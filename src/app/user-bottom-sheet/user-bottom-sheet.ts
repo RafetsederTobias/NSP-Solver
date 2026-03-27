@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, computed, ElementRef, inject, ViewChild } from '@angular/core';
 import {
   MatBottomSheet,
   MatBottomSheetModule,
@@ -8,6 +8,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import { Draggable } from '@fullcalendar/interaction/index.js';
+import { UserService } from '../service/user-service';
 
 @Component({
   selector: 'app-user-bottom-sheet',
@@ -17,7 +18,7 @@ import { Draggable } from '@fullcalendar/interaction/index.js';
     <div class="bottom-sheet-container">
       <div #externalEvents class="external-events">
         <p><strong>Mitarbeiter</strong></p>
-        <div class="fc-event" *ngFor="let event of externalEventsList">{{ event.title }}</div>
+        <div class="fc-event" *ngFor="let user of userList()">{{ user.name }}</div>
       </div>
     </div>
   `,
@@ -28,12 +29,12 @@ import { Draggable } from '@fullcalendar/interaction/index.js';
         display: flex;
         flex-flow: row, wrap;
         max-width: 65vw;
-        align-items:center;
-        justify-content:center;
+        align-items: center;
+        justify-content: center;
       }
 
       .fc-event {
-        min-width:7vw;
+        min-width: 7vw;
         margin: 5px;
         display: inline-block;
         padding: 6px 12px;
@@ -56,25 +57,16 @@ import { Draggable } from '@fullcalendar/interaction/index.js';
   ],
 })
 export class UserBottomSheet {
+  private userService = inject(UserService);
+
+  userList = this.userService.users;
+
   constructor(private bottomSheetRef: MatBottomSheetRef<UserBottomSheet>) {}
 
-  externalEventsList = [
-    { title: 'Max Mustermann' },
-    { title: 'Max Mustermann 2' },
-    { title: 'Max Mustermann 3' },
-    { title: 'Max Mustermann' },
-    { title: 'Max Mustermann' },
-    { title: 'Max Mustermann' },
-    { title: 'Max Mustermann' },
-    { title: 'Max Mustermann' },
-    { title: 'Max Mustermann' },
-    { title: 'Max Mustermann' },
-    { title: 'Max Mustermann' },
-    { title: 'Max Mustermann' },
-  ];
   close() {
     this.bottomSheetRef.dismiss();
   }
+
   ngAfterViewInit() {
     const containerEl = document.querySelector('.external-events');
     new Draggable(containerEl as HTMLElement, {
