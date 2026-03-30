@@ -9,8 +9,8 @@ export interface User {
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private _users = signal<User[]>([
-    { id: 1, name: 'John Doe', skills: ['Blutabnahme', 'Freundlichkeit :)'] },
-    { id: 2, name: 'Jane Smith', skills: ['Jonglieren'] },
+    { id: 1, name: 'John Doe', skills: ['Blutabnahme', 'Röntgen'] },
+    { id: 2, name: 'Jane Smith', skills: ['EKG'] },
   ]);
 
   readonly users = this._users.asReadonly();

@@ -12,8 +12,8 @@ export interface Station {
 })
 export class StationService {
   private _stations = signal<Station[]>([
-    { id: 1, name: 'Station 3', skills_needed: ['SEHR gute Augen'] },
-    { id: 2, name: 'Station 6', skills_needed: ['Jonglieren', 'Freundlichkeit :)'] },
+    { id: 1, name: 'Station 3', skills_needed: ['Blutabnahme'] },
+    { id: 2, name: 'Station 6', skills_needed: ['EKG', 'Röntgen'] },
   ]);
 
   readonly stations = this._stations.asReadonly();
