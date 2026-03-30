@@ -11,7 +11,7 @@ import { User, UserService } from '../../service/user-service';
     <div class="min-h-screen bg-slate-50 px-6 py-10">
       <div class="max-w-7xl mx-auto">
         <div class="flex items-center justify-between mb-6">
-          <h1 class="text-2xl font-semibold text-slate-800 tracking-tight">Users</h1>
+          <h1 class="text-2xl font-semibold text-slate-800 tracking-tight">Mitarbeiter</h1>
           <button
             (click)="router.navigate(['/users/create'])"
             class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-sm font-medium px-4 py-2 rounded-xl shadow-sm transition-all duration-150"

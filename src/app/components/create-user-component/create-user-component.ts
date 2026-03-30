@@ -1,9 +1,9 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, signal, computed, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../../service/user-service';
+import { SkillsService, Skill } from '../../service/skills-service';
 
 @Component({
   selector: 'app-create-user',
@@ -49,8 +49,10 @@ import { UserService } from '../../service/user-service';
           </h1>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden">
-          <div class="flex items-center gap-4 px-8 py-6 border-b border-slate-100 bg-slate-50/60">
+        <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-visible">
+          <div
+            class="flex items-center gap-4 px-8 py-6 border-b border-slate-100 bg-slate-50/60 rounded-t-2xl"
+          >
             <div
               class="w-14 h-14 rounded-full bg-indigo-100 text-indigo-700 text-xl font-semibold flex items-center justify-center select-none"
             >
@@ -58,7 +60,9 @@ import { UserService } from '../../service/user-service';
             </div>
             <div>
               <p class="text-sm font-medium text-slate-700">{{ form.name || 'New user' }}</p>
-              <p class="text-xs text-slate-400 mt-0.5">{{ form.kompetenzen || 'No skills yet' }}</p>
+              <p class="text-xs text-slate-400 mt-0.5">
+                {{ selectedSkills().length > 0 ? selectedSkills().map(s => s.name).join(' · ') : 'No skills yet' }}
+              </p>
             </div>
           </div>
 
@@ -71,23 +75,96 @@ import { UserService } from '../../service/user-service';
                 [(ngModel)]="form.name"
                 class="w-full h-14 px-3.5 text-sm text-slate-800 border border-slate-300 rounded-xl outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition"
               />
-              <label for="f-name">Full name</label>
+              <label for="f-name">Name</label>
             </div>
 
-            <div class="field-wrap">
-              <input
-                id="f-kompetenzen"
-                type="text"
-                placeholder=" "
-                [(ngModel)]="form.kompetenzen"
-                class="w-full h-14 px-3.5 text-sm text-slate-800 border border-slate-300 rounded-xl outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition"
-              />
-              <label for="f-kompetenzen">Kompetenzen (comma-separated)</label>
+            <div>
+              <p class="text-[11px] font-semibold tracking-widest text-slate-400 uppercase mb-2">
+                Kompetenzen
+              </p>
+
+              <div
+                (click)="toggleDropdown()"
+                [class.ring-2]="dropdownOpen()"
+                [class.ring-indigo-100]="dropdownOpen()"
+                [class.border-indigo-500]="dropdownOpen()"
+                [class.rounded-b-none]="dropdownOpen()"
+                class="relative flex items-center justify-between min-h-[56px] px-3.5 border border-slate-300 rounded-xl cursor-pointer transition bg-white"
+              >
+                <div class="flex flex-wrap gap-1.5 py-2">
+                  <ng-container *ngIf="selectedSkills().length > 0; else placeholder">
+                    <span
+                      *ngFor="let skill of selectedSkills()"
+                      class="inline-flex items-center gap-1 bg-indigo-50 text-indigo-700 text-xs font-medium pl-3 pr-1.5 py-1 rounded-full"
+                    >
+                      {{ skill.name }}
+                      <button
+                        (click)="$event.stopPropagation(); toggleSkill(skill)"
+                        class="w-3.5 h-3.5 rounded-full flex items-center justify-center hover:bg-indigo-200 transition-colors"
+                      >
+                        <span class="material-icons-round text-[11px]">close</span>
+                      </button>
+                    </span>
+                  </ng-container>
+                  <ng-template #placeholder>
+                    <span class="text-sm text-slate-400">Kompetenz auswählen...</span>
+                  </ng-template>
+                </div>
+                <span
+                  class="material-icons-round text-slate-400 text-[20px] flex-shrink-0 transition-transform duration-150 ml-2"
+                  [class.rotate-180]="dropdownOpen()"
+                  >expand_more</span
+                >
+              </div>
+
+              <div
+                *ngIf="dropdownOpen()"
+                class="border border-t-0 border-slate-300 rounded-b-xl bg-white overflow-hidden z-10 relative"
+              >
+                <div class="px-3 py-2 border-b border-slate-100">
+                  <input
+                    #searchInput
+                    [ngModel]="skillSearch()"
+                    (ngModelChange)="skillSearch.set($event)"
+                    (click)="$event.stopPropagation()"
+                    placeholder="Kompetenzen durchsuchen..."
+                    class="w-full h-8 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-300 focus:ring-1 focus:ring-indigo-100 transition"
+                  />
+                </div>
+
+                <div class="max-h-52 overflow-y-auto">
+                  <ng-container *ngIf="filteredSkills().length > 0; else noResults">
+                    <div
+                      *ngFor="let skill of filteredSkills()"
+                      (click)="toggleSkill(skill)"
+                      class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors"
+                    >
+                      <div
+                        [class.bg-indigo-600]="isSelected(skill)"
+                        [class.border-indigo-600]="isSelected(skill)"
+                        class="w-4 h-4 rounded flex items-center justify-center border border-slate-300 flex-shrink-0 transition-colors"
+                      >
+                        <span
+                          *ngIf="isSelected(skill)"
+                          class="material-icons-round text-white text-[11px]"
+                          >check</span
+                        >
+                      </div>
+                      {{ skill.name }}
+                    </div>
+                  </ng-container>
+                  <ng-template #noResults>
+                    <p class="text-sm text-slate-400 text-center py-4">
+                      Keine Kompetenz "{{ skillSearch() }}"
+                    </p>
+                  </ng-template>
+                </div>
+              </div>
             </div>
           </div>
 
           <div
-            class="flex items-center justify-end gap-2 px-8 py-5 border-t border-slate-100 bg-slate-50/60"
+            class="flex items-center justify-end gap-2 px-8 py-5 border-t border-slate-100 bg-slate-50/60 rounded-b-2xl"
           >
             <button
               (click)="cancel()"
@@ -100,7 +177,9 @@ import { UserService } from '../../service/user-service';
               [disabled]="!form.name.trim()"
               class="inline-flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl shadow-sm transition"
             >
-              <span class="material-icons-round text-[17px]">person_add</span>
+              <span class="material-icons-round text-[17px]">{{
+                isEditMode ? 'save' : 'person_add'
+              }}</span>
               {{ isEditMode ? 'Save changes' : 'Create user' }}
             </button>
           </div>
@@ -111,12 +190,29 @@ import { UserService } from '../../service/user-service';
 })
 export class CreateUserComponent {
   router = inject(Router);
-
   private route = inject(ActivatedRoute);
   private userService = inject(UserService);
+  private skillsService = inject(SkillsService);
+  private elRef = inject(ElementRef);
 
   isEditMode = false;
   private editId: number | null = null;
+
+  form = { name: '' };
+  dropdownOpen = signal(false);
+  skillSearch = signal('');
+  selectedSkillIds = signal<Set<number>>(new Set());
+
+  allSkills = this.skillsService.skills;
+
+  selectedSkills = computed(() =>
+    this.allSkills().filter((s) => this.selectedSkillIds().has(s.id)),
+  );
+
+  filteredSkills = computed(() => {
+    const q = this.skillSearch().toLowerCase();
+    return q ? this.allSkills().filter((s) => s.name.toLowerCase().includes(q)) : this.allSkills();
+  });
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -125,21 +221,45 @@ export class CreateUserComponent {
       this.editId = +id;
       const user = this.userService.getById(+id);
       if (user) {
-        this.form = { name: user.name, kompetenzen: user.skills.join(', ') };
+        this.form.name = user.name;
+        const ids = new Set(
+          this.allSkills()
+            .filter((s) => user.skills.includes(s.name))
+            .map((s) => s.id),
+        );
+        this.selectedSkillIds.set(ids);
       }
     }
   }
+  toggleDropdown() {
+    this.dropdownOpen.update((v) => !v);
+    this.skillSearch.set('');
+  }
 
-  form = { name: '', kompetenzen: '' };
+  toggleSkill(skill: Skill) {
+    this.selectedSkillIds.update((ids) => {
+      const next = new Set(ids);
+      next.has(skill.id) ? next.delete(skill.id) : next.add(skill.id);
+      return next;
+    });
+  }
+
+  isSelected(skill: Skill): boolean {
+    return this.selectedSkillIds().has(skill.id);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(e: MouseEvent) {
+    if (!this.elRef.nativeElement.contains(e.target)) {
+      this.dropdownOpen.set(false);
+    }
+  }
 
   submit() {
     if (!this.form.name.trim()) return;
     const data = {
       name: this.form.name.trim(),
-      skills: this.form.kompetenzen
-        .split(',')
-        .map((k) => k.trim())
-        .filter(Boolean),
+      skills: this.selectedSkills().map((s) => s.name),
     };
     if (this.isEditMode && this.editId) {
       this.userService.update(this.editId, data);
