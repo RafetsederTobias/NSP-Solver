@@ -1,13 +1,19 @@
 import { Routes } from '@angular/router';
-import { CalendarComponent } from './calendar/calendar';
-import { Users } from './users/users';
-import { CreateUserComponent } from './create-user-component/create-user-component';
+import { CalendarComponent } from './components/calendar/calendar';
+import { Users } from './components/users/users';
+import { CreateUserComponent } from './components/create-user-component/create-user-component';
+import { Stations } from './components/stations/stations';
+import { CreateStationComponent } from './components/create-station/create-station';
+import { Skills } from './components/skills/skills';
 
 export const routes: Routes = [
   { path: 'calendar', component: CalendarComponent },
   { path: 'users', component: Users },
-  { path: 'settings', component: CreateUserComponent },
+  { path: 'stations', component: Stations },
+  { path: 'skills', component: Skills },
   { path: 'users/create', component: CreateUserComponent },
   { path: 'users/:id/edit', component: CreateUserComponent },
+  { path: 'stations/:id/edit', component: CreateStationComponent },
+  { path: 'stations/create', component: CreateStationComponent },
   { path: '', redirectTo: 'calendar', pathMatch: 'full' },
 ];

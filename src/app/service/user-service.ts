@@ -3,14 +3,14 @@ import { Injectable, signal } from '@angular/core';
 export interface User {
   id: number;
   name: string;
-  kompetenzen: string[];
+  skills: string[];
 }
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private _users = signal<User[]>([
-    { id: 1, name: 'John Doe', kompetenzen: ['Angular', 'TypeScript', 'RxJS'] },
-    { id: 2, name: 'Jane Smith', kompetenzen: ['UX Design', 'Figma'] },
+    { id: 1, name: 'John Doe', skills: ['Blutabnahme', 'Freundlichkeit :)'] },
+    { id: 2, name: 'Jane Smith', skills: ['Jonglieren'] },
   ]);
 
   readonly users = this._users.asReadonly();

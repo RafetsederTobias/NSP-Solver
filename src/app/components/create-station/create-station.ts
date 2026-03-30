@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { UserService } from '../service/user-service';
+import { StationService } from '../../service/station-service';
 
 @Component({
-  selector: 'app-create-user',
+  selector: 'app-create-station',
   standalone: true,
   imports: [CommonModule, FormsModule],
   styles: [
@@ -37,22 +37,19 @@ import { UserService } from '../service/user-service';
   template: `
     <div class="min-h-screen bg-slate-50 px-6 py-10">
       <div class="max-w-5xl mx-auto">
-        <!-- Header -->
         <div class="flex items-center gap-3 mb-6">
           <button
-            (click)="router.navigate(['/users'])"
+            (click)="router.navigate(['/stations'])"
             class="w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-white hover:text-slate-600 hover:shadow-sm transition-all duration-150"
           >
             <span class="material-icons-round text-[20px]">arrow_back</span>
           </button>
           <h1 class="text-2xl font-semibold text-slate-800 tracking-tight">
-            {{ isEditMode ? 'Edit User' : 'Create User' }}
+            {{ isEditMode ? 'Edit Station' : 'Create Station' }}
           </h1>
         </div>
 
-        <!-- Card -->
         <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden">
-          <!-- Avatar preview -->
           <div class="flex items-center gap-4 px-8 py-6 border-b border-slate-100 bg-slate-50/60">
             <div
               class="w-14 h-14 rounded-full bg-indigo-100 text-indigo-700 text-xl font-semibold flex items-center justify-center select-none"
@@ -60,12 +57,11 @@ import { UserService } from '../service/user-service';
               {{ form.name ? form.name.charAt(0).toUpperCase() : '?' }}
             </div>
             <div>
-              <p class="text-sm font-medium text-slate-700">{{ form.name || 'New user' }}</p>
+              <p class="text-sm font-medium text-slate-700">{{ form.name || 'New Station' }}</p>
               <p class="text-xs text-slate-400 mt-0.5">{{ form.kompetenzen || 'No skills yet' }}</p>
             </div>
           </div>
 
-          <!-- Fields -->
           <div class="px-8 py-7 grid grid-cols-1 gap-5">
             <div class="field-wrap">
               <input
@@ -90,7 +86,6 @@ import { UserService } from '../service/user-service';
             </div>
           </div>
 
-          <!-- Footer actions -->
           <div
             class="flex items-center justify-end gap-2 px-8 py-5 border-t border-slate-100 bg-slate-50/60"
           >
@@ -105,8 +100,8 @@ import { UserService } from '../service/user-service';
               [disabled]="!form.name.trim()"
               class="inline-flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl shadow-sm transition"
             >
-              <span class="material-icons-round text-[17px]">person_add</span>
-              {{ isEditMode ? 'Save changes' : 'Create user' }}
+              <span class="material-icons-round text-[17px]">add_box</span>
+              {{ isEditMode ? 'Save changes' : 'Create station' }}
             </button>
           </div>
         </div>
@@ -114,11 +109,11 @@ import { UserService } from '../service/user-service';
     </div>
   `,
 })
-export class CreateUserComponent {
+export class CreateStationComponent {
   router = inject(Router);
 
   private route = inject(ActivatedRoute);
-  private userService = inject(UserService);
+  private stationService = inject(StationService);
 
   isEditMode = false;
   private editId: number | null = null;
@@ -128,9 +123,9 @@ export class CreateUserComponent {
     if (id) {
       this.isEditMode = true;
       this.editId = +id;
-      const user = this.userService.getById(+id);
-      if (user) {
-        this.form = { name: user.name, kompetenzen: user.kompetenzen.join(', ') };
+      const station = this.stationService.getById(+id);
+      if (station) {
+        this.form = { name: station.name, kompetenzen: station.skills_needed.join(', ') };
       }
     }
   }
@@ -141,20 +136,20 @@ export class CreateUserComponent {
     if (!this.form.name.trim()) return;
     const data = {
       name: this.form.name.trim(),
-      kompetenzen: this.form.kompetenzen
+      skills_needed: this.form.kompetenzen
         .split(',')
         .map((k) => k.trim())
         .filter(Boolean),
     };
     if (this.isEditMode && this.editId) {
-      this.userService.update(this.editId, data);
+      this.stationService.update(this.editId, data);
     } else {
-      this.userService.add(data);
+      this.stationService.add(data);
     }
-    this.router.navigate(['/users']);
+    this.router.navigate(['/stations']);
   }
 
   cancel() {
-    this.router.navigate(['/users']);
+    this.router.navigate(['/stations']);
   }
 }
