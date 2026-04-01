@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions } from '@fullcalendar/core';
+import { DateClickArg } from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import deLocale from '@fullcalendar/core/locales/de';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { UserBottomSheet } from '../user-bottom-sheet/user-bottom-sheet';
 
@@ -105,22 +107,22 @@ import { UserBottomSheet } from '../user-bottom-sheet/user-bottom-sheet';
     full-calendar ::ng-deep .fc-scrollgrid-section-body tr:last-child td {
       border-bottom: none !important;
     }
-        full-calendar ::ng-deep .fc-daygrid-day.fc-day-other {
-    background: transparent;
-  }
-  full-calendar ::ng-deep .fc .fc-daygrid-body-natural .fc-daygrid-day-events {
-    margin-left: 0;
-  }
-  full-calendar ::ng-deep .fc .fc-timegrid-axis {
-    width: 0;
-  }
-  full-calendar ::ng-deep .fc-daygrid-week-number {
-    display: none;
-  }
-  full-calendar ::ng-deep td.fc-timegrid-axis,
-  full-calendar ::ng-deep th.fc-timegrid-axis {
-    width: 0 !important;
-  }
+    full-calendar ::ng-deep .fc-daygrid-day.fc-day-other {
+      background: transparent;
+    }
+    full-calendar ::ng-deep .fc .fc-daygrid-body-natural .fc-daygrid-day-events {
+      margin-left: 0;
+    }
+    full-calendar ::ng-deep .fc .fc-timegrid-axis {
+      width: 0;
+    }
+    full-calendar ::ng-deep .fc-daygrid-week-number {
+      display: none;
+    }
+    full-calendar ::ng-deep td.fc-timegrid-axis,
+    full-calendar ::ng-deep th.fc-timegrid-axis {
+      width: 0 !important;
+    }
   `],
   template: `
     <div class="min-h-screen bg-slate-50 px-6 py-10">
@@ -157,7 +159,11 @@ import { UserBottomSheet } from '../user-bottom-sheet/user-bottom-sheet';
 export class CalendarComponent {
   bottomSheetRef: MatBottomSheetRef | null = null;
 
-  constructor(private bottomSheet: MatBottomSheet) {}
+  constructor(
+    private bottomSheet: MatBottomSheet,
+    private router: Router,
+    private zone: NgZone,
+  ) {}
 
   toggleBottomSheet() {
     if (this.bottomSheetRef) {
@@ -185,6 +191,11 @@ export class CalendarComponent {
     drop: (info) => {
       console.log('Dropped event:', info);
       alert(`Event "${info.draggedEl.innerText}" added on ${info.date?.toLocaleDateString()}`);
+    },
+    dateClick: (info: DateClickArg) => {
+      this.zone.run(() => {
+        this.router.navigate(['/calendar', info.dateStr]);
+      });
     },
   };
 }
