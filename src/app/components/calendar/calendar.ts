@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, ChangeDetectionStrategy } from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions } from '@fullcalendar/core';
 import { DateClickArg } from '@fullcalendar/interaction';
@@ -14,6 +14,7 @@ import { UserBottomSheet } from '../user-bottom-sheet/user-bottom-sheet';
   selector: 'app-calendar',
   standalone: true,
   imports: [FullCalendarModule, CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [`
     :host {
       display: block;
@@ -158,12 +159,32 @@ import { UserBottomSheet } from '../user-bottom-sheet/user-bottom-sheet';
 })
 export class CalendarComponent {
   bottomSheetRef: MatBottomSheetRef | null = null;
+  calendarOptions: CalendarOptions;
 
   constructor(
     private bottomSheet: MatBottomSheet,
     private router: Router,
     private zone: NgZone,
-  ) {}
+  ) {
+
+    this.calendarOptions = this.zone.runOutsideAngular(() => ({
+      initialView: 'dayGridMonth',
+      weekends: false,
+      plugins: [dayGridPlugin, interactionPlugin],
+      editable: true,
+      droppable: true,
+      selectable: true,
+      locale: deLocale,
+      events: [],
+      drop: (info: any) => {
+        console.log('Dropped event:', info);
+        alert(`Event "${info.draggedEl.innerText}" added on ${info.date?.toLocaleDateString()}`);
+      },
+      dateClick: (info: DateClickArg) => {
+          this.router.navigate(['/calendar', info.dateStr]);
+      },
+    }));
+  }
 
   toggleBottomSheet() {
     if (this.bottomSheetRef) {
@@ -176,26 +197,4 @@ export class CalendarComponent {
       });
     }
   }
-
-  calendarOptions: CalendarOptions = {
-    initialView: 'dayGridMonth',
-    weekends: false,
-    plugins: [dayGridPlugin, interactionPlugin],
-    editable: true,
-    droppable: true,
-    selectable: true,
-    locale: deLocale,
-    eventDragStart: (info) => console.log(info),
-    eventDrop: (info) => console.log(info),
-    events: [],
-    drop: (info) => {
-      console.log('Dropped event:', info);
-      alert(`Event "${info.draggedEl.innerText}" added on ${info.date?.toLocaleDateString()}`);
-    },
-    dateClick: (info: DateClickArg) => {
-      this.zone.run(() => {
-        this.router.navigate(['/calendar', info.dateStr]);
-      });
-    },
-  };
 }

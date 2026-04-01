@@ -29,7 +29,7 @@ import { UserService } from '../../service/user-service';
         </div>
         <div class="flex flex-wrap gap-2">
           <div
-            class="fc-event min-w-[7vw] inline-block px-4 py-1.5 bg-indigo-100 text-indigo-700 rounded-full cursor-grab text-sm font-medium transition-all duration-200 active:cursor-grabbing active:scale-95 active:bg-indigo-200 select-none"
+            class="fc-event min-w-[7vw] inline-block px-4 py-1.5 bg-indigo-100 text-indigo-700 rounded-full cursor-grab text-sm font-medium active:cursor-grabbing active:scale-95 active:bg-indigo-200 select-none"
             *ngFor="let user of userList()"
           >
             {{ user.name }}
@@ -38,16 +38,6 @@ import { UserService } from '../../service/user-service';
       </div>
     </div>
   `,
-  styles: [
-    `
-      .bottom-sheet-container {
-      }
-      .external-events {
-      }
-      .fc-event {
-      }
-    `,
-  ],
 })
 export class UserBottomSheet {
   private userService = inject(UserService);
