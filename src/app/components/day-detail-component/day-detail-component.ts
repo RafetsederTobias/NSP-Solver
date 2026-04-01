@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { UserService } from '../../service/user-service'
+import { UserService } from '../../service/user-service';
 import { StationService } from '../../service/station-service';
 
 interface Assignment {
@@ -19,9 +19,6 @@ interface Assignment {
   styles: [`
     .station-row:not(:last-child) {
       border-bottom: 1px solid #f1f5f9;
-    }
-    .group-header {
-      background: #f8fafc;
     }
   `],
   template: `
@@ -52,34 +49,25 @@ interface Assignment {
             <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Mitarbeiter</span>
           </div>
 
-          <ng-container *ngFor="let group of stationGroups">
+          <div
+            *ngFor="let station of stationService.stations()"
+            class="station-row grid grid-cols-[1fr_280px] items-center px-6 py-3 hover:bg-slate-50 transition-colors"
+          >
+            <span class="text-sm font-medium text-slate-700">{{ station.name }}</span>
 
-            <div class="group-header px-6 py-2">
-              <span class="text-[11px] font-bold uppercase tracking-widest text-indigo-300">{{ group.name }}</span>
-            </div>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
+              <mat-select
+                [(ngModel)]="getAssignment(station.id).selectedUserId"
+                placeholder="— Niemand —"
+              >
+                <mat-option [value]="null">— Niemand —</mat-option>
+                <mat-option *ngFor="let user of userService.users()" [value]="user.id">
+                  {{ user.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-            <div
-              *ngFor="let stationId of group.stationIds"
-              class="station-row grid grid-cols-[1fr_280px] items-center px-6 py-3 hover:bg-slate-50 transition-colors"
-            >
-              <span class="text-sm font-medium text-slate-700">
-                {{ stationService.getById(stationId)?.name }}
-              </span>
-
-              <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
-                <mat-select
-                  [(ngModel)]="getAssignment(stationId).selectedUserId"
-                  placeholder="— Niemand —"
-                >
-                  <mat-option [value]="null">— Niemand —</mat-option>
-                  <mat-option *ngFor="let user of userService.users()" [value]="user.id">
-                    {{ user.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-
-          </ng-container>
         </div>
 
       </div>
@@ -90,14 +78,6 @@ export class DayDetailComponent {
   date: Date;
 
   private assignments = new Map<number, Assignment>();
-
-  stationGroups = [
-    { name: 'Leitung',   stationIds: [1, 2, 3] },
-    { name: 'OP',        stationIds: [4, 5, 6] },
-    { name: 'KAT',       stationIds: [7, 8, 9, 10] },
-    { name: 'Sonstige',  stationIds: [11, 12, 13, 14] },
-    { name: 'Ambulanz',  stationIds: [15, 16, 17, 18, 19, 20, 21, 22] },
-  ];
 
   constructor(
     route: ActivatedRoute,
@@ -114,6 +94,9 @@ export class DayDetailComponent {
   }
 
   getAssignment(stationId: number): Assignment {
+    if (!this.assignments.has(stationId)) {
+      this.assignments.set(stationId, { stationId, selectedUserId: null });
+    }
     return this.assignments.get(stationId)!;
   }
 }
