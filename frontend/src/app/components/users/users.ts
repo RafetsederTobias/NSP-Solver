@@ -104,12 +104,14 @@ import { User, UserService } from '../../service/user-service';
 export class Users {
   router = inject(Router);
   private userService = inject(UserService);
+
   users = this.userService.users;
 
-  add = output<void>();
-  edit = output<User>();
+  constructor() {
+    this.userService.loadAll().subscribe();
+  }
 
   deleteUser(user: User) {
-    this.userService.delete(user.id);
+    this.userService.delete(user.id).subscribe();
   }
 }

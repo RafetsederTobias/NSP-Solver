@@ -219,7 +219,7 @@ export class CreateUserComponent {
     if (id) {
       this.isEditMode = true;
       this.editId = +id;
-      const user = this.userService.getById(+id);
+      const user = this.userService.users().find(u => u.id === +id);
       if (user) {
         this.form.name = user.name;
         const ids = new Set(
@@ -262,9 +262,9 @@ export class CreateUserComponent {
       skills: this.selectedSkills().map((s) => s.name),
     };
     if (this.isEditMode && this.editId) {
-      this.userService.update(this.editId, data);
+      this.userService.update(this.editId, data).subscribe();
     } else {
-      this.userService.add(data);
+      this.userService.add(data).subscribe();
     }
     this.router.navigate(['/users']);
   }

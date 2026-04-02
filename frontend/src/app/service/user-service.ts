@@ -1,4 +1,6 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs';
 
 export interface User {
   id: number;
@@ -6,31 +8,39 @@ export interface User {
   skills: string[];
 }
 
+type UserPayload = Omit<User, 'id'>;
+
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private _users = signal<User[]>([
-    { id: 1, name: 'John Doe', skills: ['Blutabnahme', 'Röntgen'] },
-    { id: 2, name: 'Jane Smith', skills: ['EKG'] },
-  ]);
+  private http = inject(HttpClient);
+  private base = 'http://localhost:8000/api/v1/users';
 
+  private _users = signal<User[]>([]);
   readonly users = this._users.asReadonly();
 
-  getById(id: number): User | undefined {
-    return this._users().find(u => u.id === id);
-  }
-
-  add(data: Omit<User, 'id'>): void {
-    const id = Date.now();
-    this._users.update(list => [...list, { id, ...data }]);
-  }
-
-  update(id: number, data: Omit<User, 'id'>): void {
-    this._users.update(list =>
-      list.map(u => u.id === id ? { id, ...data } : u)
+  loadAll() {
+    return this.http.get<User[]>(this.base).pipe(
+      tap(users => this._users.set(users))
     );
   }
 
-  delete(id: number): void {
-    this._users.update(list => list.filter(u => u.id !== id));
+  add(data: UserPayload) {
+    return this.http.post<User>(this.base, data).pipe(
+      tap(user => this._users.update(list => [...list, user]))
+    );
+  }
+
+  update(id: number, data: UserPayload) {
+    return this.http.put<User>(`${this.base}/${id}`, data).pipe(
+      tap(updated => this._users.update(list =>
+        list.map(u => u.id === id ? updated : u)
+      ))
+    );
+  }
+
+  delete(id: number) {
+    return this.http.delete<void>(`${this.base}/${id}`).pipe(
+      tap(() => this._users.update(list => list.filter(u => u.id !== id)))
+    );
   }
 }
