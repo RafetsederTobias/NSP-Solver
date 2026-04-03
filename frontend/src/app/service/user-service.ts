@@ -1,7 +1,6 @@
 import { Injectable, signal, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { EMPTY, tap } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
+import { tap } from 'rxjs';
 
 export interface User {
   id: number;
@@ -18,10 +17,8 @@ export class UserService {
 
   private _users = signal<User[]>([]);
   readonly users = this._users.asReadonly();
-  private platformId = inject(PLATFORM_ID);
 
   loadAll() {
-    if (!isPlatformBrowser(this.platformId)) return EMPTY;
     return this.http.get<User[]>(this.base).pipe(tap((users) => this._users.set(users)));
   }
   add(data: UserPayload) {

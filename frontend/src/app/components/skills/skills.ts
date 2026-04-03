@@ -75,6 +75,10 @@ export class Skills {
   newSkill = '';
   duplicate = signal(false);
 
+  constructor() {
+    this.skillsService.loadAll().subscribe();
+  }
+
   addSkill() {
     const val = this.newSkill.trim();
     if (!val) return;
@@ -83,11 +87,11 @@ export class Skills {
       setTimeout(() => this.duplicate.set(false), 1200);
       return;
     }
-    this.skillsService.add({ name: val });
+    this.skillsService.add({ name: val }).subscribe();
     this.newSkill = '';
   }
 
   deleteSkill(id: number) {
-    this.skillsService.delete(id);
+    this.skillsService.delete(id).subscribe();
   }
 }

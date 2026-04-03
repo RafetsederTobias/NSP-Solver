@@ -1,36 +1,49 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs';
 
 export interface Skill {
   id: number;
   name: string;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
-export class SkillsService {
-  private _skills = signal<Skill[]>([
-    { id: 1, name: 'Blutabnahme' },
-    { id: 2, name: 'Röntgen' },
-    { id: 3, name: 'EKG' },
-  ]);
+type SkillPayload = Omit<Skill, 'id'>;
 
+@Injectable({ providedIn: 'root' })
+export class SkillsService {
+  private http = inject(HttpClient);
+  private base = 'http://localhost:8000/api/v1/skills';
+
+  private _skills = signal<Skill[]>([]);
   readonly skills = this._skills.asReadonly();
 
-  getById(id: number): Skill | undefined {
-    return this._skills().find((u) => u.id === id);
+  loadAll() {
+    return this.http.get<Skill[]>(this.base).pipe(
+      tap(skills => this._skills.set(skills))
+    );
   }
 
-  add(data: Omit<Skill, 'id'>): void {
-    const id = Date.now();
-    this._skills.update((list) => [...list, { id, ...data }]);
+  getById(id: number) {
+    return this.http.get<Skill>(`${this.base}/${id}`);
   }
 
-  update(id: number, data: Omit<Skill, 'id'>): void {
-    this._skills.update((list) => list.map((u) => (u.id === id ? { id, ...data } : u)));
+  add(data: SkillPayload) {
+    return this.http.post<Skill>(this.base, data).pipe(
+      tap(skill => this._skills.update(list => [...list, skill]))
+    );
   }
 
-  delete(id: number): void {
-    this._skills.update((list) => list.filter((u) => u.id !== id));
+  update(id: number, data: SkillPayload) {
+    return this.http.put<Skill>(`${this.base}/${id}`, data).pipe(
+      tap(updated => this._skills.update(list =>
+        list.map(s => s.id === id ? updated : s)
+      ))
+    );
+  }
+
+  delete(id: number) {
+    return this.http.delete<void>(`${this.base}/${id}`).pipe(
+      tap(() => this._skills.update(list => list.filter(s => s.id !== id)))
+    );
   }
 }

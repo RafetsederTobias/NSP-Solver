@@ -4,6 +4,8 @@ from contextlib import asynccontextmanager
 from db import engine, Base
 from routers import stations
 from routers import users
+from routers import skills
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -29,6 +31,7 @@ app.add_middleware(
 
 app.include_router(users.router)
 app.include_router(stations.router)
+app.include_router(skills.router)
 
 @app.get("/")
 def read_root():
