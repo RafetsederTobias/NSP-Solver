@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -16,15 +16,16 @@ interface Assignment {
   selector: 'app-day-detail',
   standalone: true,
   imports: [CommonModule, FormsModule, MatSelectModule, MatFormFieldModule],
-  styles: [`
-    .station-row:not(:last-child) {
-      border-bottom: 1px solid #f1f5f9;
-    }
-  `],
+  styles: [
+    `
+      .station-row:not(:last-child) {
+        border-bottom: 1px solid #f1f5f9;
+      }
+    `,
+  ],
   template: `
     <div class="min-h-screen bg-slate-50 px-6 py-10">
       <div class="max-w-5xl mx-auto">
-
         <div class="flex items-center gap-3 mb-6">
           <button
             (click)="router.navigate(['/calendar'])"
@@ -34,19 +35,24 @@ interface Assignment {
           </button>
           <div>
             <p class="text-xs font-semibold uppercase tracking-widest text-indigo-400">
-              {{ date | date:'EEEE' }}
+              {{ date | date: 'EEEE' }}
             </p>
             <h1 class="text-2xl font-semibold text-slate-800 tracking-tight leading-tight">
-              {{ date | date:'d. MMMM yyyy' }}
+              {{ date | date: 'd. MMMM yyyy' }}
             </h1>
           </div>
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden">
-
-          <div class="grid grid-cols-[1fr_280px] items-center px-6 py-3 bg-slate-50 border-b border-slate-100">
-            <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Station</span>
-            <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Mitarbeiter</span>
+          <div
+            class="grid grid-cols-[1fr_280px] items-center px-6 py-3 bg-slate-50 border-b border-slate-100"
+          >
+            <span class="text-xs font-semibold uppercase tracking-widest text-slate-400"
+              >Station</span
+            >
+            <span class="text-xs font-semibold uppercase tracking-widest text-slate-400"
+              >Mitarbeiter</span
+            >
           </div>
 
           <div
@@ -67,30 +73,30 @@ interface Assignment {
               </mat-select>
             </mat-form-field>
           </div>
-
         </div>
-
       </div>
     </div>
   `,
 })
 export class DayDetailComponent {
-  date: Date;
-
   private assignments = new Map<number, Assignment>();
+  private route = inject(ActivatedRoute);
+  router = inject(Router);
+  userService = inject(UserService);
+  stationService = inject(StationService);
 
-  constructor(
-    route: ActivatedRoute,
-    public router: Router,
-    public userService: UserService,
-    public stationService: StationService,
-  ) {
-    const dateStr = route.snapshot.paramMap.get('date') ?? '';
+  date: Date = new Date();
+
+  ngOnInit() {
+    const dateStr = this.route.snapshot.paramMap.get('date') ?? '';
     this.date = new Date(dateStr);
 
-    for (const station of this.stationService.stations()) {
-      this.assignments.set(station.id, { stationId: station.id, selectedUserId: null });
-    }
+    this.userService.loadAll().subscribe();
+    this.stationService.loadAll().subscribe(() => {
+      for (const station of this.stationService.stations()) {
+        this.assignments.set(station.id, { stationId: station.id, selectedUserId: null });
+      }
+    });
   }
 
   getAssignment(stationId: number): Assignment {

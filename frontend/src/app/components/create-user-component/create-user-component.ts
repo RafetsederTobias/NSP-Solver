@@ -215,21 +215,22 @@ export class CreateUserComponent {
   });
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.isEditMode = true;
-      this.editId = +id;
-      const user = this.userService.users().find(u => u.id === +id);
-      if (user) {
-        this.form.name = user.name;
-        const ids = new Set(
-          this.allSkills()
-            .filter((s) => user.skills.includes(s.name))
-            .map((s) => s.id),
-        );
-        this.selectedSkillIds.set(ids);
+    this.skillsService.loadAll().subscribe(() => {
+      const id = this.route.snapshot.paramMap.get('id');
+      if (id) {
+        this.isEditMode = true;
+        this.editId = +id;
+        this.userService.getById(+id).subscribe((user) => {
+          this.form.name = user.name;
+          const ids = new Set(
+            this.allSkills()
+              .filter((s) => user.skills.includes(s.name))
+              .map((s) => s.id),
+          );
+          this.selectedSkillIds.set(ids);
+        });
       }
-    }
+    });
   }
   toggleDropdown() {
     this.dropdownOpen.update((v) => !v);
@@ -262,11 +263,10 @@ export class CreateUserComponent {
       skills: this.selectedSkills().map((s) => s.name),
     };
     if (this.isEditMode && this.editId) {
-      this.userService.update(this.editId, data).subscribe();
+      this.userService.update(this.editId, data).subscribe(() => this.router.navigate(['/users']));
     } else {
-      this.userService.add(data).subscribe();
+      this.userService.add(data).subscribe(() => this.router.navigate(['/users']));
     }
-    this.router.navigate(['/users']);
   }
 
   cancel() {

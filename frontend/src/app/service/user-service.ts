@@ -27,6 +27,10 @@ export class UserService {
       .pipe(tap((user) => this._users.update((list) => [...list, user])));
   }
 
+  getById(id: number) {
+    return this.http.get<User>(`${this.base}/${id}`);
+  }
+
   update(id: number, data: UserPayload) {
     return this.http
       .put<User>(`${this.base}/${id}`, data)

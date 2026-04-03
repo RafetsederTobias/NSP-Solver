@@ -215,22 +215,24 @@ export class CreateStationComponent {
   });
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.isEditMode = true;
-      this.editId = +id;
-      this.stationService.getById(+id).subscribe((station) => {
-        if (station) {
-          this.form.name = station.name;
-          const ids = new Set(
-            this.allSkills()
-              .filter((s) => station.skills_needed.includes(s.name))
-              .map((s) => s.id),
-          );
-          this.selectedSkillIds.set(ids);
-        }
-      });
-    }
+    this.skillsService.loadAll().subscribe(() => {
+      const id = this.route.snapshot.paramMap.get('id');
+      if (id) {
+        this.isEditMode = true;
+        this.editId = +id;
+        this.stationService.getById(+id).subscribe((station) => {
+          if (station) {
+            this.form.name = station.name;
+            const ids = new Set(
+              this.allSkills()
+                .filter((s) => station.skills_needed.includes(s.name))
+                .map((s) => s.id),
+            );
+            this.selectedSkillIds.set(ids);
+          }
+        });
+      }
+    });
   }
   toggleDropdown() {
     this.dropdownOpen.update((v) => !v);
