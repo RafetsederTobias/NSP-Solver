@@ -1,6 +1,7 @@
 import {
   Title
-} from "./chunk-LLPU6FYK.js";
+} from "./chunk-F2UPICH4.js";
+import "./chunk-RD4FTIUC.js";
 import {
   HashLocationStrategy,
   Location,
@@ -11,7 +12,6 @@ import {
   PlatformNavigation,
   ViewportScroller
 } from "./chunk-G2K6UD2U.js";
-import "./chunk-RD4FTIUC.js";
 import {
   LOCATION_INITIALIZED,
   PlatformLocation

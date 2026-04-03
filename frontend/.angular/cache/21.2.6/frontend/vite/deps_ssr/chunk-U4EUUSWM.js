@@ -997,11 +997,6 @@ var ConfigurableFocusTrapFactory = class _ConfigurableFocusTrapFactory {
   }], () => [], null);
 })();
 
-// node_modules/@angular/cdk/fesm2022/coercion.mjs
-function coerceBooleanProperty(value) {
-  return value != null && `${value}` !== "false";
-}
-
 // node_modules/@angular/cdk/fesm2022/platform.mjs
 var PlatformModule = class _PlatformModule {
   static ɵfac = function PlatformModule_Factory(__ngFactoryType__) {
@@ -1019,10 +1014,15 @@ var PlatformModule = class _PlatformModule {
   }], null, null);
 })();
 
+// node_modules/@angular/cdk/fesm2022/coercion.mjs
+function coerceBooleanProperty(value) {
+  return value != null && `${value}` !== "false";
+}
+
 export {
   ActiveDescendantKeyManager,
   addAriaReferencedId,
   removeAriaReferencedId,
   coerceBooleanProperty
 };
-//# sourceMappingURL=chunk-LKEF63PU.js.map
+//# sourceMappingURL=chunk-U4EUUSWM.js.map

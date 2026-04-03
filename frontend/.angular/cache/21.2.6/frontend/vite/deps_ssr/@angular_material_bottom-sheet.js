@@ -12,7 +12,7 @@ import {
   createBlockScrollStrategy,
   createGlobalPositionStrategy,
   createOverlayRef
-} from "./chunk-3AR2F6EL.js";
+} from "./chunk-P6BOUMT7.js";
 import "./chunk-T5KZAXF6.js";
 import {
   A11yModule,
@@ -32,12 +32,12 @@ import "./chunk-56UX73AC.js";
 import {
   Platform
 } from "./chunk-CODKKGXY.js";
-import "./chunk-MAKODMQV.js";
-import "./chunk-XGLF7CAU.js";
 import {
   BidiModule,
   Directionality
 } from "./chunk-G3J374VF.js";
+import "./chunk-MAKODMQV.js";
+import "./chunk-XGLF7CAU.js";
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,

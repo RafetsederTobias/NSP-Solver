@@ -17,7 +17,7 @@ import {
   _CdkPrivateStyleLoader,
   _VisuallyHiddenLoader,
   hasModifierKey
-} from "./chunk-RYNZC7SY.js";
+} from "./chunk-24OH6YC7.js";
 import {
   Platform
 } from "./chunk-MVKWA5CV.js";
@@ -988,6 +988,11 @@ var ConfigurableFocusTrapFactory = class _ConfigurableFocusTrapFactory {
   }], () => [], null);
 })();
 
+// node_modules/@angular/cdk/fesm2022/coercion.mjs
+function coerceBooleanProperty(value) {
+  return value != null && `${value}` !== "false";
+}
+
 // node_modules/@angular/cdk/fesm2022/platform.mjs
 var PlatformModule = class _PlatformModule {
   static ɵfac = function PlatformModule_Factory(__ngFactoryType__) {
@@ -1005,15 +1010,10 @@ var PlatformModule = class _PlatformModule {
   }], null, null);
 })();
 
-// node_modules/@angular/cdk/fesm2022/coercion.mjs
-function coerceBooleanProperty(value) {
-  return value != null && `${value}` !== "false";
-}
-
 export {
   ActiveDescendantKeyManager,
   addAriaReferencedId,
   removeAriaReferencedId,
   coerceBooleanProperty
 };
-//# sourceMappingURL=chunk-44RPMDB3.js.map
+//# sourceMappingURL=chunk-DGS4R3C6.js.map

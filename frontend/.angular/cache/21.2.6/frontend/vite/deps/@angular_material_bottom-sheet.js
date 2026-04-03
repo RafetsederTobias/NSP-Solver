@@ -11,7 +11,7 @@ import {
   createBlockScrollStrategy,
   createGlobalPositionStrategy,
   createOverlayRef
-} from "./chunk-6U5IE6LL.js";
+} from "./chunk-TGOFFQLF.js";
 import "./chunk-VOTN343P.js";
 import {
   A11yModule,
@@ -25,17 +25,17 @@ import {
   _animationsDisabled,
   _getFocusedElementPierceShadowDom,
   hasModifierKey
-} from "./chunk-RYNZC7SY.js";
-import "./chunk-LLPU6FYK.js";
+} from "./chunk-24OH6YC7.js";
 import {
   Platform
 } from "./chunk-MVKWA5CV.js";
-import "./chunk-G2K6UD2U.js";
 import {
   BidiModule,
   Directionality
 } from "./chunk-U36AWYXQ.js";
+import "./chunk-F2UPICH4.js";
 import "./chunk-RD4FTIUC.js";
+import "./chunk-G2K6UD2U.js";
 import "./chunk-DUE4JVTC.js";
 import {
   ChangeDetectionStrategy,

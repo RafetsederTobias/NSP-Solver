@@ -1,22 +1,21 @@
-import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   coerceBooleanProperty
-} from "./chunk-LKEF63PU.js";
+} from "./chunk-DGS4R3C6.js";
 import {
   ObserversModule,
   _IdGenerator,
   _animationsDisabled
-} from "./chunk-6QKIMRNJ.js";
+} from "./chunk-24OH6YC7.js";
 import {
   Platform
-} from "./chunk-CODKKGXY.js";
-import {
-  NgTemplateOutlet
-} from "./chunk-MAKODMQV.js";
+} from "./chunk-MVKWA5CV.js";
 import {
   BidiModule,
   Directionality
-} from "./chunk-G3J374VF.js";
+} from "./chunk-U36AWYXQ.js";
+import {
+  NgTemplateOutlet
+} from "./chunk-G2K6UD2U.js";
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -40,7 +39,6 @@ import {
   effect,
   forwardRef,
   inject,
-  require_operators,
   setClassMetadata,
   signal,
   viewChild,
@@ -79,21 +77,21 @@ import {
   ɵɵtextInterpolate,
   ɵɵviewQuery,
   ɵɵviewQuerySignal
-} from "./chunk-DSXPS2M4.js";
+} from "./chunk-F5NGALBH.js";
 import {
-  require_cjs
-} from "./chunk-O5J3CNTX.js";
-import {
-  __toESM
-} from "./chunk-6DU2HRTW.js";
-
-// node_modules/@angular/material/fesm2022/_form-field-chunk.mjs
-var import_rxjs2 = __toESM(require_cjs(), 1);
-var import_operators2 = __toESM(require_operators(), 1);
+  Observable,
+  Subject,
+  Subscription,
+  filter,
+  map,
+  merge,
+  pairwise,
+  shareReplay,
+  startWith,
+  takeUntil
+} from "./chunk-RSS3ODKE.js";
 
 // node_modules/@angular/cdk/fesm2022/observers-private.mjs
-var import_rxjs = __toESM(require_cjs(), 1);
-var import_operators = __toESM(require_operators(), 1);
 var loopLimitExceededErrorHandler = (e) => {
   if (e instanceof ErrorEvent && e.message === "ResizeObserver loop limit exceeded") {
     console.error(`${e.message}. This could indicate a performance issue with your app. See https://github.com/WICG/resize-observer/blob/master/explainer.md#error-handling`);
@@ -101,8 +99,8 @@ var loopLimitExceededErrorHandler = (e) => {
 };
 var SingleBoxSharedResizeObserver = class {
   _box;
-  _destroyed = new import_rxjs.Subject();
-  _resizeSubject = new import_rxjs.Subject();
+  _destroyed = new Subject();
+  _resizeSubject = new Subject();
   _resizeObserver;
   _elementObservables = /* @__PURE__ */ new Map();
   constructor(_box) {
@@ -113,7 +111,7 @@ var SingleBoxSharedResizeObserver = class {
   }
   observe(target) {
     if (!this._elementObservables.has(target)) {
-      this._elementObservables.set(target, new import_rxjs.Observable((observer) => {
+      this._elementObservables.set(target, new Observable((observer) => {
         const subscription = this._resizeSubject.subscribe(observer);
         this._resizeObserver?.observe(target, {
           box: this._box
@@ -123,10 +121,10 @@ var SingleBoxSharedResizeObserver = class {
           subscription.unsubscribe();
           this._elementObservables.delete(target);
         };
-      }).pipe((0, import_operators.filter)((entries) => entries.some((entry) => entry.target === target)), (0, import_operators.shareReplay)({
+      }).pipe(filter((entries) => entries.some((entry) => entry.target === target)), shareReplay({
         bufferSize: 1,
         refCount: true
-      }), (0, import_operators.takeUntil)(this._destroyed)));
+      }), takeUntil(this._destroyed)));
     }
     return this._elementObservables.get(target);
   }
@@ -544,7 +542,7 @@ var MatFormFieldFloatingLabel = class _MatFormFieldFloatingLabel {
   _resizeObserver = inject(SharedResizeObserver);
   _ngZone = inject(NgZone);
   _parent = inject(FLOATING_LABEL_PARENT);
-  _resizeSubscription = new import_rxjs2.Subscription();
+  _resizeSubscription = new Subscription();
   constructor() {
   }
   ngOnDestroy() {
@@ -917,7 +915,7 @@ var MatFormField = class _MatFormField {
   set _control(value) {
     this._explicitFormFieldControl = value;
   }
-  _destroyed = new import_rxjs2.Subject();
+  _destroyed = new Subject();
   _isFocused = null;
   _explicitFormFieldControl;
   _previousControl = null;
@@ -1008,12 +1006,12 @@ var MatFormField = class _MatFormField {
       this._changeDetectorRef.markForCheck();
     });
     this._describedByChanges?.unsubscribe();
-    this._describedByChanges = control.stateChanges.pipe((0, import_operators2.startWith)([void 0, void 0]), (0, import_operators2.map)(() => [control.errorState, control.userAriaDescribedBy]), (0, import_operators2.pairwise)(), (0, import_operators2.filter)(([[prevErrorState, prevDescribedBy], [currentErrorState, currentDescribedBy]]) => {
+    this._describedByChanges = control.stateChanges.pipe(startWith([void 0, void 0]), map(() => [control.errorState, control.userAriaDescribedBy]), pairwise(), filter(([[prevErrorState, prevDescribedBy], [currentErrorState, currentDescribedBy]]) => {
       return prevErrorState !== currentErrorState || prevDescribedBy !== currentDescribedBy;
     })).subscribe(() => this._syncDescribedByIds());
     this._valueChanges?.unsubscribe();
     if (control.ngControl && control.ngControl.valueChanges) {
-      this._valueChanges = control.ngControl.valueChanges.pipe((0, import_operators2.takeUntil)(this._destroyed)).subscribe(() => this._changeDetectorRef.markForCheck());
+      this._valueChanges = control.ngControl.valueChanges.pipe(takeUntil(this._destroyed)).subscribe(() => this._changeDetectorRef.markForCheck());
     }
   }
   _checkPrefixAndSuffixTypes() {
@@ -1024,7 +1022,7 @@ var MatFormField = class _MatFormField {
   }
   _initializePrefixAndSuffix() {
     this._checkPrefixAndSuffixTypes();
-    (0, import_rxjs2.merge)(this._prefixChildren.changes, this._suffixChildren.changes).subscribe(() => {
+    merge(this._prefixChildren.changes, this._suffixChildren.changes).subscribe(() => {
       this._checkPrefixAndSuffixTypes();
       this._changeDetectorRef.markForCheck();
     });
@@ -1494,8 +1492,6 @@ var MatFormField = class _MatFormField {
 })();
 
 // node_modules/@angular/material/fesm2022/form-field.mjs
-var import_rxjs3 = __toESM(require_cjs(), 1);
-var import_operators3 = __toESM(require_operators(), 1);
 var MatFormFieldModule = class _MatFormFieldModule {
   static ɵfac = function MatFormFieldModule_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _MatFormFieldModule)();
@@ -1537,4 +1533,4 @@ export {
   MatFormField,
   MatFormFieldModule
 };
-//# sourceMappingURL=chunk-XQV3HR3K.js.map
+//# sourceMappingURL=chunk-35TTR5LY.js.map

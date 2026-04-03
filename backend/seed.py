@@ -1,6 +1,8 @@
 import asyncio
 from db import SessionLocal
 from models.station import Station
+from models.skill import Skill
+from sqlalchemy import select, func
 
 STATIONS = [
     {"name": "Leitung / V.",  "skills_needed": ["Blutabnahme", "EKG", "Röntgen"]},
@@ -29,13 +31,21 @@ STATIONS = [
 
 async def seed():
     async with SessionLocal() as db:
-        from sqlalchemy import select, func
         count = await db.scalar(select(func.count()).select_from(Station))
         if count > 0:
             print("Already seeded, skipping.")
             return
+
+        result = await db.execute(select(Skill))
+        skills_by_name = {s.name: s for s in result.scalars().all()}
+
         for data in STATIONS:
-            db.add(Station(**data))
+            station = Station(
+                name=data["name"],
+                skill_relations=[skills_by_name[s] for s in data["skills_needed"] if s in skills_by_name]
+            )
+            db.add(station)
+
         await db.commit()
         print(f"Seeded {len(STATIONS)} stations.")
 
