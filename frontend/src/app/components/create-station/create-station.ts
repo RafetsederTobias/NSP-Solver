@@ -219,16 +219,17 @@ export class CreateStationComponent {
     if (id) {
       this.isEditMode = true;
       this.editId = +id;
-      const station = this.stationService.getById(+id);
-      if (station) {
-        this.form.name = station.name;
-        const ids = new Set(
-          this.allSkills()
-            .filter((s) => station.skills_needed.includes(s.name))
-            .map((s) => s.id),
-        );
-        this.selectedSkillIds.set(ids);
-      }
+      this.stationService.getById(+id).subscribe((station) => {
+        if (station) {
+          this.form.name = station.name;
+          const ids = new Set(
+            this.allSkills()
+              .filter((s) => station.skills_needed.includes(s.name))
+              .map((s) => s.id),
+          );
+          this.selectedSkillIds.set(ids);
+        }
+      });
     }
   }
   toggleDropdown() {
@@ -262,11 +263,12 @@ export class CreateStationComponent {
       skills_needed: this.selectedSkills().map((s) => s.name),
     };
     if (this.isEditMode && this.editId) {
-      this.stationService.update(this.editId, data);
+      this.stationService
+        .update(this.editId, data)
+        .subscribe(() => this.router.navigate(['/stations']));
     } else {
-      this.stationService.add(data);
+      this.stationService.add(data).subscribe(() => this.router.navigate(['/stations']));
     }
-    this.router.navigate(['/stations']);
   }
 
   cancel() {

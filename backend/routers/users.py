@@ -4,6 +4,7 @@ from sqlalchemy import select
 from db import get_db
 from models.user import User as UserModel
 from pydantic import BaseModel
+from models import user
 
 router = APIRouter(prefix="/api/v1/users", tags=["users"])
 
@@ -18,7 +19,7 @@ class UserPayload(BaseModel):
     name: str
     skills: list[str]
 
-@router.get("/", response_model=list[User])
+@router.get("", response_model=list[User])
 async def get_users(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(UserModel))
     return result.scalars().all()
@@ -30,7 +31,7 @@ async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
-@router.post("/", response_model=User, status_code=201)
+@router.post("", response_model=User, status_code=201)
 async def create_user(payload: UserPayload, db: AsyncSession = Depends(get_db)):
     user = UserModel(**payload.model_dump())
     db.add(user)

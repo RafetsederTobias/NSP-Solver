@@ -6,13 +6,15 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { LOCALE_ID } from '@angular/core';
-import { provideHttpClient } from '@angular/common/http';
- 
+import { provideHttpClient, withFetch } from '@angular/common/http';
+
 registerLocaleData(localeDe);
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes), provideClientHydration(withEventReplay()),
-    { provide: LOCALE_ID, useValue: 'de' }, provideHttpClient()
-  ]
+    provideRouter(routes),
+    provideClientHydration(withEventReplay()),
+    { provide: LOCALE_ID, useValue: 'de' },
+    provideHttpClient(withFetch()),
+  ],
 };

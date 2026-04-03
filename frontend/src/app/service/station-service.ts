@@ -24,9 +24,9 @@ export class StationService {
     );
   }
 
-  getById(id: number): Station | undefined {
-    return this._stations().find(s => s.id === id);
-  }
+  getById(id: number) {
+  return this.http.get<Station>(`${this.base}/${id}`);
+}
 
   add(data: StationPayload) {
     return this.http.post<Station>(this.base, data).pipe(

@@ -107,10 +107,11 @@ export class Stations {
   private stationService = inject(StationService);
   stations = this.stationService.stations;
 
-  add = output<void>();
-  edit = output<Station>();
+  constructor() {
+    this.stationService.loadAll().subscribe(data=>{console.log(data)});
+  }
 
   deleteStation(station: Station) {
-    this.stationService.delete(station.id);
+    this.stationService.delete(station.id).subscribe();
   }
 }
