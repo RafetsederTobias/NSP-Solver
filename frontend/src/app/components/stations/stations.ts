@@ -108,7 +108,7 @@ export class Stations {
   stations = this.stationService.stations;
 
   constructor() {
-    this.stationService.loadAll().subscribe(data=>{console.log(data)});
+    this.stationService.loadAll().subscribe();
   }
 
   deleteStation(station: Station) {
