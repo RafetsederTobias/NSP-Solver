@@ -1,6 +1,7 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Injectable, signal, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { EMPTY, tap } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 
 export interface User {
   id: number;
@@ -17,30 +18,31 @@ export class UserService {
 
   private _users = signal<User[]>([]);
   readonly users = this._users.asReadonly();
+  private platformId = inject(PLATFORM_ID);
 
   loadAll() {
-    return this.http.get<User[]>(this.base).pipe(
-      tap(users => this._users.set(users))
-    );
+    if (!isPlatformBrowser(this.platformId)) return EMPTY;
+    return this.http.get<User[]>(this.base).pipe(tap((users) => this._users.set(users)));
   }
-
   add(data: UserPayload) {
-    return this.http.post<User>(this.base, data).pipe(
-      tap(user => this._users.update(list => [...list, user]))
-    );
+    return this.http
+      .post<User>(this.base, data)
+      .pipe(tap((user) => this._users.update((list) => [...list, user])));
   }
 
   update(id: number, data: UserPayload) {
-    return this.http.put<User>(`${this.base}/${id}`, data).pipe(
-      tap(updated => this._users.update(list =>
-        list.map(u => u.id === id ? updated : u)
-      ))
-    );
+    return this.http
+      .put<User>(`${this.base}/${id}`, data)
+      .pipe(
+        tap((updated) =>
+          this._users.update((list) => list.map((u) => (u.id === id ? updated : u))),
+        ),
+      );
   }
 
   delete(id: number) {
-    return this.http.delete<void>(`${this.base}/${id}`).pipe(
-      tap(() => this._users.update(list => list.filter(u => u.id !== id)))
-    );
+    return this.http
+      .delete<void>(`${this.base}/${id}`)
+      .pipe(tap(() => this._users.update((list) => list.filter((u) => u.id !== id))));
   }
 }
