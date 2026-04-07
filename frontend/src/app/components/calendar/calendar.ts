@@ -1,4 +1,4 @@
-import { Component, NgZone, ChangeDetectionStrategy } from '@angular/core';
+import { Component, NgZone, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions } from '@fullcalendar/core';
 import { DateClickArg } from '@fullcalendar/interaction';
@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { UserBottomSheet } from '../user-bottom-sheet/user-bottom-sheet';
+import { AssignmentService } from '../../service/assignment-service';
 
 @Component({
   selector: 'app-calendar',
@@ -160,14 +161,14 @@ import { UserBottomSheet } from '../user-bottom-sheet/user-bottom-sheet';
 export class CalendarComponent {
   bottomSheetRef: MatBottomSheetRef | null = null;
   calendarOptions: CalendarOptions;
+  private assignmentService = inject(AssignmentService);
 
   constructor(
     private bottomSheet: MatBottomSheet,
-    private router: Router,
-    private zone: NgZone,
+    private router: Router
   ) {
 
-    this.calendarOptions = this.zone.runOutsideAngular(() => ({
+    this.calendarOptions = {
       initialView: 'dayGridMonth',
       weekends: false,
       plugins: [dayGridPlugin, interactionPlugin],
@@ -183,7 +184,20 @@ export class CalendarComponent {
       dateClick: (info: DateClickArg) => {
           this.router.navigate(['/calendar', info.dateStr]);
       },
-    }));
+    }
+  }
+
+    ngOnInit() {
+    this.assignmentService.loadAll().subscribe((assignments) => {
+        this.calendarOptions = {
+          ...this.calendarOptions,
+          events: assignments.map((a) => ({
+            title: a.users.join(', '),
+            date: a.date,
+          })),
+        };
+
+    });
   }
 
   toggleBottomSheet() {
