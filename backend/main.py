@@ -5,6 +5,8 @@ from db import engine, Base
 from routers import stations
 from routers import users
 from routers import skills
+from routers import assignments
+
 
 
 @asynccontextmanager
@@ -32,6 +34,7 @@ app.add_middleware(
 app.include_router(users.router)
 app.include_router(stations.router)
 app.include_router(skills.router)
+app.include_router(assignments.router)
 
 @app.get("/")
 def read_root():
