@@ -1,7 +1,7 @@
 import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   isPlatformBrowser
-} from "./chunk-MAKODMQV.js";
+} from "./chunk-OZCRCA26.js";
 import {
   ElementRef,
   Injectable,
@@ -128,4 +128,4 @@ export {
   supportsScrollBehavior,
   getRtlScrollAxisType
 };
-//# sourceMappingURL=chunk-CODKKGXY.js.map
+//# sourceMappingURL=chunk-UXNAGEY3.js.map

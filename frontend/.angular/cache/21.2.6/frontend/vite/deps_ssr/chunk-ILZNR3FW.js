@@ -1,3 +1,4 @@
+import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   A,
   DOWN_ARROW,
@@ -17,10 +18,10 @@ import {
   _CdkPrivateStyleLoader,
   _VisuallyHiddenLoader,
   hasModifierKey
-} from "./chunk-24OH6YC7.js";
+} from "./chunk-QKGTCPC3.js";
 import {
   Platform
-} from "./chunk-MVKWA5CV.js";
+} from "./chunk-UXNAGEY3.js";
 import {
   APP_ID,
   DOCUMENT,
@@ -33,37 +34,36 @@ import {
   effect,
   inject,
   isSignal,
+  require_operators,
   setClassMetadata,
   signal,
   ɵɵdefineInjectable,
   ɵɵdefineInjector,
   ɵɵdefineNgModule
-} from "./chunk-F5NGALBH.js";
+} from "./chunk-DSXPS2M4.js";
 import {
-  Subject,
-  Subscription,
-  debounceTime,
-  filter,
-  isObservable,
-  map,
-  of,
-  take,
-  tap
-} from "./chunk-RSS3ODKE.js";
+  require_cjs
+} from "./chunk-O5J3CNTX.js";
 import {
   __spreadProps,
-  __spreadValues
-} from "./chunk-GOMI4DH3.js";
+  __spreadValues,
+  __toESM
+} from "./chunk-6DU2HRTW.js";
+
+// node_modules/@angular/cdk/fesm2022/_list-key-manager-chunk.mjs
+var import_rxjs2 = __toESM(require_cjs(), 1);
 
 // node_modules/@angular/cdk/fesm2022/_typeahead-chunk.mjs
+var import_rxjs = __toESM(require_cjs(), 1);
+var import_operators = __toESM(require_operators(), 1);
 var DEFAULT_TYPEAHEAD_DEBOUNCE_INTERVAL_MS = 200;
 var Typeahead = class {
-  _letterKeyStream = new Subject();
+  _letterKeyStream = new import_rxjs.Subject();
   _items = [];
   _selectedItemIndex = -1;
   _pressedLetters = [];
   _skipPredicateFn;
-  _selectedItem = new Subject();
+  _selectedItem = new import_rxjs.Subject();
   selectedItem = this._selectedItem;
   constructor(initialItems, config) {
     const typeAheadInterval = typeof config?.debounceInterval === "number" ? config.debounceInterval : DEFAULT_TYPEAHEAD_DEBOUNCE_INTERVAL_MS;
@@ -102,7 +102,7 @@ var Typeahead = class {
     this._pressedLetters = [];
   }
   _setupKeyHandler(typeAheadInterval) {
-    this._letterKeyStream.pipe(tap((letter) => this._pressedLetters.push(letter)), debounceTime(typeAheadInterval), filter(() => this._pressedLetters.length > 0), map(() => this._pressedLetters.join("").toLocaleUpperCase())).subscribe((inputString) => {
+    this._letterKeyStream.pipe((0, import_operators.tap)((letter) => this._pressedLetters.push(letter)), (0, import_operators.debounceTime)(typeAheadInterval), (0, import_operators.filter)(() => this._pressedLetters.length > 0), (0, import_operators.map)(() => this._pressedLetters.join("").toLocaleUpperCase())).subscribe((inputString) => {
       for (let i = 1; i < this._items.length + 1; i++) {
         const index = (this._selectedItemIndex + i) % this._items.length;
         const item = this._items[index];
@@ -126,7 +126,7 @@ var ListKeyManager = class {
     debugName: "_activeItem"
   }] : []);
   _wrap = false;
-  _typeaheadSubscription = Subscription.EMPTY;
+  _typeaheadSubscription = import_rxjs2.Subscription.EMPTY;
   _itemChangesSubscription;
   _vertical = true;
   _horizontal = null;
@@ -154,8 +154,8 @@ var ListKeyManager = class {
       }));
     }
   }
-  tabOut = new Subject();
-  change = new Subject();
+  tabOut = new import_rxjs2.Subject();
+  change = new import_rxjs2.Subject();
   skipPredicate(predicate) {
     this._skipPredicateFn = predicate;
     return this;
@@ -393,10 +393,18 @@ var ActiveDescendantKeyManager = class extends ListKeyManager {
   }
 };
 
+// node_modules/@angular/cdk/fesm2022/a11y.mjs
+var import_rxjs5 = __toESM(require_cjs(), 1);
+
+// node_modules/@angular/cdk/fesm2022/_tree-key-manager-chunk.mjs
+var import_rxjs4 = __toESM(require_cjs(), 1);
+var import_operators2 = __toESM(require_operators(), 1);
+
 // node_modules/@angular/cdk/fesm2022/coercion-private.mjs
+var import_rxjs3 = __toESM(require_cjs(), 1);
 function coerceObservable(data) {
-  if (!isObservable(data)) {
-    return of(data);
+  if (!(0, import_rxjs3.isObservable)(data)) {
+    return (0, import_rxjs3.of)(data);
   }
   return data;
 }
@@ -411,7 +419,7 @@ var TreeKeyManager = class {
   _trackByFn = (item) => item;
   _items = [];
   _typeahead;
-  _typeaheadSubscription = Subscription.EMPTY;
+  _typeaheadSubscription = import_rxjs4.Subscription.EMPTY;
   _hasInitialFocused = false;
   _initializeFocus() {
     if (this._hasInitialFocused || this._items.length === 0) {
@@ -440,7 +448,7 @@ var TreeKeyManager = class {
     if (items instanceof QueryList) {
       this._items = items.toArray();
       items.changes.subscribe((newItems) => this._itemsChanged(newItems.toArray()));
-    } else if (isObservable(items)) {
+    } else if ((0, import_rxjs4.isObservable)(items)) {
       items.subscribe((newItems) => this._itemsChanged(newItems));
     } else {
       this._items = items;
@@ -462,7 +470,7 @@ var TreeKeyManager = class {
       this._setTypeAhead(config.typeAheadDebounceInterval);
     }
   }
-  change = new Subject();
+  change = new import_rxjs4.Subject();
   destroy() {
     this._typeaheadSubscription.unsubscribe();
     this._typeahead?.destroy();
@@ -614,7 +622,7 @@ var TreeKeyManager = class {
     if (!this._isCurrentItemExpanded()) {
       this._activeItem.expand();
     } else {
-      coerceObservable(this._activeItem.getChildren()).pipe(take(1)).subscribe((children) => {
+      coerceObservable(this._activeItem.getChildren()).pipe((0, import_operators2.take)(1)).subscribe((children) => {
         const firstChild = children.find((child) => !this._skipPredicateFn(child));
         if (!firstChild) {
           return;
@@ -639,11 +647,11 @@ var TreeKeyManager = class {
     const parent = this._activeItem.getParent();
     let itemsToExpand;
     if (!parent) {
-      itemsToExpand = of(this._items.filter((item) => item.getParent() === null));
+      itemsToExpand = (0, import_rxjs4.of)(this._items.filter((item) => item.getParent() === null));
     } else {
       itemsToExpand = coerceObservable(parent.getChildren());
     }
-    itemsToExpand.pipe(take(1)).subscribe((items) => {
+    itemsToExpand.pipe((0, import_operators2.take)(1)).subscribe((items) => {
       for (const item of items) {
         item.expand();
       }
@@ -659,6 +667,7 @@ var TREE_KEY_MANAGER = new InjectionToken("tree-key-manager", {
 });
 
 // node_modules/@angular/cdk/fesm2022/a11y.mjs
+var import_operators3 = __toESM(require_operators(), 1);
 var ID_DELIMITER = " ";
 function addAriaReferencedId(el, attr, id) {
   const ids = getAriaReferenceIds(el, attr);
@@ -1016,4 +1025,4 @@ export {
   removeAriaReferencedId,
   coerceBooleanProperty
 };
-//# sourceMappingURL=chunk-DGS4R3C6.js.map
+//# sourceMappingURL=chunk-ILZNR3FW.js.map

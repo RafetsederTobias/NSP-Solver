@@ -1,6 +1,6 @@
 import {
   isPlatformBrowser
-} from "./chunk-G2K6UD2U.js";
+} from "./chunk-TMCUE22L.js";
 import {
   ElementRef,
   Injectable,
@@ -127,4 +127,4 @@ export {
   supportsScrollBehavior,
   getRtlScrollAxisType
 };
-//# sourceMappingURL=chunk-MVKWA5CV.js.map
+//# sourceMappingURL=chunk-PBUGZZDC.js.map

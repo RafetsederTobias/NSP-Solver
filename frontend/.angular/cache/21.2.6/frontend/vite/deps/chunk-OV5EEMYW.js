@@ -1,11 +1,11 @@
 import {
+  DomSanitizer
+} from "./chunk-YTP6KVBR.js";
+import {
   Platform,
   coerceElement,
   coerceNumberProperty
-} from "./chunk-MVKWA5CV.js";
-import {
-  DomSanitizer
-} from "./chunk-F2UPICH4.js";
+} from "./chunk-PBUGZZDC.js";
 import {
   ANIMATION_MODULE_TYPE,
   APP_ID,
@@ -1864,4 +1864,4 @@ export {
   Breakpoints,
   _animationsDisabled
 };
-//# sourceMappingURL=chunk-24OH6YC7.js.map
+//# sourceMappingURL=chunk-OV5EEMYW.js.map

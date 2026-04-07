@@ -1,3 +1,4 @@
+import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   _CdkPrivateStyleLoader,
   _animationsDisabled,
@@ -5,14 +6,14 @@ import {
   isFakeMousedownFromScreenReader,
   isFakeTouchstartFromScreenReader,
   normalizePassiveListenerOptions
-} from "./chunk-24OH6YC7.js";
+} from "./chunk-QKGTCPC3.js";
 import {
   Platform,
   coerceElement
-} from "./chunk-MVKWA5CV.js";
+} from "./chunk-UXNAGEY3.js";
 import {
   BidiModule
-} from "./chunk-U36AWYXQ.js";
+} from "./chunk-G3J374VF.js";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -31,10 +32,10 @@ import {
   ɵɵdefineDirective,
   ɵɵdefineInjector,
   ɵɵdefineNgModule
-} from "./chunk-F5NGALBH.js";
+} from "./chunk-DSXPS2M4.js";
 import {
   __spreadValues
-} from "./chunk-GOMI4DH3.js";
+} from "./chunk-6DU2HRTW.js";
 
 // node_modules/@angular/material/fesm2022/_ripple-chunk.mjs
 var RippleState;
@@ -585,4 +586,4 @@ export {
   _StructuralStylesLoader,
   MatRippleModule
 };
-//# sourceMappingURL=chunk-IMYUFGFZ.js.map
+//# sourceMappingURL=chunk-QPNP7NUW.js.map

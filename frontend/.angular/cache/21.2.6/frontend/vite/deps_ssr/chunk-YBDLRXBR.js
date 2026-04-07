@@ -1,3 +1,4 @@
+import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   Platform,
   RtlScrollAxisType,
@@ -5,11 +6,11 @@ import {
   coerceNumberProperty,
   getRtlScrollAxisType,
   supportsScrollBehavior
-} from "./chunk-MVKWA5CV.js";
+} from "./chunk-UXNAGEY3.js";
 import {
   BidiModule,
   Directionality
-} from "./chunk-U36AWYXQ.js";
+} from "./chunk-G3J374VF.js";
 import {
   ApplicationRef,
   ChangeDetectionStrategy,
@@ -38,6 +39,7 @@ import {
   effect,
   forwardRef,
   inject,
+  require_operators,
   setClassMetadata,
   signal,
   untracked,
@@ -60,35 +62,29 @@ import {
   ɵɵqueryRefresh,
   ɵɵstyleProp,
   ɵɵviewQuery
-} from "./chunk-F5NGALBH.js";
+} from "./chunk-DSXPS2M4.js";
 import {
-  ConnectableObservable,
-  Observable,
-  Subject,
-  Subscription,
-  animationFrameScheduler,
-  asapScheduler,
-  auditTime,
-  distinctUntilChanged,
-  filter,
-  isObservable,
-  of,
-  pairwise,
-  shareReplay,
-  startWith,
-  switchMap,
-  takeUntil
-} from "./chunk-RSS3ODKE.js";
+  require_cjs
+} from "./chunk-O5J3CNTX.js";
 import {
   __spreadProps,
-  __spreadValues
-} from "./chunk-GOMI4DH3.js";
+  __spreadValues,
+  __toESM
+} from "./chunk-6DU2HRTW.js";
+
+// node_modules/@angular/cdk/fesm2022/scrolling.mjs
+var import_rxjs3 = __toESM(require_cjs(), 1);
+var import_operators = __toESM(require_operators(), 1);
+
+// node_modules/@angular/cdk/fesm2022/_recycle-view-repeater-strategy-chunk.mjs
+var import_rxjs2 = __toESM(require_cjs(), 1);
 
 // node_modules/@angular/cdk/fesm2022/_data-source-chunk.mjs
+var import_rxjs = __toESM(require_cjs(), 1);
 var DataSource = class {
 };
 function isDataSource(value) {
-  return value && typeof value.connect === "function" && !(value instanceof ConnectableObservable);
+  return value && typeof value.connect === "function" && !(value instanceof import_rxjs.ConnectableObservable);
 }
 
 // node_modules/@angular/cdk/fesm2022/_recycle-view-repeater-strategy-chunk.mjs
@@ -99,7 +95,7 @@ var ArrayDataSource = class extends DataSource {
     this._data = _data;
   }
   connect() {
-    return isObservable(this._data) ? this._data : of(this._data);
+    return (0, import_rxjs2.isObservable)(this._data) ? this._data : (0, import_rxjs2.of)(this._data);
   }
   disconnect() {
   }
@@ -189,8 +185,8 @@ var _c0 = ["contentWrapper"];
 var _c1 = ["*"];
 var VIRTUAL_SCROLL_STRATEGY = new InjectionToken("VIRTUAL_SCROLL_STRATEGY");
 var FixedSizeVirtualScrollStrategy = class {
-  _scrolledIndexChange = new Subject();
-  scrolledIndexChange = this._scrolledIndexChange.pipe(distinctUntilChanged());
+  _scrolledIndexChange = new import_rxjs3.Subject();
+  scrolledIndexChange = this._scrolledIndexChange.pipe((0, import_operators.distinctUntilChanged)());
   _viewport = null;
   _itemSize;
   _minBufferPx;
@@ -362,7 +358,7 @@ var ScrollDispatcher = class _ScrollDispatcher {
   _cleanupGlobalListener;
   constructor() {
   }
-  _scrolled = new Subject();
+  _scrolled = new import_rxjs3.Subject();
   _scrolledCount = 0;
   scrollContainers = /* @__PURE__ */ new Map();
   register(scrollable) {
@@ -379,13 +375,13 @@ var ScrollDispatcher = class _ScrollDispatcher {
   }
   scrolled(auditTimeInMs = DEFAULT_SCROLL_TIME) {
     if (!this._platform.isBrowser) {
-      return of();
+      return (0, import_rxjs3.of)();
     }
-    return new Observable((observer) => {
+    return new import_rxjs3.Observable((observer) => {
       if (!this._cleanupGlobalListener) {
         this._cleanupGlobalListener = this._ngZone.runOutsideAngular(() => this._renderer.listen("document", "scroll", () => this._scrolled.next()));
       }
-      const subscription = auditTimeInMs > 0 ? this._scrolled.pipe(auditTime(auditTimeInMs)).subscribe(observer) : this._scrolled.subscribe(observer);
+      const subscription = auditTimeInMs > 0 ? this._scrolled.pipe((0, import_operators.auditTime)(auditTimeInMs)).subscribe(observer) : this._scrolled.subscribe(observer);
       this._scrolledCount++;
       return () => {
         subscription.unsubscribe();
@@ -405,7 +401,7 @@ var ScrollDispatcher = class _ScrollDispatcher {
   }
   ancestorScrolled(elementOrElementRef, auditTimeInMs) {
     const ancestors = this.getAncestorScrollContainers(elementOrElementRef);
-    return this.scrolled(auditTimeInMs).pipe(filter((target) => !target || ancestors.indexOf(target) > -1));
+    return this.scrolled(auditTimeInMs).pipe((0, import_operators.filter)((target) => !target || ancestors.indexOf(target) > -1));
   }
   getAncestorScrollContainers(elementOrElementRef) {
     const scrollingContainers = [];
@@ -451,10 +447,10 @@ var CdkScrollable = class _CdkScrollable {
     optional: true
   });
   _scrollElement = this.elementRef.nativeElement;
-  _destroyed = new Subject();
+  _destroyed = new import_rxjs3.Subject();
   _renderer = inject(Renderer2);
   _cleanupScroll;
-  _elementScrolled = new Subject();
+  _elementScrolled = new import_rxjs3.Subject();
   constructor() {
   }
   ngOnInit() {
@@ -572,7 +568,7 @@ var ViewportRuler = class _ViewportRuler {
   _platform = inject(Platform);
   _listeners;
   _viewportSize = null;
-  _change = new Subject();
+  _change = new import_rxjs3.Subject();
   _document = inject(DOCUMENT);
   constructor() {
     const ngZone = inject(NgZone);
@@ -636,7 +632,7 @@ var ViewportRuler = class _ViewportRuler {
     };
   }
   change(throttleTime = DEFAULT_RESIZE_TIME) {
-    return throttleTime > 0 ? this._change.pipe(auditTime(throttleTime)) : this._change;
+    return throttleTime > 0 ? this._change.pipe((0, import_operators.auditTime)(throttleTime)) : this._change;
   }
   _getWindow() {
     return this._document.defaultView || window;
@@ -693,7 +689,7 @@ var CdkVirtualScrollable = class _CdkVirtualScrollable extends CdkScrollable {
 function rangesEqual(r1, r2) {
   return r1.start == r2.start && r1.end == r2.end;
 }
-var SCROLL_SCHEDULER = typeof requestAnimationFrame !== "undefined" ? animationFrameScheduler : asapScheduler;
+var SCROLL_SCHEDULER = typeof requestAnimationFrame !== "undefined" ? import_rxjs3.animationFrameScheduler : import_rxjs3.asapScheduler;
 var CDK_VIRTUAL_SCROLL_VIEWPORT = new InjectionToken("CDK_VIRTUAL_SCROLL_VIEWPORT");
 var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtualScrollable {
   elementRef = inject(ElementRef);
@@ -705,9 +701,9 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
     optional: true
   });
   _platform = inject(Platform);
-  _detachedSubject = new Subject();
-  _renderedRangeSubject = new Subject();
-  _renderedContentOffsetSubject = new Subject();
+  _detachedSubject = new import_rxjs3.Subject();
+  _renderedRangeSubject = new import_rxjs3.Subject();
+  _renderedContentOffsetSubject = new import_rxjs3.Subject();
   get orientation() {
     return this._orientation;
   }
@@ -719,10 +715,10 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
   }
   _orientation = "vertical";
   appendOnly = false;
-  scrolledIndexChange = new Observable((observer) => this._scrollStrategy.scrolledIndexChange.subscribe((index) => Promise.resolve().then(() => this.ngZone.run(() => observer.next(index)))));
+  scrolledIndexChange = new import_rxjs3.Observable((observer) => this._scrollStrategy.scrolledIndexChange.subscribe((index) => Promise.resolve().then(() => this.ngZone.run(() => observer.next(index)))));
   _contentWrapper;
   renderedRangeStream = this._renderedRangeSubject;
-  renderedContentOffset = this._renderedContentOffsetSubject.pipe(filter((offset) => offset !== null), distinctUntilChanged());
+  renderedContentOffset = this._renderedContentOffsetSubject.pipe((0, import_operators.filter)((offset) => offset !== null), (0, import_operators.distinctUntilChanged)());
   _totalContentSize = 0;
   _totalContentWidth = signal("", ...ngDevMode ? [{
     debugName: "_totalContentWidth"
@@ -744,7 +740,7 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
     debugName: "_changeDetectionNeeded"
   }] : []);
   _runAfterChangeDetection = [];
-  _viewportChanges = Subscription.EMPTY;
+  _viewportChanges = import_rxjs3.Subscription.EMPTY;
   _injector = inject(Injector);
   _isDestroyed = false;
   constructor() {
@@ -781,7 +777,7 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
     this.ngZone.runOutsideAngular(() => Promise.resolve().then(() => {
       this._measureViewportSize();
       this._scrollStrategy.attach(this);
-      this.scrollable.elementScrolled().pipe(startWith(null), auditTime(0, SCROLL_SCHEDULER), takeUntil(this._destroyed)).subscribe(() => this._scrollStrategy.onContentScrolled());
+      this.scrollable.elementScrolled().pipe((0, import_operators.startWith)(null), (0, import_operators.auditTime)(0, SCROLL_SCHEDULER), (0, import_operators.takeUntil)(this._destroyed)).subscribe(() => this._scrollStrategy.onContentScrolled());
       this._markChangeDetectionNeeded();
     }));
   }
@@ -800,7 +796,7 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
     }
     this.ngZone.runOutsideAngular(() => {
       this._forOf = forOf;
-      this._forOf.dataStream.pipe(takeUntil(this._detachedSubject)).subscribe((data) => {
+      this._forOf.dataStream.pipe((0, import_operators.takeUntil)(this._detachedSubject)).subscribe((data) => {
         const newLength = data.length;
         if (newLength !== this._dataLength) {
           this._dataLength = newLength;
@@ -1094,8 +1090,8 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
   _viewport = inject(CDK_VIRTUAL_SCROLL_VIEWPORT, {
     skipSelf: true
   });
-  viewChange = new Subject();
-  _dataSourceChanges = new Subject();
+  viewChange = new import_rxjs3.Subject();
+  _dataSourceChanges = new import_rxjs3.Subject();
   get cdkVirtualForOf() {
     return this._cdkVirtualForOf;
   }
@@ -1104,7 +1100,7 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
     if (isDataSource(value)) {
       this._dataSourceChanges.next(value);
     } else {
-      this._dataSourceChanges.next(new ArrayDataSource(isObservable(value) ? value : Array.from(value || [])));
+      this._dataSourceChanges.next(new ArrayDataSource((0, import_rxjs3.isObservable)(value) ? value : Array.from(value || [])));
     }
   }
   _cdkVirtualForOf;
@@ -1128,7 +1124,7 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
   set cdkVirtualForTemplateCacheSize(size) {
     this._viewRepeater.viewCacheSize = coerceNumberProperty(size);
   }
-  dataStream = this._dataSourceChanges.pipe(startWith(null), pairwise(), switchMap(([prev, cur]) => this._changeDataSource(prev, cur)), shareReplay(1));
+  dataStream = this._dataSourceChanges.pipe((0, import_operators.startWith)(null), (0, import_operators.pairwise)(), (0, import_operators.switchMap)(([prev, cur]) => this._changeDataSource(prev, cur)), (0, import_operators.shareReplay)(1));
   _differ = null;
   _data = [];
   _renderedItems = [];
@@ -1137,14 +1133,14 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
     end: 0
   };
   _needsUpdate = false;
-  _destroyed = new Subject();
+  _destroyed = new import_rxjs3.Subject();
   constructor() {
     const ngZone = inject(NgZone);
     this.dataStream.subscribe((data) => {
       this._data = data;
       this._onRenderedDataChange();
     });
-    this._viewport.renderedRangeStream.pipe(takeUntil(this._destroyed)).subscribe((range) => {
+    this._viewport.renderedRangeStream.pipe((0, import_operators.takeUntil)(this._destroyed)).subscribe((range) => {
       this._renderedRange = range;
       if (this.viewChange.observers.length) {
         ngZone.run(() => this.viewChange.next(this._renderedRange));
@@ -1217,7 +1213,7 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
       oldDs.disconnect(this);
     }
     this._needsUpdate = true;
-    return newDs ? newDs.connect(this) : of();
+    return newDs ? newDs.connect(this) : (0, import_rxjs3.of)();
   }
   _updateContext() {
     const count = this._data.length;
@@ -1437,4 +1433,4 @@ export {
   CdkScrollableModule,
   ScrollingModule
 };
-//# sourceMappingURL=chunk-VOTN343P.js.map
+//# sourceMappingURL=chunk-YBDLRXBR.js.map

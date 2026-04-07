@@ -1,6 +1,7 @@
+import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   getDOM
-} from "./chunk-DUE4JVTC.js";
+} from "./chunk-YFOEJUGX.js";
 import {
   ApplicationRef,
   ChangeDetectorRef,
@@ -29,6 +30,7 @@ import {
   inject,
   isPromise,
   isSubscribable,
+  require_operators,
   setClassMetadata,
   signal,
   untracked,
@@ -44,19 +46,19 @@ import {
   ɵɵdirectiveInject,
   ɵɵgetInheritedFactory,
   ɵɵlistener
-} from "./chunk-F5NGALBH.js";
+} from "./chunk-DSXPS2M4.js";
 import {
-  Subject,
-  forkJoin,
-  from,
-  map
-} from "./chunk-RSS3ODKE.js";
+  require_cjs
+} from "./chunk-O5J3CNTX.js";
 import {
   __spreadProps,
-  __spreadValues
-} from "./chunk-GOMI4DH3.js";
+  __spreadValues,
+  __toESM
+} from "./chunk-6DU2HRTW.js";
 
 // node_modules/@angular/forms/fesm2022/forms.mjs
+var import_rxjs = __toESM(require_cjs(), 1);
+var import_operators = __toESM(require_operators(), 1);
 var BaseControlValueAccessor = class _BaseControlValueAccessor {
   _renderer;
   _elementRef;
@@ -405,7 +407,7 @@ function isPresent(o) {
   return o != null;
 }
 function toObservable(value) {
-  const obs = isPromise(value) ? from(value) : value;
+  const obs = isPromise(value) ? (0, import_rxjs.from)(value) : value;
   if ((typeof ngDevMode === "undefined" || ngDevMode) && !isSubscribable(obs)) {
     let errorMessage = `Expected async validator to return Promise or Observable.`;
     if (typeof value === "object") {
@@ -450,7 +452,7 @@ function composeAsync(validators) {
   if (presentValidators.length == 0) return null;
   return function(control) {
     const observables = executeValidators(control, presentValidators).map(toObservable);
-    return forkJoin(observables).pipe(map(mergeErrors));
+    return (0, import_rxjs.forkJoin)(observables).pipe((0, import_operators.map)(mergeErrors));
   };
 }
 function composeAsyncValidators(validators) {
@@ -1043,7 +1045,7 @@ var AbstractControl = class {
   get untouched() {
     return !this.touched;
   }
-  _events = new Subject();
+  _events = new import_rxjs.Subject();
   events = this._events.asObservable();
   valueChanges;
   statusChanges;
@@ -4788,4 +4790,4 @@ export {
   FormsModule,
   ReactiveFormsModule
 };
-//# sourceMappingURL=chunk-TPRADQHK.js.map
+//# sourceMappingURL=chunk-WHVQB73Y.js.map
