@@ -1,9 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, ElementRef, inject, ViewChild } from '@angular/core';
-import {
-  MatBottomSheetModule,
-  MatBottomSheetRef,
-} from '@angular/material/bottom-sheet';
+import { MatBottomSheetModule, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { Draggable } from '@fullcalendar/interaction/index.js';
@@ -30,7 +27,7 @@ import { UserService } from '../../service/user-service';
         <div class="flex flex-wrap gap-2">
           <div
             class="fc-event min-w-[7vw] inline-block px-4 py-1.5 bg-indigo-100 text-indigo-700 rounded-full cursor-grab text-sm font-medium active:cursor-grabbing active:scale-95 active:bg-indigo-200 select-none"
-            *ngFor="let user of userList()"
+            *ngFor="let user of userService.users()"
           >
             {{ user.name }}
           </div>
@@ -40,14 +37,16 @@ import { UserService } from '../../service/user-service';
   `,
 })
 export class UserBottomSheet {
-  private userService = inject(UserService);
-
-  userList = this.userService.users;
+  userService = inject(UserService);
 
   constructor(private bottomSheetRef: MatBottomSheetRef<UserBottomSheet>) {}
 
   close() {
     this.bottomSheetRef.dismiss();
+  }
+
+  ngOnInit() {
+    this.userService.loadAll().subscribe();
   }
 
   ngAfterViewInit() {
