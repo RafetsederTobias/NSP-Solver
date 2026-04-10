@@ -2,8 +2,8 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from db import get_db
-from models.user import User as UserModel
-from models.skill import Skill as SkillModel
+from models.User import User as UserModel
+from models.Skill import Skill as SkillModel
 from pydantic import BaseModel
 from sqlalchemy.orm import selectinload
 

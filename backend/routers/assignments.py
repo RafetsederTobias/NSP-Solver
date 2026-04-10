@@ -2,8 +2,8 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from db import get_db
-from models.assignment import Assignment as AssignmentModel
-from models.user import User as UserModel
+from models.Assignment import Assignment as AssignmentModel
+from models.User import User as UserModel
 from pydantic import BaseModel
 from sqlalchemy.orm import selectinload
 from datetime import date

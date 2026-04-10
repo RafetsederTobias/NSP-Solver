@@ -3,8 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from db import get_db
-from models.station import Station as StationModel
-from models.skill import Skill as SkillModel
+from models.Station import Station as StationModel
+from models.Skill import Skill as SkillModel
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/v1/stations", tags=["stations"])

@@ -8,7 +8,7 @@ import { User } from '../../service/user-service';
 import { StationService } from '../../service/station-service';
 import { Assignment, AssignmentService } from '../../service/assignment-service';
 
-interface StationUserAssignment {
+interface StationAssignment {
   stationId: number;
   selectedUserId: number | null;
 }
@@ -64,7 +64,7 @@ interface StationUserAssignment {
 
             <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
               <mat-select
-                [(ngModel)]="getAssignment(station.id).selectedUserId"
+                [(ngModel)]="getStationAssignment(station.id).selectedUserId"
                 placeholder="— Niemand —"
               >
                 <mat-option [value]="null">— Niemand —</mat-option>
@@ -80,7 +80,7 @@ interface StationUserAssignment {
   `,
 })
 export class DayDetailComponent {
-  private assignments = new Map<number, StationUserAssignment>();
+  private assignments = new Map<number, StationAssignment>();
   private route = inject(ActivatedRoute);
   public users : User[] = [];
   public date = new Date();
@@ -98,13 +98,14 @@ export class DayDetailComponent {
 
     let info = this.route.snapshot.paramMap.get('assignment')!;
     const assignmentId = +info.split(";")[0];
+    this.date = new Date(info.split(";")[1]);
     if (assignmentId == -1) return;
     this.assignmentService.getUsersByAssignment(assignmentId).subscribe((data) => {
       this.users = data;
     });
   }
 
-  getAssignment(stationId: number): StationUserAssignment {
+  getStationAssignment(stationId: number): StationAssignment {
     if (!this.assignments.has(stationId)) {
       this.assignments.set(stationId, { stationId, selectedUserId: null });
     }

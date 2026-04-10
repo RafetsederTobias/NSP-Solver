@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Table, ForeignKey
 from sqlalchemy.orm import relationship
 from db import Base
-from models.skill import Skill
+from models.Skill import Skill
 
 station_skills = Table(
     "station_skills", Base.metadata,
