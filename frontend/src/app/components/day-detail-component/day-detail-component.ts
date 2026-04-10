@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -9,10 +9,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { User } from '../../service/user-service';
 import { StationService } from '../../service/station-service';
 import { AssignmentService } from '../../service/assignment-service';
-import {
-  StationAssignment,
-  StationAssignmentService,
-} from '../../service/station-assignment-service';
+import { StationAssignmentService } from '../../service/station-assignment-service';
 
 interface StationRow {
   stationId: number;
@@ -64,19 +61,19 @@ interface StationRow {
           </div>
 
           <div
-            *ngFor="let station of stationService.stations()"
+            *ngFor="let row of rows()"
             class="station-row grid grid-cols-[1fr_280px] items-center px-6 py-3 hover:bg-slate-50 transition-colors"
           >
-            <span class="text-sm font-medium text-slate-700">{{ station.name }}</span>
+            <span class="text-sm font-medium text-slate-700">{{ stationName(row.stationId) }}</span>
 
             <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
               <mat-select
-                [(ngModel)]="getRow(station.id).selectedUserId"
-                (ngModelChange)="onSelectionChange(getRow(station.id))"
+                [(ngModel)]="row.selectedUserId"
+                (ngModelChange)="onSelectionChange(row)"
                 placeholder="— Niemand —"
               >
                 <mat-option [value]="null">— Niemand —</mat-option>
-                <mat-option *ngFor="let user of users" [value]="user.id">
+                <mat-option *ngFor="let user of availableUsers(row)" [value]="user.id">
                   {{ user.name }}
                 </mat-option>
               </mat-select>
@@ -88,7 +85,8 @@ interface StationRow {
   `,
 })
 export class DayDetailComponent {
-  private rows = new Map<number, StationRow>();
+  rows = signal<StationRow[]>([]);
+
   private route = inject(ActivatedRoute);
   public users: User[] = [];
   public date = new Date();
@@ -100,35 +98,42 @@ export class DayDetailComponent {
   stationAssignmentService = inject(StationAssignmentService);
 
   ngOnInit() {
-    let info = this.route.snapshot.paramMap.get('assignment')!;
-    const assignmentId = +info.split(';')[0];
-    this.dateIso = info.split(';')[1];
-    this.date = new Date(this.dateIso);
+    this.route.paramMap.subscribe((params) => {
+      const info = params.get('assignment')!;
+      this.dateIso = info;
+      this.date = new Date(this.dateIso);
 
-    this.stationService.loadAll().subscribe(() => {
-      this.stationAssignmentService.getByDate(this.dateIso).subscribe((existing) => {
-        for (const station of this.stationService.stations()) {
-          const match = existing.find((a) => a.station_id === station.id);
-          this.rows.set(station.id, {
-            stationId: station.id,
-            assignmentId: match?.id ?? null,
-            selectedUserId: match?.user_id ?? null,
-          });
-        }
+      this.stationService.loadAll().subscribe(() => {
+        this.stationAssignmentService.getByDate(this.dateIso).subscribe((existing) => {
+          this.rows.set(
+            this.stationService.stations().map((station) => {
+              const match = existing.find((a) => a.station_id === station.id);
+              return {
+                stationId: station.id,
+                assignmentId: match?.id ?? null,
+                selectedUserId: match?.user_id ?? null,
+              };
+            }),
+          );
+        });
       });
-    });
 
-    if (assignmentId === -1) return;
-    this.assignmentService.getUsersByAssignment(assignmentId).subscribe((data) => {
-      this.users = data;
+      this.assignmentService.getUsersByDate(this.dateIso).subscribe((data) => {
+        this.users = data;
+      });
     });
   }
 
-  getRow(stationId: number): StationRow {
-    if (!this.rows.has(stationId)) {
-      this.rows.set(stationId, { stationId, assignmentId: null, selectedUserId: null });
-    }
-    return this.rows.get(stationId)!;
+  stationName(stationId: number): string {
+    return this.stationService.stations().find((s) => s.id === stationId)?.name ?? '';
+  }
+
+  availableUsers(row: StationRow): User[] {
+    const assignedUserIds = this.rows()
+      .filter((r) => r.stationId !== row.stationId && r.selectedUserId !== null)
+      .map((r) => r.selectedUserId!);
+
+    return this.users.filter((u) => !assignedUserIds.includes(u.id));
   }
 
   onSelectionChange(row: StationRow): void {
@@ -136,7 +141,7 @@ export class DayDetailComponent {
       this.stationAssignmentService
         .delete(row.assignmentId)
         .pipe(
-          tap(() => (row.assignmentId = null)),
+          tap(() => this.updateRow(row.stationId, { assignmentId: null })),
           catchError(() => of(null)),
         )
         .subscribe();
@@ -148,7 +153,7 @@ export class DayDetailComponent {
           user_id: row.selectedUserId,
         })
         .pipe(
-          tap((saved) => (row.assignmentId = saved.id)),
+          tap((saved) => this.updateRow(row.stationId, { assignmentId: saved.id })),
           catchError(() => of(null)),
         )
         .subscribe();
@@ -162,5 +167,11 @@ export class DayDetailComponent {
         .pipe(catchError(() => of(null)))
         .subscribe();
     }
+  }
+
+  private updateRow(stationId: number, patch: Partial<StationRow>): void {
+    this.rows.update((rows) =>
+      rows.map((r) => (r.stationId === stationId ? { ...r, ...patch } : r)),
+    );
   }
 }

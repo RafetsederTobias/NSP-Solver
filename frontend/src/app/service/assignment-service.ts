@@ -55,7 +55,7 @@ export class AssignmentService {
       .pipe(tap(() => this._assignments.update((list) => list.filter((a) => a.id !== id))));
   }
 
-  getUsersByAssignment(assignmentId: number) {
-    return this.http.get<User[]>(`${this.base}/${assignmentId}/users`);
+  getUsersByDate(date: string) {
+    return this.http.get<User[]>(`${this.base}/by-date/${date}/users`);
   }
 }
