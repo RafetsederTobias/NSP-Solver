@@ -4,12 +4,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { User } from '../../service/user-service';
 import { StationService } from '../../service/station-service';
-import { Assignment, AssignmentService } from '../../service/assignment-service';
+import { AssignmentService } from '../../service/assignment-service';
+import {
+  StationAssignment,
+  StationAssignmentService,
+} from '../../service/station-assignment-service';
 
-interface StationAssignment {
+interface StationRow {
   stationId: number;
+  assignmentId: number | null;
   selectedUserId: number | null;
 }
 
@@ -64,11 +71,12 @@ interface StationAssignment {
 
             <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
               <mat-select
-                [(ngModel)]="getStationAssignment(station.id).selectedUserId"
+                [(ngModel)]="getRow(station.id).selectedUserId"
+                (ngModelChange)="onSelectionChange(getRow(station.id))"
                 placeholder="— Niemand —"
               >
                 <mat-option [value]="null">— Niemand —</mat-option>
-                <mat-option *ngFor="let user of this.users" [value]="user.id">
+                <mat-option *ngFor="let user of users" [value]="user.id">
                   {{ user.name }}
                 </mat-option>
               </mat-select>
@@ -80,35 +88,79 @@ interface StationAssignment {
   `,
 })
 export class DayDetailComponent {
-  private assignments = new Map<number, StationAssignment>();
+  private rows = new Map<number, StationRow>();
   private route = inject(ActivatedRoute);
-  public users : User[] = [];
+  public users: User[] = [];
   public date = new Date();
+  public dateIso = '';
 
   router = inject(Router);
   stationService = inject(StationService);
   assignmentService = inject(AssignmentService);
+  stationAssignmentService = inject(StationAssignmentService);
 
   ngOnInit() {
+    let info = this.route.snapshot.paramMap.get('assignment')!;
+    const assignmentId = +info.split(';')[0];
+    this.dateIso = info.split(';')[1];
+    this.date = new Date(this.dateIso);
+
     this.stationService.loadAll().subscribe(() => {
-      for (const station of this.stationService.stations()) {
-        this.assignments.set(station.id, { stationId: station.id, selectedUserId: null });
-      }
+      this.stationAssignmentService.getByDate(this.dateIso).subscribe((existing) => {
+        for (const station of this.stationService.stations()) {
+          const match = existing.find((a) => a.station_id === station.id);
+          this.rows.set(station.id, {
+            stationId: station.id,
+            assignmentId: match?.id ?? null,
+            selectedUserId: match?.user_id ?? null,
+          });
+        }
+      });
     });
 
-    let info = this.route.snapshot.paramMap.get('assignment')!;
-    const assignmentId = +info.split(";")[0];
-    this.date = new Date(info.split(";")[1]);
-    if (assignmentId == -1) return;
+    if (assignmentId === -1) return;
     this.assignmentService.getUsersByAssignment(assignmentId).subscribe((data) => {
       this.users = data;
     });
   }
 
-  getStationAssignment(stationId: number): StationAssignment {
-    if (!this.assignments.has(stationId)) {
-      this.assignments.set(stationId, { stationId, selectedUserId: null });
+  getRow(stationId: number): StationRow {
+    if (!this.rows.has(stationId)) {
+      this.rows.set(stationId, { stationId, assignmentId: null, selectedUserId: null });
     }
-    return this.assignments.get(stationId)!;
+    return this.rows.get(stationId)!;
+  }
+
+  onSelectionChange(row: StationRow): void {
+    if (row.selectedUserId === null && row.assignmentId !== null) {
+      this.stationAssignmentService
+        .delete(row.assignmentId)
+        .pipe(
+          tap(() => (row.assignmentId = null)),
+          catchError(() => of(null)),
+        )
+        .subscribe();
+    } else if (row.selectedUserId !== null && row.assignmentId === null) {
+      this.stationAssignmentService
+        .create({
+          date: this.dateIso,
+          station_id: row.stationId,
+          user_id: row.selectedUserId,
+        })
+        .pipe(
+          tap((saved) => (row.assignmentId = saved.id)),
+          catchError(() => of(null)),
+        )
+        .subscribe();
+    } else if (row.selectedUserId !== null && row.assignmentId !== null) {
+      this.stationAssignmentService
+        .update(row.assignmentId, {
+          date: this.dateIso,
+          station_id: row.stationId,
+          user_id: row.selectedUserId,
+        })
+        .pipe(catchError(() => of(null)))
+        .subscribe();
+    }
   }
 }

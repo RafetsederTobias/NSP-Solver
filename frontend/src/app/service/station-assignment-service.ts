@@ -18,7 +18,7 @@ export interface StationAssignmentCreate {
 @Injectable({ providedIn: 'root' })
 export class StationAssignmentService {
   private http = inject(HttpClient);
-  private base = '/api/v1/station-assignments';
+  private base = 'http://localhost:8000/api/v1/station-assignments';
 
   getByDate(date: string): Observable<StationAssignment[]> {
     return this.http.get<StationAssignment[]>(this.base, { params: { date } });
