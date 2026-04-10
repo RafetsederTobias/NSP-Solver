@@ -14,3 +14,5 @@ class Station(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
     skill_relations = relationship("Skill", secondary=station_skills)
+    station_assignments = relationship("StationAssignment", back_populates="station")
+    

@@ -15,3 +15,5 @@ class User(Base):
     name = Column(String, nullable=False)
     skill_relations = relationship("Skill", secondary=user_skills)
     assignments = relationship("Assignment", secondary=assignment_users, back_populates="users")
+    station_assignments = relationship("StationAssignment", back_populates="user")
+
