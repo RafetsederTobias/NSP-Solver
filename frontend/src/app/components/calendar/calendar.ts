@@ -193,7 +193,8 @@ export class CalendarComponent implements OnInit {
         },
         events: assignments.flatMap((a) => a.users.map((user) => ({ title: user, date: a.date }))),
         dateClick: (info: DateClickArg) => {
-          this.router.navigate(['/calendar', info.dateStr]);
+          const assignment = assignments.find((a) => a.date === info.dateStr);
+          this.router.navigate(['/calendar', assignment?.id ?? -1 + ";" + info.dateStr]);
         },
       })),
     );

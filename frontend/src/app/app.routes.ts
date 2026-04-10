@@ -16,6 +16,6 @@ export const routes: Routes = [
   { path: 'users/:id/edit', component: CreateUserComponent },
   { path: 'stations/:id/edit', component: CreateStationComponent },
   { path: 'stations/create', component: CreateStationComponent },
-  { path: 'calendar/:date', component: DayDetailComponent },
+  { path: 'calendar/:assignment', component: DayDetailComponent },
   { path: '', redirectTo: 'calendar', pathMatch: 'full' },
 ];

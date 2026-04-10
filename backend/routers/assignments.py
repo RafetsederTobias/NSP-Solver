@@ -86,3 +86,15 @@ async def delete_assignment(assignment_id: int, db: AsyncSession = Depends(get_d
         raise HTTPException(status_code=404, detail="Assignment not found")
     await db.delete(assignment)
     await db.commit()
+
+@router.get("/{assignment_id}/users")
+async def get_users_by_assignment(assignment_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(
+        select(AssignmentModel)
+        .options(selectinload(AssignmentModel.users))
+        .where(AssignmentModel.id == assignment_id)
+    )
+    assignment = result.scalar_one_or_none()
+    if not assignment:
+        raise HTTPException(status_code=404, detail="Assignment not found")
+    return assignment.users

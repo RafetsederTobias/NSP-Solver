@@ -4,10 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { UserService } from '../../service/user-service';
+import { User } from '../../service/user-service';
 import { StationService } from '../../service/station-service';
+import { Assignment, AssignmentService } from '../../service/assignment-service';
 
-interface Assignment {
+interface StationUserAssignment {
   stationId: number;
   selectedUserId: number | null;
 }
@@ -67,7 +68,7 @@ interface Assignment {
                 placeholder="— Niemand —"
               >
                 <mat-option [value]="null">— Niemand —</mat-option>
-                <mat-option *ngFor="let user of userService.users()" [value]="user.id">
+                <mat-option *ngFor="let user of this.users" [value]="user.id">
                   {{ user.name }}
                 </mat-option>
               </mat-select>
@@ -79,27 +80,31 @@ interface Assignment {
   `,
 })
 export class DayDetailComponent {
-  private assignments = new Map<number, Assignment>();
+  private assignments = new Map<number, StationUserAssignment>();
   private route = inject(ActivatedRoute);
-  router = inject(Router);
-  userService = inject(UserService);
-  stationService = inject(StationService);
+  public users : User[] = [];
+  public date = new Date();
 
-  date: Date = new Date();
+  router = inject(Router);
+  stationService = inject(StationService);
+  assignmentService = inject(AssignmentService);
 
   ngOnInit() {
-    const dateStr = this.route.snapshot.paramMap.get('date') ?? '';
-    this.date = new Date(dateStr);
-
-    this.userService.loadAll().subscribe();
     this.stationService.loadAll().subscribe(() => {
       for (const station of this.stationService.stations()) {
         this.assignments.set(station.id, { stationId: station.id, selectedUserId: null });
       }
     });
+
+    let info = this.route.snapshot.paramMap.get('assignment')!;
+    const assignmentId = +info.split(";")[0];
+    if (assignmentId == -1) return;
+    this.assignmentService.getUsersByAssignment(assignmentId).subscribe((data) => {
+      this.users = data;
+    });
   }
 
-  getAssignment(stationId: number): Assignment {
+  getAssignment(stationId: number): StationUserAssignment {
     if (!this.assignments.has(stationId)) {
       this.assignments.set(stationId, { stationId, selectedUserId: null });
     }

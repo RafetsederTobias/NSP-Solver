@@ -1,6 +1,7 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
+import { User } from './user-service';
 
 export interface Assignment {
   id: number;
@@ -19,7 +20,9 @@ export class AssignmentService {
   readonly assignments = this._assignments.asReadonly();
 
   loadAll() {
-    return this.http.get<Assignment[]>(this.base).pipe(tap((assignments) => this._assignments.set(assignments)));
+    return this.http
+      .get<Assignment[]>(this.base)
+      .pipe(tap((assignments) => this._assignments.set(assignments)));
   }
 
   loadByDate(date: string) {
@@ -50,5 +53,9 @@ export class AssignmentService {
     return this.http
       .delete<void>(`${this.base}/${id}`)
       .pipe(tap(() => this._assignments.update((list) => list.filter((a) => a.id !== id))));
+  }
+
+  getUsersByAssignment(assignmentId: number) {
+    return this.http.get<User[]>(`${this.base}/${assignmentId}/users`);
   }
 }
