@@ -11,10 +11,16 @@ import { StationService } from '../../service/station-service';
 import { AssignmentService } from '../../service/assignment-service';
 import { StationAssignmentService } from '../../service/station-assignment-service';
 
+interface StationAssignment {
+  assignmentId: number;
+  userId: number;
+}
+
 interface StationRow {
   stationId: number;
-  assignmentId: number | null;
-  selectedUserId: number | null;
+  maxAssignments: number;
+  assignments: StationAssignment[];       // currently persisted pairs
+  selectedUserIds: number[];              // bound to mat-select
 }
 
 @Component({
@@ -52,12 +58,8 @@ interface StationRow {
           <div
             class="grid grid-cols-[1fr_280px] items-center px-6 py-3 bg-slate-50 border-b border-slate-100"
           >
-            <span class="text-xs font-semibold uppercase tracking-widest text-slate-400"
-              >Station</span
-            >
-            <span class="text-xs font-semibold uppercase tracking-widest text-slate-400"
-              >Mitarbeiter</span
-            >
+            <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Station</span>
+            <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Mitarbeiter</span>
           </div>
 
           <div
@@ -68,12 +70,16 @@ interface StationRow {
 
             <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
               <mat-select
-                [(ngModel)]="row.selectedUserId"
+                [multiple]="true"
+                [(ngModel)]="row.selectedUserIds"
                 (ngModelChange)="onSelectionChange(row)"
                 placeholder="— Niemand —"
               >
-                <mat-option [value]="null">— Niemand —</mat-option>
-                <mat-option *ngFor="let user of availableUsers(row)" [value]="user.id">
+                <mat-option
+                  *ngFor="let user of availableUsers(row)"
+                  [value]="user.id"
+                  [disabled]="isAtCapacity(row, user.id)"
+                >
                   {{ user.name }}
                 </mat-option>
               </mat-select>
@@ -107,11 +113,12 @@ export class DayDetailComponent {
         this.stationAssignmentService.getByDate(this.dateIso).subscribe((existing) => {
           this.rows.set(
             this.stationService.stations().map((station) => {
-              const match = existing.find((a) => a.station_id === station.id);
+              const matches = existing.filter((a) => a.station_id === station.id);
               return {
                 stationId: station.id,
-                assignmentId: match?.id ?? null,
-                selectedUserId: match?.user_id ?? null,
+                maxAssignments: station.maxAssignments ?? 1,
+                assignments: matches.map((m) => ({ assignmentId: m.id, userId: m.user_id })),
+                selectedUserIds: matches.map((m) => m.user_id),
               };
             }),
           );
@@ -128,50 +135,65 @@ export class DayDetailComponent {
     return this.stationService.stations().find((s) => s.id === stationId)?.name ?? '';
   }
 
+  /** Users not already assigned to a *different* station, plus those already on this station */
   availableUsers(row: StationRow): User[] {
-    const assignedUserIds = this.rows()
-      .filter((r) => r.stationId !== row.stationId && r.selectedUserId !== null)
-      .map((r) => r.selectedUserId!);
+    const assignedElsewhere = new Set(
+      this.rows()
+        .filter((r) => r.stationId !== row.stationId)
+        .flatMap((r) => r.selectedUserIds),
+    );
+    return this.users.filter((u) => !assignedElsewhere.has(u.id));
+  }
 
-    return this.users.filter((u) => !assignedUserIds.includes(u.id));
+  /** Disable option when station is full AND the user isn't already selected */
+  isAtCapacity(row: StationRow, userId: number): boolean {
+    return (
+      row.selectedUserIds.length >= row.maxAssignments &&
+      !row.selectedUserIds.includes(userId)
+    );
   }
 
   onSelectionChange(row: StationRow): void {
-    if (row.selectedUserId === null && row.assignmentId !== null) {
+    const previous = row.assignments; // persisted state
+    const nextIds = row.selectedUserIds; // new selection from UI
+
+    // Users removed → delete their assignment
+    const removed = previous.filter((a) => !nextIds.includes(a.userId));
+    for (const a of removed) {
       this.stationAssignmentService
-        .delete(row.assignmentId)
+        .delete(a.assignmentId)
         .pipe(
-          tap(() => this.updateRow(row.stationId, { assignmentId: null })),
+          tap(() =>
+            this.updateRow(row.stationId, (r) => ({
+              assignments: r.assignments.filter((x) => x.assignmentId !== a.assignmentId),
+            })),
+          ),
           catchError(() => of(null)),
         )
         .subscribe();
-    } else if (row.selectedUserId !== null && row.assignmentId === null) {
+    }
+
+    // Users added → create new assignment
+    const existingUserIds = previous.map((a) => a.userId);
+    const added = nextIds.filter((id) => !existingUserIds.includes(id));
+    for (const userId of added) {
       this.stationAssignmentService
-        .create({
-          date: this.dateIso,
-          station_id: row.stationId,
-          user_id: row.selectedUserId,
-        })
+        .create({ date: this.dateIso, station_id: row.stationId, user_id: userId })
         .pipe(
-          tap((saved) => this.updateRow(row.stationId, { assignmentId: saved.id })),
+          tap((saved) =>
+            this.updateRow(row.stationId, (r) => ({
+              assignments: [...r.assignments, { assignmentId: saved.id, userId }],
+            })),
+          ),
           catchError(() => of(null)),
         )
-        .subscribe();
-    } else if (row.selectedUserId !== null && row.assignmentId !== null) {
-      this.stationAssignmentService
-        .update(row.assignmentId, {
-          date: this.dateIso,
-          station_id: row.stationId,
-          user_id: row.selectedUserId,
-        })
-        .pipe(catchError(() => of(null)))
         .subscribe();
     }
   }
 
-  private updateRow(stationId: number, patch: Partial<StationRow>): void {
+  private updateRow(stationId: number, patch: (row: StationRow) => Partial<StationRow>): void {
     this.rows.update((rows) =>
-      rows.map((r) => (r.stationId === stationId ? { ...r, ...patch } : r)),
+      rows.map((r) => (r.stationId === stationId ? { ...r, ...patch(r) } : r)),
     );
   }
 }
