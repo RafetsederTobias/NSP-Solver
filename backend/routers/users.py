@@ -32,7 +32,8 @@ async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
 
 @router.get("", response_model=list[User])
 async def get_users(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(UserModel).options(selectinload(UserModel.skill_relations)))
+    result = await db.execute(select(UserModel).options(selectinload(UserModel.skill_relations)).order_by(UserModel.id)
+)
     return [
         {"id": u.id, "name": u.name, "skills": [s.name for s in u.skill_relations]}
         for u in result.scalars().all()

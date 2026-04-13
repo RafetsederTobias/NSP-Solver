@@ -78,6 +78,24 @@ import { StationService } from '../../service/station-service';
               <label for="f-name">Stationsbezeichnung</label>
             </div>
 
+            <div class="flex flex-col gap-1">
+              <label
+                for="f-max"
+                class="text-[11px] font-semibold tracking-widest text-slate-400 uppercase"
+              >
+                Anzahl Zuteilungen
+              </label>
+              <select
+                id="f-max"
+                [(ngModel)]="form.maxAssignments"
+                class="w-full h-14 px-3.5 text-sm text-slate-800 border border-slate-300 rounded-xl outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition appearance-none bg-white"
+              >
+                <option [value]="1">1</option>
+                <option [value]="2">2</option>
+                <option [value]="3">3</option>
+              </select>
+            </div>
+
             <div>
               <p class="text-[11px] font-semibold tracking-widest text-slate-400 uppercase mb-2">
                 Benötigte Kompetenzen
@@ -198,7 +216,7 @@ export class CreateStationComponent {
   isEditMode = false;
   private editId: number | null = null;
 
-  form = { name: '' };
+  form = { name: '', maxAssignments: 1 };
   dropdownOpen = signal(false);
   skillSearch = signal('');
   selectedSkillIds = signal<Set<number>>(new Set());
@@ -223,6 +241,7 @@ export class CreateStationComponent {
         this.stationService.getById(+id).subscribe((station) => {
           if (station) {
             this.form.name = station.name;
+            this.form.maxAssignments = station.maxAssignments ?? 1;
             const ids = new Set(
               this.allSkills()
                 .filter((s) => station.skills_needed.includes(s.name))
@@ -262,12 +281,14 @@ export class CreateStationComponent {
     if (!this.form.name.trim()) return;
     const data = {
       name: this.form.name.trim(),
+      maxAssignments: this.form.maxAssignments,
       skills_needed: this.selectedSkills().map((s) => s.name),
     };
     if (this.isEditMode && this.editId) {
       this.stationService
         .update(this.editId, data)
-        .subscribe(() => this.router.navigate(['/stations']));
+        .subscribe(() => 
+        this.router.navigate(['/stations']));
     } else {
       this.stationService.add(data).subscribe(() => this.router.navigate(['/stations']));
     }

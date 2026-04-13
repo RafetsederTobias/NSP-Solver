@@ -5,6 +5,7 @@ import { tap } from 'rxjs';
 export interface Station {
   id: number;
   name: string;
+  maxAssignments: number;
   skills_needed: string[];
 }
 
@@ -19,32 +20,34 @@ export class StationService {
   readonly stations = this._stations.asReadonly();
 
   loadAll() {
-    return this.http.get<Station[]>(this.base).pipe(
-      tap(stations => this._stations.set(stations))
-    );
+    return this.http
+      .get<Station[]>(this.base)
+      .pipe(tap((stations) => this._stations.set(stations)));
   }
 
   getById(id: number) {
-  return this.http.get<Station>(`${this.base}/${id}`);
-}
+    return this.http.get<Station>(`${this.base}/${id}`);
+  }
 
   add(data: StationPayload) {
-    return this.http.post<Station>(this.base, data).pipe(
-      tap(station => this._stations.update(list => [...list, station]))
-    );
+    return this.http
+      .post<Station>(this.base, data)
+      .pipe(tap((station) => this._stations.update((list) => [...list, station])));
   }
 
   update(id: number, data: StationPayload) {
-    return this.http.put<Station>(`${this.base}/${id}`, data).pipe(
-      tap(updated => this._stations.update(list =>
-        list.map(s => s.id === id ? updated : s)
-      ))
-    );
+    return this.http
+      .put<Station>(`${this.base}/${id}`, data)
+      .pipe(
+        tap((updated) =>
+          this._stations.update((list) => list.map((s) => (s.id === id ? updated : s))),
+        ),
+      );
   }
 
   delete(id: number) {
-    return this.http.delete<void>(`${this.base}/${id}`).pipe(
-      tap(() => this._stations.update(list => list.filter(s => s.id !== id)))
-    );
+    return this.http
+      .delete<void>(`${this.base}/${id}`)
+      .pipe(tap(() => this._stations.update((list) => list.filter((s) => s.id !== id))));
   }
 }

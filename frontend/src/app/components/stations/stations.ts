@@ -16,8 +16,7 @@ import { Station, StationService } from '../../service/station-service';
             (click)="router.navigate(['/stations/create'])"
             class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-sm font-medium px-4 py-2 rounded-xl shadow-sm transition-all duration-150"
           >
-            <span class="material-icons-round text-[18px]">add_box
-            </span>
+            <span class="material-icons-round text-[18px]">add_box </span>
             Add Station
           </button>
         </div>
@@ -35,6 +34,11 @@ import { Station, StationService } from '../../service/station-service';
                   class="px-6 py-3 text-left text-[11px] font-semibold tracking-widest text-slate-400 uppercase"
                 >
                   Benötigte Kompetenzen
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-[11px] font-semibold tracking-widest text-slate-400 uppercase"
+                >
+                  Mögliche Zuteilungen
                 </th>
                 <th class="px-6 py-3 w-24"></th>
               </tr>
@@ -62,6 +66,11 @@ import { Station, StationService } from '../../service/station-service';
                       class="text-xs font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full"
                       >{{ s }}</span
                     >
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <span class="text-sm font-medium text-slate-700">{{ station.maxAssignments }}</span>
                   </div>
                 </td>
                 <td class="px-6 py-4">
