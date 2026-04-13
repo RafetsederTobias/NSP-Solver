@@ -19,8 +19,8 @@ interface StationAssignment {
 interface StationRow {
   stationId: number;
   maxAssignments: number;
-  assignments: StationAssignment[];       // currently persisted pairs
-  selectedUserIds: number[];              // bound to mat-select
+  assignments: StationAssignment[]; // currently persisted pairs
+  selectedUserIds: number[]; // bound to mat-select
 }
 
 @Component({
@@ -56,17 +56,25 @@ interface StationRow {
 
         <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden">
           <div
-            class="grid grid-cols-[1fr_280px] items-center px-6 py-3 bg-slate-50 border-b border-slate-100"
+            class="grid grid-cols-[1fr_280px_280px] items-center px-6 py-3 bg-slate-50 border-b border-slate-100"
           >
-            <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Station</span>
-            <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Mitarbeiter</span>
+            <span class="text-xs font-semibold uppercase tracking-widest text-slate-400"
+              >Station</span
+            >
+            <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Zuteilungen</span>
+            <span class="text-xs font-semibold uppercase tracking-widest text-slate-400"
+              >Mitarbeiter</span
+            >
           </div>
 
           <div
             *ngFor="let row of rows()"
-            class="station-row grid grid-cols-[1fr_280px] items-center px-6 py-3 hover:bg-slate-50 transition-colors"
+            class="station-row grid grid-cols-[1fr_280px_280px] items-center px-6 py-3 hover:bg-slate-50 transition-colors"
           >
             <span class="text-sm font-medium text-slate-700">{{ stationName(row.stationId) }}</span>
+            <span class="text-sm text-slate-500"
+              >{{ row.selectedUserIds.length }} / {{ row.maxAssignments }}</span
+            >
 
             <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
               <mat-select
@@ -148,8 +156,7 @@ export class DayDetailComponent {
   /** Disable option when station is full AND the user isn't already selected */
   isAtCapacity(row: StationRow, userId: number): boolean {
     return (
-      row.selectedUserIds.length >= row.maxAssignments &&
-      !row.selectedUserIds.includes(userId)
+      row.selectedUserIds.length >= row.maxAssignments && !row.selectedUserIds.includes(userId)
     );
   }
 
