@@ -80,7 +80,7 @@ import { StationService } from '../../service/station-service';
 
             <div>
               <p class="text-[11px] font-semibold tracking-widest text-slate-400 uppercase mb-2">
-                Kompetenzen
+                Benötigte Kompetenzen
               </p>
 
               <div

@@ -10,7 +10,6 @@ from routers import stationassignments
 
 
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:

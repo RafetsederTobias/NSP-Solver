@@ -1,7 +1,7 @@
 import asyncio
 from db import SessionLocal
-from models.station import Station
-from models.skill import Skill
+from models.Station import Station
+from models.Skill import Skill
 from sqlalchemy import select, func
 
 STATIONS = [
@@ -42,6 +42,7 @@ async def seed():
         for data in STATIONS:
             station = Station(
                 name=data["name"],
+                maxAssignments=1,
                 skill_relations=[skills_by_name[s] for s in data["skills_needed"] if s in skills_by_name]
             )
             db.add(station)
