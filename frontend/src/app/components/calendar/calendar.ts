@@ -9,7 +9,6 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { UserBottomSheet } from '../user-bottom-sheet/user-bottom-sheet';
-import { AssignmentService } from '../../service/assignment-service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { StationAssignmentService } from '../../service/station-assignment-service';
@@ -180,9 +179,6 @@ export class CalendarComponent implements OnInit {
         initialView: 'dayGridMonth',
         weekends: false,
         plugins: [dayGridPlugin, interactionPlugin],
-        editable: true,
-        droppable: true,
-        selectable: true,
         locale: deLocale,
         events: assignments.map((a) => ({
           title:a.user.name,

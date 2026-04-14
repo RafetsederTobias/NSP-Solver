@@ -5,7 +5,6 @@ from db import engine, Base
 from routers import stations
 from routers import users
 from routers import skills
-from routers import assignments
 from routers import stationassignments
 
 
@@ -35,7 +34,6 @@ app.add_middleware(
 app.include_router(users.router)
 app.include_router(stations.router)
 app.include_router(skills.router)
-app.include_router(assignments.router)
 app.include_router(stationassignments.router)
 
 @app.get("/")
