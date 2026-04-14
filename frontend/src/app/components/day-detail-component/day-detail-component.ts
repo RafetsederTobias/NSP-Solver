@@ -4,23 +4,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { firstValueFrom, forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { User } from '../../service/user-service';
 import { StationService } from '../../service/station-service';
 import { AssignmentService } from '../../service/assignment-service';
 import { StationAssignmentService } from '../../service/station-assignment-service';
 
-interface StationAssignment {
-  assignmentId: number;
-  userId: number;
-}
-
 interface StationRow {
   stationId: number;
   maxAssignments: number;
-  assignments: StationAssignment[]; // currently persisted pairs
-  selectedUserIds: number[]; // bound to mat-select
+  selectedUserIds: number[];
 }
 
 @Component({
@@ -61,7 +55,9 @@ interface StationRow {
             <span class="text-xs font-semibold uppercase tracking-widest text-slate-400"
               >Station</span
             >
-            <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Zuteilungen</span>
+            <span class="text-xs font-semibold uppercase tracking-widest text-slate-400"
+              >Zuteilungen</span
+            >
             <span class="text-xs font-semibold uppercase tracking-widest text-slate-400"
               >Mitarbeiter</span
             >
@@ -80,7 +76,6 @@ interface StationRow {
               <mat-select
                 [multiple]="true"
                 [(ngModel)]="row.selectedUserIds"
-                (ngModelChange)="onSelectionChange(row)"
                 placeholder="— Niemand —"
               >
                 <mat-option
@@ -93,6 +88,16 @@ interface StationRow {
               </mat-select>
             </mat-form-field>
           </div>
+
+          <div class="flex justify-end px-6 py-4 border-t border-slate-100">
+            <button
+              (click)="save()"
+              [disabled]="saving()"
+              class="px-5 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 disabled:opacity-50 transition-colors shadow-sm"
+            >
+              {{ saving() ? 'Speichern…' : 'Speichern' }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -100,32 +105,40 @@ interface StationRow {
 })
 export class DayDetailComponent {
   rows = signal<StationRow[]>([]);
+  saving = signal(false);
 
-  private route = inject(ActivatedRoute);
-  public users: User[] = [];
-  public date = new Date();
-  public dateIso = '';
+  // Snapshot of what was loaded from the server
+  private persisted = new Map<number, { assignmentId: number; userId: number }[]>();
 
   router = inject(Router);
-  stationService = inject(StationService);
-  assignmentService = inject(AssignmentService);
-  stationAssignmentService = inject(StationAssignmentService);
+  private route = inject(ActivatedRoute);
+  private stationService = inject(StationService);
+  private assignmentService = inject(AssignmentService);
+  private stationAssignmentService = inject(StationAssignmentService);
+
+  users: User[] = [];
+  date = new Date();
+  dateIso = '';
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
-      const info = params.get('assignment')!;
-      this.dateIso = info;
+      this.dateIso = params.get('assignment')!;
       this.date = new Date(this.dateIso);
 
       this.stationService.loadAll().subscribe(() => {
         this.stationAssignmentService.getByDate(this.dateIso).subscribe((existing) => {
+          this.persisted.clear();
+
           this.rows.set(
             this.stationService.stations().map((station) => {
               const matches = existing.filter((a) => a.station_id === station.id);
+              this.persisted.set(
+                station.id,
+                matches.map((m) => ({ assignmentId: m.id, userId: m.user_id })),
+              );
               return {
                 stationId: station.id,
                 maxAssignments: station.maxAssignments ?? 1,
-                assignments: matches.map((m) => ({ assignmentId: m.id, userId: m.user_id })),
                 selectedUserIds: matches.map((m) => m.user_id),
               };
             }),
@@ -139,11 +152,10 @@ export class DayDetailComponent {
     });
   }
 
-  stationName(stationId: number): string {
-    return this.stationService.stations().find((s) => s.id === stationId)?.name ?? '';
+  stationName(id: number) {
+    return this.stationService.stations().find((s) => s.id === id)?.name ?? '';
   }
 
-  /** Users not already assigned to a *different* station, plus those already on this station */
   availableUsers(row: StationRow): User[] {
     const assignedElsewhere = new Set(
       this.rows()
@@ -153,54 +165,24 @@ export class DayDetailComponent {
     return this.users.filter((u) => !assignedElsewhere.has(u.id));
   }
 
-  /** Disable option when station is full AND the user isn't already selected */
   isAtCapacity(row: StationRow, userId: number): boolean {
     return (
       row.selectedUserIds.length >= row.maxAssignments && !row.selectedUserIds.includes(userId)
     );
   }
 
-  onSelectionChange(row: StationRow): void {
-    const previous = row.assignments; // persisted state
-    const nextIds = row.selectedUserIds; // new selection from UI
+  async save() {
+    this.saving.set(true);
 
-    // Users removed → delete their assignment
-    const removed = previous.filter((a) => !nextIds.includes(a.userId));
-    for (const a of removed) {
-      this.stationAssignmentService
-        .delete(a.assignmentId)
-        .pipe(
-          tap(() =>
-            this.updateRow(row.stationId, (r) => ({
-              assignments: r.assignments.filter((x) => x.assignmentId !== a.assignmentId),
-            })),
-          ),
-          catchError(() => of(null)),
-        )
-        .subscribe();
-    }
-
-    // Users added → create new assignment
-    const existingUserIds = previous.map((a) => a.userId);
-    const added = nextIds.filter((id) => !existingUserIds.includes(id));
-    for (const userId of added) {
-      this.stationAssignmentService
-        .create({ date: this.dateIso, station_id: row.stationId, user_id: userId })
-        .pipe(
-          tap((saved) =>
-            this.updateRow(row.stationId, (r) => ({
-              assignments: [...r.assignments, { assignmentId: saved.id, userId }],
-            })),
-          ),
-          catchError(() => of(null)),
-        )
-        .subscribe();
-    }
-  }
-
-  private updateRow(stationId: number, patch: (row: StationRow) => Partial<StationRow>): void {
-    this.rows.update((rows) =>
-      rows.map((r) => (r.stationId === stationId ? { ...r, ...patch(r) } : r)),
+    const assignments = this.rows().flatMap((row) =>
+      row.selectedUserIds.map((userId) => ({
+        date: this.dateIso,
+        station_id: row.stationId,
+        user_id: userId,
+      })),
     );
+
+    await firstValueFrom(this.stationAssignmentService.replaceAll(this.dateIso, assignments));
+    this.saving.set(false);
   }
 }

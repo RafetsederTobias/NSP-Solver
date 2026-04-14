@@ -39,4 +39,10 @@ export class StationAssignmentService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.base}/${id}`);
   }
+  replaceAll(
+    date: string,
+    assignments: StationAssignmentCreate[],
+  ): Observable<StationAssignment[]> {
+    return this.http.put<StationAssignment[]>(`${this.base}/by-date/${date}`, assignments);
+  }
 }

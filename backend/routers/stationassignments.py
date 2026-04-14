@@ -3,9 +3,10 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from datetime import date as Date
-
 from db import get_db
 from models.StationAssignment import StationAssignment
+from sqlalchemy import delete as sa_delete
+
 
 
 class StationAssignmentCreate(BaseModel):
@@ -69,3 +70,14 @@ async def delete(assignment_id: int, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Assignment not found.")
     await db.delete(assignment)
     await db.commit()
+
+
+@router.put("/by-date/{date}", response_model=list[StationAssignmentRead], status_code=200)
+async def replace_all(date: Date, body: list[StationAssignmentCreate], db: AsyncSession = Depends(get_db)):
+    await db.execute(sa_delete(StationAssignment).where(StationAssignment.date == date))
+    new_assignments = [StationAssignment(**item.model_dump()) for item in body]
+    db.add_all(new_assignments)
+    await db.commit()
+    for a in new_assignments:
+        await db.refresh(a)
+    return new_assignments
