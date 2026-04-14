@@ -5,10 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { firstValueFrom, forkJoin, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { User } from '../../service/user-service';
+import { User, UserService } from '../../service/user-service';
 import { StationService } from '../../service/station-service';
-import { AssignmentService } from '../../service/assignment-service';
 import { StationAssignmentService } from '../../service/station-assignment-service';
 
 interface StationRow {
@@ -113,7 +111,7 @@ export class DayDetailComponent {
   router = inject(Router);
   private route = inject(ActivatedRoute);
   private stationService = inject(StationService);
-  private assignmentService = inject(AssignmentService);
+  private userService = inject(UserService);
   private stationAssignmentService = inject(StationAssignmentService);
 
   users: User[] = [];
@@ -146,7 +144,7 @@ export class DayDetailComponent {
         });
       });
 
-      this.assignmentService.getUsersByDate(this.dateIso).subscribe((data) => {
+      this.userService.loadAll().subscribe((data) => {
         this.users = data;
       });
     });

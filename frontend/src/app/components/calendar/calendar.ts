@@ -12,6 +12,7 @@ import { UserBottomSheet } from '../user-bottom-sheet/user-bottom-sheet';
 import { AssignmentService } from '../../service/assignment-service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { StationAssignmentService } from '../../service/station-assignment-service';
 
 @Component({
   selector: 'app-calendar',
@@ -166,7 +167,7 @@ import { map } from 'rxjs/operators';
   `,
 })
 export class CalendarComponent implements OnInit {
-  private assignmentService = inject(AssignmentService);
+  private stationassignmentService = inject(StationAssignmentService);
   private router = inject(Router);
   private bottomSheet = inject(MatBottomSheet);
 
@@ -174,7 +175,7 @@ export class CalendarComponent implements OnInit {
   calendarOptions$!: Observable<CalendarOptions>;
 
   ngOnInit() {
-    this.calendarOptions$ = this.assignmentService.loadAll().pipe(
+    this.calendarOptions$ = this.stationassignmentService.loadAll().pipe(
       map((assignments) => ({
         initialView: 'dayGridMonth',
         weekends: false,
@@ -183,17 +184,11 @@ export class CalendarComponent implements OnInit {
         droppable: true,
         selectable: true,
         locale: deLocale,
-        eventReceive: (info: EventReceiveArg) => {
-          this.assignmentService
-            .add({
-              date: info.event.startStr,
-              users: [info.event.title],
-            })
-            .subscribe();
-        },
-        events: assignments.flatMap((a) => a.users.map((user) => ({ title: user, date: a.date }))),
+        events: assignments.map((a) => ({
+          title:a.user.name,
+          date: a.date,
+        })),
         dateClick: (info: DateClickArg) => {
-          const assignment = assignments.find((a) => a.date === info.dateStr);
           this.router.navigate(['/calendar', info.dateStr]);
         },
       })),

@@ -7,6 +7,10 @@ export interface StationAssignment {
   date: string; // 'YYYY-MM-DD'
   station_id: number;
   user_id: number;
+    user: {
+    id: number;
+    name: string;
+  };
 }
 
 export interface StationAssignmentCreate {
@@ -19,6 +23,10 @@ export interface StationAssignmentCreate {
 export class StationAssignmentService {
   private http = inject(HttpClient);
   private base = 'http://localhost:8000/api/v1/station-assignments';
+
+  loadAll(): Observable<StationAssignment[]> {
+    return this.http.get<StationAssignment[]>(`${this.base}/all`);
+  }
 
   getByDate(date: string): Observable<StationAssignment[]> {
     return this.http.get<StationAssignment[]>(this.base, { params: { date } });
@@ -43,6 +51,6 @@ export class StationAssignmentService {
     date: string,
     assignments: StationAssignmentCreate[],
   ): Observable<StationAssignment[]> {
-    return this.http.put<StationAssignment[]>(`${this.base}/by-date/${date}`, assignments);
+    return this.http.put<StationAssignment[]>(`${this.base}/replace/${date}`, assignments);
   }
 }

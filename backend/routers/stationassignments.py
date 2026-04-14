@@ -6,6 +6,7 @@ from datetime import date as Date
 from db import get_db
 from models.StationAssignment import StationAssignment
 from sqlalchemy import delete as sa_delete
+from sqlalchemy.orm import selectinload
 
 
 
@@ -19,15 +20,31 @@ class StationAssignmentRead(BaseModel):
     date: Date
     station_id: int
     user_id: int
+    user_name: str | None = None 
+    user: UserRead
+
+
+class UserRead(BaseModel):
+    id: int
+    name: str
 
     model_config = {"from_attributes": True}
+
 
 router = APIRouter(prefix="/api/v1/station-assignments", tags=["station-assignments"])
 
 
+@router.get("/all", response_model=list[StationAssignmentRead])
+async def get_all(db: AsyncSession = Depends(get_db)):
+    result = await db.execute(
+        select(StationAssignment)
+        .options(selectinload(StationAssignment.user))
+    )
+    return result.scalars().all()
+
 @router.get("", response_model=list[StationAssignmentRead])
 async def get_by_date(date: Date, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(StationAssignment).where(StationAssignment.date == date))
+    result = await db.execute(select(StationAssignment).where(StationAssignment.date == date).options(selectinload(StationAssignment.user)))
     return result.scalars().all()
 
 
@@ -72,12 +89,18 @@ async def delete(assignment_id: int, db: AsyncSession = Depends(get_db)):
     await db.commit()
 
 
-@router.put("/by-date/{date}", response_model=list[StationAssignmentRead], status_code=200)
+@router.put("/replace/{date}", response_model=list[StationAssignmentRead], status_code=200)
 async def replace_all(date: Date, body: list[StationAssignmentCreate], db: AsyncSession = Depends(get_db)):
     await db.execute(sa_delete(StationAssignment).where(StationAssignment.date == date))
+
     new_assignments = [StationAssignment(**item.model_dump()) for item in body]
     db.add_all(new_assignments)
     await db.commit()
-    for a in new_assignments:
-        await db.refresh(a)
-    return new_assignments
+
+    result = await db.execute(
+        select(StationAssignment)
+        .where(StationAssignment.date == date)
+        .options(selectinload(StationAssignment.user))
+    )
+
+    return result.scalars().all()
