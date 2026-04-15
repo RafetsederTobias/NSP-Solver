@@ -4,9 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { firstValueFrom, forkJoin, of } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { firstValueFrom } from 'rxjs';
 import { User, UserService } from '../../service/user-service';
-import { StationService } from '../../service/station-service';
+import { StationService, Station } from '../../service/station-service';
 import { StationAssignmentService } from '../../service/station-assignment-service';
 
 interface StationRow {
@@ -18,11 +19,17 @@ interface StationRow {
 @Component({
   selector: 'app-day-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatSelectModule, MatFormFieldModule],
+  imports: [CommonModule, FormsModule, MatSelectModule, MatFormFieldModule, MatTooltipModule],
   styles: [
     `
       .station-row:not(:last-child) {
         border-bottom: 1px solid #f1f5f9;
+      }
+      .skill-mismatch-icon {
+        font-size: 14px;
+        color: #f59e0b;
+        vertical-align: middle;
+        margin-left: 4px;
       }
     `,
   ],
@@ -66,22 +73,25 @@ interface StationRow {
             class="station-row grid grid-cols-[1fr_280px_280px] items-center px-6 py-3 hover:bg-slate-50 transition-colors"
           >
             <span class="text-sm font-medium text-slate-700">{{ stationName(row.stationId) }}</span>
-            <span class="text-sm text-slate-500"
-              >{{ row.selectedUserIds.length }} / {{ row.maxAssignments }}</span
-            >
+            <span class="text-sm text-slate-500">
+              {{ row.selectedUserIds.length }} / {{ row.maxAssignments }}
+            </span>
 
             <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
-              <mat-select
-                [multiple]="true"
-                [(ngModel)]="row.selectedUserIds"
-                placeholder="— Niemand —"
-              >
+              <mat-select [multiple]="true" [(ngModel)]="row.selectedUserIds" placeholder="—">
                 <mat-option
                   *ngFor="let user of availableUsers(row)"
                   [value]="user.id"
-                  [disabled]="isAtCapacity(row, user.id)"
+                  [disabled]="isDisabled(row, user.id)"
                 >
-                  {{ user.name }}
+                  <span>{{ user.name }}</span>
+                  <span
+                    *ngIf="!hasSkillMatch(user, row.stationId)"
+                    class="skill-mismatch-icon material-icons-round"
+                    [matTooltip]="skillMismatchTooltip(user, row.stationId)"
+                    matTooltipPosition="right"
+                    >warning_amber</span
+                  >
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -105,7 +115,6 @@ export class DayDetailComponent {
   rows = signal<StationRow[]>([]);
   saving = signal(false);
 
-  // Snapshot of what was loaded from the server
   private persisted = new Map<number, { assignmentId: number; userId: number }[]>();
 
   router = inject(Router);
@@ -126,7 +135,6 @@ export class DayDetailComponent {
       this.stationService.loadAll().subscribe(() => {
         this.stationAssignmentService.getByDate(this.dateIso).subscribe((existing) => {
           this.persisted.clear();
-
           this.rows.set(
             this.stationService.stations().map((station) => {
               const matches = existing.filter((a) => a.station_id === station.id);
@@ -150,8 +158,25 @@ export class DayDetailComponent {
     });
   }
 
-  stationName(id: number) {
+  stationName(id: number): string {
     return this.stationService.stations().find((s) => s.id === id)?.name ?? '';
+  }
+
+  private getStation(stationId: number): Station | undefined {
+    return this.stationService.stations().find((s) => s.id === stationId);
+  }
+
+  hasSkillMatch(user: User, stationId: number): boolean {
+    const station = this.getStation(stationId);
+    if (!station?.skills_needed?.length) return true;
+    if (!user.skills?.length) return false;
+    return station.skills_needed.every((skill) => user.skills.includes(skill));
+  }
+  skillMismatchTooltip(user: User, stationId: number): string {
+    const station = this.getStation(stationId);
+    const needed = station?.skills_needed ?? [];
+    const missing = needed.filter((s) => !user.skills?.includes(s));
+    return `Fehlende Skills: ${missing.join(', ')}`;
   }
 
   availableUsers(row: StationRow): User[] {
@@ -160,18 +185,30 @@ export class DayDetailComponent {
         .filter((r) => r.stationId !== row.stationId)
         .flatMap((r) => r.selectedUserIds),
     );
-    return this.users.filter((u) => !assignedElsewhere.has(u.id));
+
+    return this.users
+      .filter((u) => !assignedElsewhere.has(u.id))
+      .sort((a, b) => {
+        const aDisabled = !this.hasSkillMatch(a, row.stationId);
+        const bDisabled = !this.hasSkillMatch(b, row.stationId);
+        return Number(aDisabled) - Number(bDisabled);
+      });
   }
 
-  isAtCapacity(row: StationRow, userId: number): boolean {
-    return (
-      row.selectedUserIds.length >= row.maxAssignments && !row.selectedUserIds.includes(userId)
-    );
+  isDisabled(row: StationRow, userId: number): boolean {
+    const user = this.users.find((u) => u.id === userId);
+    if (!user) return true;
+
+    if (!this.hasSkillMatch(user, row.stationId)) return true;
+
+    if (row.selectedUserIds.length >= row.maxAssignments && !row.selectedUserIds.includes(userId))
+      return true;
+
+    return false;
   }
 
   async save() {
     this.saving.set(true);
-
     const assignments = this.rows().flatMap((row) =>
       row.selectedUserIds.map((userId) => ({
         date: this.dateIso,
@@ -179,7 +216,6 @@ export class DayDetailComponent {
         user_id: userId,
       })),
     );
-
     await firstValueFrom(this.stationAssignmentService.replaceAll(this.dateIso, assignments));
     this.saving.set(false);
   }
