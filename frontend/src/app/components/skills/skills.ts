@@ -24,7 +24,6 @@ import { SkillsService } from '../../service/skills-service';
               [class.ring-2]="duplicate()"
               class="flex-1 text-sm border border-slate-200 rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-indigo-300 transition"
             />
-
             <button
               (click)="addSkill()"
               class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-sm font-medium px-4 py-2 rounded-xl shadow-sm transition-all duration-150"
@@ -41,7 +40,7 @@ import { SkillsService } from '../../service/skills-service';
             >
               {{ skill.name }}
               <button
-                (click)="deleteSkill(skill.id)"
+                (click)="confirmDelete(skill.id, skill.name)"
                 class="w-4 h-4 rounded-full flex items-center justify-center text-slate-400 hover:bg-red-100 hover:text-red-500 transition-colors duration-150"
               >
                 <span class="material-icons-round text-[13px]">close</span>
@@ -67,6 +66,37 @@ import { SkillsService } from '../../service/skills-service';
         </p>
       </div>
     </div>
+
+    <div
+      *ngIf="pendingDeleteId() !== null"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+      (click)="cancelDelete()"
+    >
+      <div
+        class="bg-white rounded-2xl shadow-xl ring-1 ring-slate-200 p-6 w-80 mx-4"
+        (click)="$event.stopPropagation()"
+      >
+        <h2 class="text-base font-semibold text-slate-800 mb-1">Kompetenz löschen?</h2>
+        <p class="text-sm text-slate-500 mb-5">
+          „{{ pendingDeleteName() }}" und alle Referenzen darauf werden dauerhaft entfernt.
+          Fortfahren?
+        </p>
+        <div class="flex justify-end gap-2">
+          <button
+            (click)="cancelDelete()"
+            class="text-sm px-4 py-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition"
+          >
+            Abbrechen
+          </button>
+          <button
+            (click)="confirmDeleteExecute()"
+            class="text-sm px-4 py-2 rounded-xl bg-red-500 hover:bg-red-600 active:scale-95 text-white font-medium transition-all duration-150"
+          >
+            Löschen
+          </button>
+        </div>
+      </div>
+    </div>
   `,
 })
 export class Skills {
@@ -74,6 +104,8 @@ export class Skills {
   skills = this.skillsService.skills;
   newSkill = '';
   duplicate = signal(false);
+  pendingDeleteId = signal<number | null>(null);
+  pendingDeleteName = signal<string>('');
 
   constructor() {
     this.skillsService.loadAll().subscribe();
@@ -91,7 +123,21 @@ export class Skills {
     this.newSkill = '';
   }
 
-  deleteSkill(id: number) {
-    this.skillsService.delete(id).subscribe();
+  confirmDelete(id: number, name: string) {
+    this.pendingDeleteId.set(id);
+    this.pendingDeleteName.set(name);
+  }
+
+  cancelDelete() {
+    this.pendingDeleteId.set(null);
+    this.pendingDeleteName.set('');
+  }
+
+  confirmDeleteExecute() {
+    const id = this.pendingDeleteId();
+    if (id !== null) {
+      this.skillsService.delete(id).subscribe();
+    }
+    this.cancelDelete();
   }
 }
