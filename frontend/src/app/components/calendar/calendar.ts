@@ -8,7 +8,6 @@ import deLocale from '@fullcalendar/core/locales/de';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { UserBottomSheet } from '../user-bottom-sheet/user-bottom-sheet';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { StationAssignmentService } from '../../service/station-assignment-service';
@@ -17,7 +16,6 @@ import { StationAssignmentService } from '../../service/station-assignment-servi
   selector: 'app-calendar',
   standalone: true,
   imports: [FullCalendarModule, CommonModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [
     `
       :host {
@@ -130,6 +128,16 @@ import { StationAssignmentService } from '../../service/station-assignment-servi
       full-calendar ::ng-deep th.fc-timegrid-axis {
         width: 0 !important;
       }
+      full-calendar ::ng-deep .fc-daygrid-day-events {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 2px !important;
+        padding: 2px !important;
+      }
+
+      full-calendar ::ng-deep .fc-daygrid-event-harness {
+        width: auto !important; 
+      }
     `,
   ],
   template: `
@@ -138,7 +146,6 @@ import { StationAssignmentService } from '../../service/station-assignment-servi
         <div class="flex items-center justify-between mb-6">
           <h1 class="text-2xl font-semibold text-slate-800 tracking-tight">Kalender</h1>
           <button
-            (click)="toggleBottomSheet()"
             class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition-all duration-150 active:scale-95"
             [class.bg-indigo-600]="!bottomSheetRef"
             [class.hover:bg-indigo-700]="!bottomSheetRef"
@@ -179,9 +186,12 @@ export class CalendarComponent implements OnInit {
         initialView: 'dayGridMonth',
         weekends: false,
         plugins: [dayGridPlugin, interactionPlugin],
+        headerToolbar: {
+          center: 'dayGridMonth,dayGridWeek',
+        },
         locale: deLocale,
         events: assignments.map((a) => ({
-          title:a.user.name,
+          title: a.user.name,
           date: a.date,
         })),
         dateClick: (info: DateClickArg) => {
@@ -191,15 +201,4 @@ export class CalendarComponent implements OnInit {
     );
   }
 
-  toggleBottomSheet() {
-    if (this.bottomSheetRef) {
-      this.bottomSheetRef.dismiss();
-      this.bottomSheetRef = null;
-    } else {
-      this.bottomSheetRef = this.bottomSheet.open(UserBottomSheet, { hasBackdrop: false });
-      this.bottomSheetRef.afterDismissed().subscribe(() => {
-        this.bottomSheetRef = null;
-      });
-    }
-  }
 }
