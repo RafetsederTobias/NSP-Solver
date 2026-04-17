@@ -10,6 +10,8 @@ import db
 from models.User import User
 from db import get_db
 from pydantic import BaseModel
+from sqlalchemy.orm import selectinload
+
 
 router = APIRouter(prefix="/api/v1/schedule", tags=["schedule"])
 
@@ -19,13 +21,23 @@ class ScheduleRequest(BaseModel):
 
 @router.get("", status_code=201)
 async def schedule(db: AsyncSession = Depends(get_db)):
-    users_result = await db.execute(select(User))
-    stations_result = await db.execute(select(Station))
+    users_result = await db.execute(
+        select(User).options(selectinload(User.skill_relations))
+    )
+    stations_result = await db.execute(
+        select(Station).options(selectinload(Station.skill_relations))
+    )
 
     users = users_result.scalars().all()
     stations = stations_result.scalars().all()
 
     assignments = solve_schedule(users, stations, days=list(range(1, 31)))
+
+    if not assignments:
+        raise HTTPException(
+            status_code=409,
+            detail="No valid schedule found — check that enough users have the required skills."
+        )
 
     db_assignments = [
         StationAssignment(

@@ -9,17 +9,20 @@ def solve_schedule(users: list[str], stations: list[str], days: list[int]) -> li
 
     facts = ""
     for u in users:
-        facts += f'user({u.id}, "{u.name}").\n'
+        facts += f"user({u.id}).\n"
+        for skill in u.skill_relations:
+            facts += f"has_skill({u.id}, {skill.id}).\n"
+
     for s in stations:
-        facts += f'station({s.id}, "{s.name}").\n'
+        facts += f"station({s.id}).\n"
+        for skill in s.skill_relations:
+            facts += f"requires({s.id}, {skill.id}).\n"
+
     for d in days:
         facts += f"day({d}).\n"
 
     ctl.add("base", [], facts)
     ctl.ground([("base", [])])
-
-   # user_map = {u.id: u.name for u in users}
-   # station_map = {s.id: s.name for s in stations}
 
     results = []
     with ctl.solve(yield_=True) as handle:
@@ -30,9 +33,7 @@ def solve_schedule(users: list[str], stations: list[str], days: list[int]) -> li
                     sid = int(str(atom.arguments[1]))
                     results.append({
                         "user_id": uid,
-                        #"user_name": user_map[uid],
                         "station_id": sid,
-                        #"station_name": station_map[sid],
                         "day": int(str(atom.arguments[2])),
                     })
             break
