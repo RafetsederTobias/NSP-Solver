@@ -7,10 +7,10 @@ import interactionPlugin from '@fullcalendar/interaction';
 import deLocale from '@fullcalendar/core/locales/de';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { StationAssignmentService } from '../../service/station-assignment-service';
+import { ScheduleService } from '../../service/schedule-service';
 
 @Component({
   selector: 'app-calendar',
@@ -136,7 +136,7 @@ import { StationAssignmentService } from '../../service/station-assignment-servi
       }
 
       full-calendar ::ng-deep .fc-daygrid-event-harness {
-        width: auto !important; 
+        width: auto !important;
       }
     `,
   ],
@@ -145,20 +145,10 @@ import { StationAssignmentService } from '../../service/station-assignment-servi
       <div class="max-w-7xl mx-auto">
         <div class="flex items-center justify-between mb-6">
           <h1 class="text-2xl font-semibold text-slate-800 tracking-tight">Kalender</h1>
-          <button
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition-all duration-150 active:scale-95"
-            [class.bg-indigo-600]="!bottomSheetRef"
-            [class.hover:bg-indigo-700]="!bottomSheetRef"
-            [class.text-white]="!bottomSheetRef"
-            [class.bg-white]="!!bottomSheetRef"
-            [class.text-slate-600]="!!bottomSheetRef"
-            [class.ring-1]="!!bottomSheetRef"
-            [class.ring-slate-200]="!!bottomSheetRef"
+          <button (click)="loadSchedule()"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition-all duration-150 active:scale-95 bg-indigo-500 text-white"
           >
-            <span class="material-icons-round text-[18px]">
-              {{ bottomSheetRef ? 'close' : 'person_add' }}
-            </span>
-            {{ bottomSheetRef ? 'Schließen' : 'Mitarbeiter zuteilen' }}
+            <span class="material-icons-round">bolt</span>SOLVE
           </button>
         </div>
 
@@ -175,9 +165,8 @@ import { StationAssignmentService } from '../../service/station-assignment-servi
 export class CalendarComponent implements OnInit {
   private stationassignmentService = inject(StationAssignmentService);
   private router = inject(Router);
-  private bottomSheet = inject(MatBottomSheet);
+  private scheduleService = inject(ScheduleService);
 
-  bottomSheetRef: MatBottomSheetRef | null = null;
   calendarOptions$!: Observable<CalendarOptions>;
 
   ngOnInit() {
@@ -201,4 +190,9 @@ export class CalendarComponent implements OnInit {
     );
   }
 
+  loadSchedule() {
+    this.scheduleService.loadSchedule().subscribe(()=> {
+      this.stationassignmentService.loadAll().subscribe();
+    });
+  }
 }
