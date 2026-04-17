@@ -6,6 +6,7 @@ from routers import stations
 from routers import users
 from routers import skills
 from routers import stationassignments
+from routers import schedules
 
 
 
@@ -35,6 +36,8 @@ app.include_router(users.router)
 app.include_router(stations.router)
 app.include_router(skills.router)
 app.include_router(stationassignments.router)
+app.include_router(schedules.router)
+
 
 @app.get("/")
 def read_root():

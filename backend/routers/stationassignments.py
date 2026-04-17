@@ -8,7 +8,11 @@ from models.StationAssignment import StationAssignment
 from sqlalchemy import delete as sa_delete
 from sqlalchemy.orm import selectinload
 
+class UserRead(BaseModel):
+    id: int
+    name: str
 
+    model_config = {"from_attributes": True}
 
 class StationAssignmentCreate(BaseModel):
     date: Date
@@ -23,16 +27,7 @@ class StationAssignmentRead(BaseModel):
     user_name: str | None = None 
     user: UserRead
 
-
-class UserRead(BaseModel):
-    id: int
-    name: str
-
-    model_config = {"from_attributes": True}
-
-
 router = APIRouter(prefix="/api/v1/station-assignments", tags=["station-assignments"])
-
 
 @router.get("/all", response_model=list[StationAssignmentRead])
 async def get_all(db: AsyncSession = Depends(get_db)):
