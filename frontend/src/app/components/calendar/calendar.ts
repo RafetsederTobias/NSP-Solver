@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, computed } from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions } from '@fullcalendar/core';
 import { DateClickArg, EventReceiveArg } from '@fullcalendar/interaction';
@@ -8,7 +8,7 @@ import deLocale from '@fullcalendar/core/locales/de';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { StationAssignmentService } from '../../service/station-assignment-service';
 import { ScheduleService } from '../../service/schedule-service';
 
@@ -145,7 +145,8 @@ import { ScheduleService } from '../../service/schedule-service';
       <div class="max-w-7xl mx-auto">
         <div class="flex items-center justify-between mb-6">
           <h1 class="text-2xl font-semibold text-slate-800 tracking-tight">Kalender</h1>
-          <button (click)="loadSchedule()"
+          <button
+            (click)="loadSchedule()"
             class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition-all duration-150 active:scale-95 bg-indigo-500 text-white"
           >
             <span class="material-icons-round">bolt</span>SOLVE
@@ -153,10 +154,7 @@ import { ScheduleService } from '../../service/schedule-service';
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden p-6">
-          <full-calendar
-            *ngIf="calendarOptions$ | async as calendarOptions"
-            [options]="calendarOptions"
-          />
+          <full-calendar [options]="calendarOptions" [events]="events()" />
         </div>
       </div>
     </div>
@@ -167,32 +165,34 @@ export class CalendarComponent implements OnInit {
   private router = inject(Router);
   private scheduleService = inject(ScheduleService);
 
-  calendarOptions$!: Observable<CalendarOptions>;
+  assignments = this.stationassignmentService.assignments;
+
+  calendarOptions: CalendarOptions = {
+    initialView: 'dayGridMonth',
+    weekends: false,
+    plugins: [dayGridPlugin, interactionPlugin],
+    headerToolbar: { center: 'dayGridMonth,dayGridWeek' },
+    locale: deLocale,
+    dateClick: (info: DateClickArg) => {
+      this.router.navigate(['/calendar', info.dateStr]);
+    },
+  };
+
+  events = computed(() =>
+    this.assignments().map((a) => ({
+      title: a.user.name,
+      date: a.date,
+    })),
+  );
 
   ngOnInit() {
-    this.calendarOptions$ = this.stationassignmentService.loadAll().pipe(
-      map((assignments) => ({
-        initialView: 'dayGridMonth',
-        weekends: false,
-        plugins: [dayGridPlugin, interactionPlugin],
-        headerToolbar: {
-          center: 'dayGridMonth,dayGridWeek',
-        },
-        locale: deLocale,
-        events: assignments.map((a) => ({
-          title: a.user.name,
-          date: a.date,
-        })),
-        dateClick: (info: DateClickArg) => {
-          this.router.navigate(['/calendar', info.dateStr]);
-        },
-      })),
-    );
+    this.stationassignmentService.loadAll().subscribe();
   }
 
   loadSchedule() {
-    this.scheduleService.loadSchedule().subscribe(()=> {
-      this.stationassignmentService.loadAll().subscribe();
-    });
+    this.scheduleService
+      .loadSchedule()
+      .pipe(switchMap(() => this.stationassignmentService.loadAll()))
+      .subscribe();
   }
 }

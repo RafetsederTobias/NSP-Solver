@@ -24,8 +24,17 @@ export class StationAssignmentService {
   private http = inject(HttpClient);
   private base = 'http://localhost:8000/api/v1/station-assignments';
 
-  loadAll(): Observable<StationAssignment[]> {
+  /*loadAll(): Observable<StationAssignment[]> {
     return this.http.get<StationAssignment[]>(`${this.base}/all`);
+  }*/
+
+  private _assignments = signal<StationAssignment[]>([]);
+  readonly assignments = this._assignments.asReadonly();
+
+  loadAll() {
+    return this.http
+      .get<StationAssignment[]>(`${this.base}/all`)
+      .pipe(tap((assignments) => this._assignments.set(assignments)));
   }
 
   getByDate(date: string): Observable<StationAssignment[]> {
