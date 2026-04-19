@@ -1,5 +1,12 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit, computed } from '@angular/core';
-import { FullCalendarModule } from '@fullcalendar/angular';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  OnInit,
+  computed,
+  ViewChild,
+} from '@angular/core';
+import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions } from '@fullcalendar/core';
 import { DateClickArg, EventReceiveArg } from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -11,6 +18,9 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { StationAssignmentService } from '../../service/station-assignment-service';
 import { ScheduleService } from '../../service/schedule-service';
+import { Dialog } from '@angular/cdk/dialog';
+import { UserService } from '../../service/user-service';
+import { SolverDialogComponent } from '../solver-dialog/solver-dialog';
 
 @Component({
   selector: 'app-calendar',
@@ -146,7 +156,7 @@ import { ScheduleService } from '../../service/schedule-service';
         <div class="flex items-center justify-between mb-6">
           <h1 class="text-2xl font-semibold text-slate-800 tracking-tight">Kalender</h1>
           <button
-            (click)="loadSchedule()"
+            (click)="openSolverDialog()"
             class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition-all duration-150 active:scale-95 bg-indigo-500 text-white"
           >
             <span class="material-icons-round">bolt</span>SOLVE
@@ -154,7 +164,7 @@ import { ScheduleService } from '../../service/schedule-service';
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden p-6">
-          <full-calendar [options]="calendarOptions" [events]="events()" />
+          <full-calendar #cal [options]="calendarOptions" [events]="events()" />
         </div>
       </div>
     </div>
@@ -164,6 +174,9 @@ export class CalendarComponent implements OnInit {
   private stationassignmentService = inject(StationAssignmentService);
   private router = inject(Router);
   private scheduleService = inject(ScheduleService);
+  private dialog = inject(Dialog);
+  private userService = inject(UserService);
+  @ViewChild('cal') calendarRef!: FullCalendarComponent;
 
   assignments = this.stationassignmentService.assignments;
 
@@ -194,5 +207,24 @@ export class CalendarComponent implements OnInit {
       .loadSchedule()
       .pipe(switchMap(() => this.stationassignmentService.loadAll()))
       .subscribe();
+  }
+
+  openSolverDialog() {
+    const calApi = this.calendarRef.getApi();
+    const currentDate = calApi.getDate();
+    this.userService.loadAll().subscribe(() => {
+      const users = this.userService.users();
+      const ref = this.dialog.open(SolverDialogComponent, {
+        data: { users, currentDate, },
+      });
+
+      ref.closed.subscribe((constraints) => {
+        if (!constraints) return;
+        this.scheduleService
+          .loadSchedule() // TODO: pass constraints to API
+          .pipe(switchMap(() => this.stationassignmentService.loadAll()))
+          .subscribe();
+      });
+    });
   }
 }

@@ -8,6 +8,12 @@ export interface User {
   skills: string[];
 }
 
+export interface UserConstraints {
+  userId: string;
+  maxDaysPerMonth: number | null;
+  minDaysPerMonth: number | null;
+}
+
 type UserPayload = Omit<User, 'id'>;
 
 @Injectable({ providedIn: 'root' })
