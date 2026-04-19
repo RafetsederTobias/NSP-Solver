@@ -59,7 +59,7 @@ export interface UserConstraintsDialogData {
             <div class="avatar">{{ initials }}</div>
             <div>
               <div style="font-size:15px;font-weight:500;color:#1e293b;">{{ data.user.name }}</div>
-              <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Einschränkungen für {{ monthLabel }}</div>
+              <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Einschränkungen definieren</div>
             </div>
           </div>
           <button class="btn-ghost" style="padding:0.2rem 0.5rem;" (click)="close()">✕</button>
@@ -105,10 +105,6 @@ export class UserConstraintsDialogComponent {
 
   get initials() {
     return this.data.user.name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase();
-  }
-
-  get monthLabel() {
-    return new Date().toLocaleDateString('de-AT', { month: 'long', year: 'numeric' });
   }
 
   onBackdropClick(e: MouseEvent) {
