@@ -39,7 +39,7 @@ async def schedule(payload: SchedulePayload,db: AsyncSession = Depends(get_db)):
     users = users_result.scalars().all()
     stations = stations_result.scalars().all()
 
-    assignments = solve_schedule(users, stations, days=list(range(1, payload.daysInMonth +1)))
+    assignments = solve_schedule(users, stations, days=list(range(1, payload.daysInMonth +1)),constraints=payload.constraints)
 
     if not assignments:
         raise HTTPException(

@@ -6,3 +6,12 @@
 
 % A user can only be assigned if they have all required skills
 :- assigned(U, S, D), requires(S, Sk), not has_skill(U, Sk).
+
+% Count total days assigned per user
+days_assigned(U, N) :- user(U), N = #count { D : assigned(U, _, D) }.
+
+% max days constraint
+:- max_days(U, Max), days_assigned(U, N), N > Max.
+
+% min days constraint
+:- min_days(U, Min), days_assigned(U, N), N < Min.
