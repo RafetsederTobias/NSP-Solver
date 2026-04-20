@@ -2,11 +2,11 @@ import { Component, inject } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { UserConstraints } from '../../service/user-service';
+import { UserConstraint } from '../../service/user-service';
 
 export interface UserConstraintsDialogData {
   user: { id: string; name: string };
-  constraints: UserConstraints;
+  constraints: UserConstraint;
 }
 
 @Component({
@@ -101,7 +101,7 @@ export class UserConstraintsDialogComponent {
   dialogRef = inject(DialogRef);
   data: UserConstraintsDialogData = inject(DIALOG_DATA);
 
-  draft: UserConstraints = { ...this.data.constraints };
+  draft: UserConstraint = { ...this.data.constraints };
 
   get initials() {
     return this.data.user.name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase();

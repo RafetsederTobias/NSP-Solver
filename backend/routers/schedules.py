@@ -1,4 +1,5 @@
 from datetime import date
+from typing import List
 
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,18 +10,25 @@ from models.Station import Station
 import db
 from models.User import User
 from db import get_db
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import selectinload
 
 
 router = APIRouter(prefix="/api/v1/schedule", tags=["schedule"])
 
-class ScheduleRequest(BaseModel):
-    user_ids: list[int] | None = None
-    station_ids: list[int] | None = None
+class UserConstraint(BaseModel):
+    user_id: int = Field(alias="userId")
+    maxDaysPerMonth: int | None = None
+    minDaysPerMonth: int | None = None
 
-@router.get("", status_code=201)
-async def schedule(db: AsyncSession = Depends(get_db)):
+class SchedulePayload(BaseModel):
+    currentMonth: int
+    currentYear: int
+    daysInMonth: int
+    constraints: List[UserConstraint]
+
+@router.post("", status_code=201)
+async def schedule(payload: SchedulePayload,db: AsyncSession = Depends(get_db)):
     users_result = await db.execute(
         select(User).options(selectinload(User.skill_relations))
     )
@@ -31,17 +39,17 @@ async def schedule(db: AsyncSession = Depends(get_db)):
     users = users_result.scalars().all()
     stations = stations_result.scalars().all()
 
-    assignments = solve_schedule(users, stations, days=list(range(1, 31)))
+    assignments = solve_schedule(users, stations, days=list(range(1, payload.daysInMonth +1)))
 
     if not assignments:
         raise HTTPException(
             status_code=409,
-            detail="No valid schedule found — check that enough users have the required skills."
+            detail="No valid schedule found - check that enough users have the required skills."
         )
 
     db_assignments = [
         StationAssignment(
-            date=date(2026, 4, a["day"]),
+            date=date(payload.currentYear, payload.currentMonth, a["day"]),
             station_id=a["station_id"],
             user_id=a["user_id"],
         )

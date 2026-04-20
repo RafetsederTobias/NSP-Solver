@@ -8,8 +8,8 @@ export interface User {
   skills: string[];
 }
 
-export interface UserConstraints {
-  userId: string;
+export interface UserConstraint {
+  userId: number;
   maxDaysPerMonth: number | null;
   minDaysPerMonth: number | null;
 }

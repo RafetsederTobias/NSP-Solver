@@ -3,7 +3,7 @@ import { DIALOG_DATA, Dialog, DialogRef } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
 import { ConstraintsService } from '../../service/constraint-service';
 import { UserConstraintsDialogComponent } from '../user-constraints-dialog/user-constraints-dialog';
-import { UserConstraints } from '../../service/user-service';
+import { UserConstraint } from '../../service/user-service';
 
 export interface SolverDialogData {
   users: { id: string; name: string }[];
@@ -182,7 +182,7 @@ export interface SolverDialogData {
   `,
 })
 export class SolverDialogComponent {
-  dialogRef = inject(DialogRef<UserConstraints[]>);
+  dialogRef = inject(DialogRef<UserConstraint[]>);
   data: SolverDialogData = inject(DIALOG_DATA);
   private dialog = inject(Dialog);
   private constraintsService = inject(ConstraintsService);
@@ -218,7 +218,7 @@ export class SolverDialogComponent {
       data: { user, constraints: this.constraintsService.get(user.id) },
     });
     ref.closed.subscribe((result) => {
-      if (result) this.constraintsService.save(result as UserConstraints);
+      if (result) this.constraintsService.save(result as UserConstraint);
     });
   }
 

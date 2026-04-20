@@ -17,9 +17,9 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { StationAssignmentService } from '../../service/station-assignment-service';
-import { ScheduleService } from '../../service/schedule-service';
+import { SchedulePayload, ScheduleService } from '../../service/schedule-service';
 import { Dialog } from '@angular/cdk/dialog';
-import { UserService } from '../../service/user-service';
+import { UserConstraint, UserService } from '../../service/user-service';
 import { SolverDialogComponent } from '../solver-dialog/solver-dialog';
 
 @Component({
@@ -202,26 +202,34 @@ export class CalendarComponent implements OnInit {
     this.stationassignmentService.loadAll().subscribe();
   }
 
-  loadSchedule() {
-    this.scheduleService
-      .loadSchedule()
-      .pipe(switchMap(() => this.stationassignmentService.loadAll()))
-      .subscribe();
+  getDaysInMonth(year: number, month: number): number {
+    return new Date(year, month, 0).getDate();
   }
 
   openSolverDialog() {
     const calApi = this.calendarRef.getApi();
     const currentDate = calApi.getDate();
+    const month = currentDate.getMonth() + 1;
+    const year = currentDate.getFullYear();
+    const daysInCurrentMonth = this.getDaysInMonth(year, month);
+
     this.userService.loadAll().subscribe(() => {
       const users = this.userService.users();
       const ref = this.dialog.open(SolverDialogComponent, {
-        data: { users, currentDate, },
+        data: { users, currentDate },
       });
 
-      ref.closed.subscribe((constraints) => {
+      ref.closed.subscribe((value) => {
+        const constraints = value as UserConstraint[];
+        let payload: SchedulePayload = {
+          currentMonth: month,
+          currentYear: year,
+          daysInMonth: daysInCurrentMonth,
+          constraints: constraints
+        }
         if (!constraints) return;
         this.scheduleService
-          .loadSchedule() // TODO: pass constraints to API
+          .loadSchedule(payload)
           .pipe(switchMap(() => this.stationassignmentService.loadAll()))
           .subscribe();
       });
