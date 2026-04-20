@@ -27,6 +27,12 @@ class SchedulePayload(BaseModel):
     daysInMonth: int
     constraints: List[UserConstraint]
 
+def get_weekdays(year: int, month: int, days: list[int]) -> list[int]:
+    return [
+        d for d in days
+        if date(year, month, d).weekday() < 5  # 0=Mon, 4=Fri, 5=Sat, 6=Sun
+    ]
+
 @router.post("", status_code=201)
 async def schedule(payload: SchedulePayload,db: AsyncSession = Depends(get_db)):
     users_result = await db.execute(
@@ -39,7 +45,9 @@ async def schedule(payload: SchedulePayload,db: AsyncSession = Depends(get_db)):
     users = users_result.scalars().all()
     stations = stations_result.scalars().all()
 
-    assignments = solve_schedule(users, stations, days=list(range(1, payload.daysInMonth +1)),constraints=payload.constraints)
+    weekdays = get_weekdays(payload.currentYear, payload.currentMonth, list(range(1, payload.daysInMonth + 1)))
+
+    assignments = solve_schedule(users, stations, days=weekdays,constraints=payload.constraints)
 
     if not assignments:
         raise HTTPException(
