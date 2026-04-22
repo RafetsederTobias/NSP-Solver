@@ -218,7 +218,11 @@ export class SolverDialogComponent {
 
   openUserSettings(user: { id: string; name: string }) {
     const ref = this.dialog.open(UserConstraintsDialogComponent, {
-      data: { user, constraints: this.constraintsService.get(user.id) },
+      data: {
+        user,
+        constraints: this.constraintsService.get(user.id),
+        currentDate: this.data.currentDate,
+      },
     });
     ref.closed.subscribe((result) => {
       if (result) this.constraintsService.save(result as UserConstraint);
