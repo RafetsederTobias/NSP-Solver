@@ -9,10 +9,12 @@ export interface User {
 }
 
 export interface UserConstraint {
-  userId: number;
-  maxDaysPerMonth: number | null;
-  minDaysPerMonth: number | null;
-  exactDaysPerMonth: number;
+  userId: string;
+  maxDaysPerMonth?: number | null;
+  minDaysPerMonth?: number | null;
+  exactDaysPerMonth?: number | null;
+  fixedDays?: string[];      // ISO date strings e.g. "2025-04-03"
+  blockedDays?: string[];
 }
 
 type UserPayload = Omit<User, 'id'>;
