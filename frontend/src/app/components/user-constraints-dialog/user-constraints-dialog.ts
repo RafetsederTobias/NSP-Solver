@@ -30,16 +30,12 @@ export interface UserConstraintsDialogData {
     .field-hint { font-size: 12px; color: #94a3b8; margin-top: 1px; }
     input[type=number] { width: 64px; text-align: center; padding: 0.3rem 0.5rem;
       font-size: 13px; border-radius: 8px; border: 0.5px solid #cbd5e1;
-      background: white; color: #1e293b; }
-    .toggle-wrap { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; }
-    .toggle { width: 34px; height: 20px; border-radius: 99px; border: none;
-      cursor: pointer; position: relative; transition: background 0.15s; flex-shrink: 0; }
-    .toggle.on { background: #6366f1; }
-    .toggle.off { background: #cbd5e1; }
-    .toggle::after { content: ''; position: absolute; top: 3px; width: 14px; height: 14px;
-      border-radius: 50%; background: white; transition: left 0.15s; }
-    .toggle.on::after { left: 17px; }
-    .toggle.off::after { left: 3px; }
+      background: white; color: #1e293b; transition: opacity 0.15s; }
+    input[type=number]:disabled { opacity: 0.35; cursor: not-allowed; background: #f8fafc; }
+    .or-divider { display: flex; align-items: center; gap: 10px; margin: 2px 0; }
+    .or-divider::before, .or-divider::after { content: ''; flex: 1; height: 0.5px; background: #f1f5f9; }
+    .or-label { font-size: 11px; color: #cbd5e1; font-weight: 500; text-transform: uppercase;
+      letter-spacing: 0.06em; }
     .btn-ghost { padding: 0.4rem 1rem; border-radius: 8px; border: 0.5px solid #cbd5e1;
       background: transparent; font-size: 13px; color: #64748b; cursor: pointer; }
     .btn-ghost:hover { background: #f8fafc; }
@@ -68,17 +64,37 @@ export interface UserConstraintsDialogData {
         <div class="body">
           <div>
             <div class="section-label">Schichten</div>
+
+            <!-- Min / Max block — disabled when exact is set -->
             <div class="field-row">
               <div>
                 <div class="field-label">Max. Tage / Monat</div>
               </div>
-              <input type="number" [(ngModel)]="draft.maxDaysPerMonth" min="0" max="23" placeholder="—">
+              <input type="number" [(ngModel)]="draft.maxDaysPerMonth"
+                     [disabled]="hasExact"
+                     (ngModelChange)="onMinMaxChange()"
+                     min="0" max="23" placeholder="—">
             </div>
             <div class="field-row">
               <div>
                 <div class="field-label">Min. Tage / Monat</div>
               </div>
-              <input type="number" [(ngModel)]="draft.minDaysPerMonth" min="0" max="23" placeholder="—">
+              <input type="number" [(ngModel)]="draft.minDaysPerMonth"
+                     [disabled]="hasExact"
+                     (ngModelChange)="onMinMaxChange()"
+                     min="0" max="23" placeholder="—">
+            </div>
+
+            <div class="or-divider"><span class="or-label">oder</span></div>
+
+            <div class="field-row" style="margin-top:10px;margin-bottom:0;">
+              <div>
+                <div class="field-label">Genau X Tage / Monat</div>
+              </div>
+              <input type="number" [(ngModel)]="draft.exactDaysPerMonth"
+                     [disabled]="hasMinMax"
+                     (ngModelChange)="onExactChange()"
+                     min="0" max="23" placeholder="—">
             </div>
           </div>
 
@@ -105,6 +121,27 @@ export class UserConstraintsDialogComponent {
 
   get initials() {
     return this.data.user.name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase();
+  }
+
+  get hasExact(): boolean {
+    return this.draft.exactDaysPerMonth != null && this.draft.exactDaysPerMonth !== (null as any);
+  }
+
+  get hasMinMax(): boolean {
+    return this.draft.maxDaysPerMonth != null || this.draft.minDaysPerMonth != null;
+  }
+
+  onExactChange() {
+    if (this.draft.exactDaysPerMonth != null) {
+      this.draft.maxDaysPerMonth = null as any;
+      this.draft.minDaysPerMonth = null as any;
+    }
+  }
+
+  onMinMaxChange() {
+    if (this.draft.maxDaysPerMonth != null || this.draft.minDaysPerMonth != null) {
+      this.draft.exactDaysPerMonth = null as any;
+    }
   }
 
   onBackdropClick(e: MouseEvent) {

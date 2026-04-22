@@ -202,14 +202,17 @@ export class SolverDialogComponent {
 
   hasSummary(userId: string): boolean {
     const c = this.constraintsService.get(userId);
-    return c.maxDaysPerMonth != null || c.minDaysPerMonth != null;
+    return c.maxDaysPerMonth != null || c.minDaysPerMonth != null || c.exactDaysPerMonth != null;
   }
 
   summary(userId: string): string {
     const c = this.constraintsService.get(userId);
     const parts: string[] = [];
-    if (c.maxDaysPerMonth != null) parts.push(`Max ${c.maxDaysPerMonth}d`);
-    if (c.minDaysPerMonth != null) parts.push(`Min ${c.minDaysPerMonth}d`);
+    if (c.exactDaysPerMonth != null) parts.push(`=${c.exactDaysPerMonth}d`);
+    else {
+      if (c.maxDaysPerMonth != null) parts.push(`Max ${c.maxDaysPerMonth}d`);
+      if (c.minDaysPerMonth != null) parts.push(`Min ${c.minDaysPerMonth}d`);
+    }
     return parts.length ? parts.join(' · ') : 'Keine Einschränkungen';
   }
 

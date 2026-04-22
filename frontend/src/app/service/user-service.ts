@@ -12,6 +12,7 @@ export interface UserConstraint {
   userId: number;
   maxDaysPerMonth: number | null;
   minDaysPerMonth: number | null;
+  exactDaysPerMonth: number;
 }
 
 type UserPayload = Omit<User, 'id'>;
