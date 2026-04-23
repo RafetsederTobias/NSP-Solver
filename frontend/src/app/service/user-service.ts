@@ -13,8 +13,8 @@ export interface UserConstraint {
   maxDaysPerMonth?: number | null;
   minDaysPerMonth?: number | null;
   exactDaysPerMonth?: number | null;
-  fixedDays?: string[];      // ISO date strings e.g. "2025-04-03"
-  blockedDays?: string[];
+  fixedDays?: string[] | null;      // ISO date strings e.g. "2025-04-03"
+  blockedDays?: string[] | null;
 }
 
 type UserPayload = Omit<User, 'id'>;

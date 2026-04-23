@@ -27,6 +27,8 @@ def solve_schedule(users: list[str], stations: list[str], days: list[int], const
                 facts += f"max_days({c.user_id}, {c.maxDaysPerMonth}).\n"
             if c.minDaysPerMonth is not None:
                 facts += f"min_days({c.user_id}, {c.minDaysPerMonth}).\n"
+            if c.exactDaysPerMonth is not None:
+                facts += f"exact_days({c.user_id}, {c.exactDaysPerMonth}).\n"
 
     ctl.add("base", [], facts)
     ctl.ground([("base", [])])

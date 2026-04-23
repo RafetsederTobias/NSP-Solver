@@ -20,6 +20,8 @@ class UserConstraint(BaseModel):
     user_id: int = Field(alias="userId")
     maxDaysPerMonth: int | None = None
     minDaysPerMonth: int | None = None
+    exactDaysPerMonth: int | None = None
+
 
 class SchedulePayload(BaseModel):
     currentMonth: int
@@ -35,6 +37,7 @@ def get_weekdays(year: int, month: int, days: list[int]) -> list[int]:
 
 @router.post("", status_code=201)
 async def schedule(payload: SchedulePayload,db: AsyncSession = Depends(get_db)):
+    print(payload.constraints)
     users_result = await db.execute(
         select(User).options(selectinload(User.skill_relations))
     )

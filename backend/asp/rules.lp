@@ -15,3 +15,6 @@ days_assigned(U, N) :- user(U), N = #count { D : assigned(U, _, D) }.
 
 % min days constraint
 :- min_days(U, Min), days_assigned(U, N), N < Min.
+
+% exact days constraint
+:- exact_days(U, Exact), days_assigned(U, N), N != Exact.
