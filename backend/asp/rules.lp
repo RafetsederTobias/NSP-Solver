@@ -18,3 +18,9 @@ days_assigned(U, N) :- user(U), N = #count { D : assigned(U, _, D) }.
 
 % exact days constraint
 :- exact_days(U, Exact), days_assigned(U, N), N != Exact.
+
+% A user cannot be assigned on a blocked day
+:- assigned(U, _, D), blocked_day(U, D).
+
+% A user must be assigned on a fixed day
+:- user(U), fixed_day(U, D), day(D), not assigned(U, _, D).

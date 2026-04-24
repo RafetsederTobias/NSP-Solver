@@ -21,6 +21,8 @@ class UserConstraint(BaseModel):
     maxDaysPerMonth: int | None = None
     minDaysPerMonth: int | None = None
     exactDaysPerMonth: int | None = None
+    fixedDays: List[int] | None = None;    
+    blockedDays: List[int] | None = None;
 
 
 class SchedulePayload(BaseModel):

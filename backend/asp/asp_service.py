@@ -29,6 +29,12 @@ def solve_schedule(users: list[str], stations: list[str], days: list[int], const
                 facts += f"min_days({c.user_id}, {c.minDaysPerMonth}).\n"
             if c.exactDaysPerMonth is not None:
                 facts += f"exact_days({c.user_id}, {c.exactDaysPerMonth}).\n"
+            if c.fixedDays:
+                for d in c.fixedDays:
+                    facts += f"fixed_day({c.user_id}, {d}).\n"
+            if c.blockedDays:
+                for d in c.blockedDays:
+                    facts += f"blocked_day({c.user_id}, {d}).\n"
 
     ctl.add("base", [], facts)
     ctl.ground([("base", [])])

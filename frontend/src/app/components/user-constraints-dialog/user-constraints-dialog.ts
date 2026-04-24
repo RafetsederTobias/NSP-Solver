@@ -311,10 +311,6 @@ export class UserConstraintsDialogComponent {
     return cells;
   }
 
-  private isoDate(day: number): string {
-    const d = this.data.currentDate;
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-  }
 
   isWeekend(day: number): boolean {
     const dow = new Date(this.data.currentDate.getFullYear(), this.data.currentDate.getMonth(), day).getDay();
@@ -322,11 +318,11 @@ export class UserConstraintsDialogComponent {
   }
 
   isFixed(day: number): boolean {
-    return this.draft.fixedDays?.includes(this.isoDate(day)) ?? false;
+    return this.draft.fixedDays?.includes(day) ?? false;
   }
 
   isBlocked(day: number): boolean {
-    return this.draft.blockedDays?.includes(this.isoDate(day)) ?? false;
+    return this.draft.blockedDays?.includes(day) ?? false;
   }
 
   /* dim day that is selected */
@@ -337,20 +333,19 @@ export class UserConstraintsDialogComponent {
   }
 
   toggleDay(day: number) {
-    const iso = this.isoDate(day);
     if (this.calMode === 'fixed') {
-      const idx = this.draft.fixedDays?.indexOf(iso) ?? -1;
+      const idx = this.draft.fixedDays?.indexOf(day) ?? -1;
       if (idx >= 0) {
         this.draft.fixedDays!.splice(idx, 1);
       } else if (!this.fixedAtCap) {
-        this.draft.fixedDays = [...(this.draft.fixedDays ?? []), iso];
+        this.draft.fixedDays = [...(this.draft.fixedDays ?? []), day];
       }
     } else {
-      const idx = this.draft.blockedDays?.indexOf(iso) ?? -1;
+      const idx = this.draft.blockedDays?.indexOf(day) ?? -1;
       if (idx >= 0) {
         this.draft.blockedDays!.splice(idx, 1);
       } else {
-        this.draft.blockedDays = [...(this.draft.blockedDays ?? []), iso];
+        this.draft.blockedDays = [...(this.draft.blockedDays ?? []), day];
       }
     }
   }
