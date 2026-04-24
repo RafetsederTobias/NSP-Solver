@@ -15,6 +15,7 @@ def solve_schedule(users: list[str], stations: list[str], days: list[int], const
 
     for s in stations:
         facts += f"station({s.id}).\n"
+        facts += f"max_assignments({s.id}, {s.maxAssignments}).\n"
         for skill in s.skill_relations:
             facts += f"requires({s.id}, {skill.id}).\n"
 
@@ -44,11 +45,9 @@ def solve_schedule(users: list[str], stations: list[str], days: list[int], const
         for model in handle:
             for atom in model.symbols(shown=True):
                 if atom.name == "assigned":
-                    uid = int(str(atom.arguments[0]))
-                    sid = int(str(atom.arguments[1]))
                     results.append({
-                        "user_id": uid,
-                        "station_id": sid,
+                        "user_id": int(str(atom.arguments[0])),
+                        "station_id": int(str(atom.arguments[1])),
                         "day": int(str(atom.arguments[2])),
                     })
             break

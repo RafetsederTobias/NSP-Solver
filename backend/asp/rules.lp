@@ -1,5 +1,5 @@
 % Each station must have exactly one user assigned per day
-1 { assigned(U, S, D) : user(U) } 1 :- station(S), day(D).
+Max { assigned(U, S, D) : user(U) } Max :- station(S), day(D), max_assignments(S, Max).
 
 % A user can only work one station per day
 :- user(U), day(D), assigned(U, S1, D), assigned(U, S2, D), S1 != S2.
@@ -24,3 +24,4 @@ days_assigned(U, N) :- user(U), N = #count { D : assigned(U, _, D) }.
 
 % A user must be assigned on a fixed day
 :- user(U), fixed_day(U, D), day(D), not assigned(U, _, D).
+
