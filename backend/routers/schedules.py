@@ -3,7 +3,7 @@ from typing import List
 
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import delete, extract, select
 from asp.asp_service import solve_schedule
 from models.StationAssignment import StationAssignment
 from models.Station import Station
@@ -29,6 +29,7 @@ class SchedulePayload(BaseModel):
     currentMonth: int
     currentYear: int
     daysInMonth: int
+    keepExistingAssignments: bool
     constraints: List[UserConstraint]
 
 def get_weekdays(year: int, month: int, days: list[int]) -> list[int]:
@@ -39,7 +40,7 @@ def get_weekdays(year: int, month: int, days: list[int]) -> list[int]:
 
 @router.post("", status_code=201)
 async def schedule(payload: SchedulePayload,db: AsyncSession = Depends(get_db)):
-    print(payload.constraints)
+    print(payload.keepExistingAssignments)
     users_result = await db.execute(
         select(User).options(selectinload(User.skill_relations))
     )
@@ -50,15 +51,39 @@ async def schedule(payload: SchedulePayload,db: AsyncSession = Depends(get_db)):
     users = users_result.scalars().all()
     stations = stations_result.scalars().all()
 
+    existing_assignments = []
+    if payload.keepExistingAssignments:
+        existing_result = await db.execute(
+            select(StationAssignment).where(
+                extract("year", StationAssignment.date) == payload.currentYear,
+                extract("month", StationAssignment.date) == payload.currentMonth,
+            )
+        )
+        existing_assignments = existing_result.scalars().all()
+
+    if not payload.keepExistingAssignments:
+        await db.execute(
+            delete(StationAssignment).where(
+                extract("year", StationAssignment.date) == payload.currentYear,
+                extract("month", StationAssignment.date) == payload.currentMonth,
+            )
+        )
+
     weekdays = get_weekdays(payload.currentYear, payload.currentMonth, list(range(1, payload.daysInMonth + 1)))
 
-    assignments = solve_schedule(users, stations, days=weekdays,constraints=payload.constraints)
+    assignments = solve_schedule(users, stations, days=weekdays,constraints=payload.constraints,existing_assignments=existing_assignments)
 
     if not assignments:
         raise HTTPException(
             status_code=409,
             detail="No valid schedule found - check that enough users have the required skills."
         )
+
+
+    existing_keys = {
+        (a.user_id, a.station_id, a.date.day)
+        for a in existing_assignments
+    }
 
     db_assignments = [
         StationAssignment(
@@ -67,6 +92,8 @@ async def schedule(payload: SchedulePayload,db: AsyncSession = Depends(get_db)):
             user_id=a["user_id"],
         )
         for a in assignments
+        if (a["user_id"], a["station_id"], a["day"]) not in existing_keys  # skips already existing assignments
+
     ]
 
     db.add_all(db_assignments)

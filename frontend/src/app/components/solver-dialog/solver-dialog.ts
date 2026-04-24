@@ -10,6 +10,11 @@ export interface SolverDialogData {
   currentDate: Date;
 }
 
+export interface SolverDialogResult {
+  constraints: UserConstraint[];
+  keepExistingAssignments: boolean;
+}
+
 @Component({
   selector: 'app-solver-dialog',
   standalone: true,
@@ -103,6 +108,64 @@ export interface SolverDialogData {
         background: #f1f5f9;
         color: #1e293b;
       }
+      .options-bar {
+        padding: 0.6rem 1.5rem;
+        border-top: 0.5px solid #f1f5f9;
+        flex-shrink: 0;
+      }
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .toggle-row:hover .toggle-label {
+        color: #1e293b;
+      }
+      .toggle-label {
+        font-size: 13px;
+        color: #475569;
+        transition: color 0.15s;
+      }
+      .toggle-switch {
+        position: relative;
+        width: 34px;
+        height: 20px;
+        flex-shrink: 0;
+      }
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        position: absolute;
+      }
+      .toggle-track {
+        position: absolute;
+        inset: 0;
+        border-radius: 99px;
+        background: #cbd5e1;
+        transition: background 0.2s;
+        cursor: pointer;
+      }
+      .toggle-track::after {
+        content: '';
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: white;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        transition: transform 0.2s;
+      }
+      .toggle-switch input:checked + .toggle-track {
+        background: #6366f1;
+      }
+      .toggle-switch input:checked + .toggle-track::after {
+        transform: translateX(14px);
+      }
       .footer {
         padding: 1rem 1.5rem;
         border-top: 0.5px solid #f1f5f9;
@@ -165,16 +228,30 @@ export interface SolverDialogData {
                 {{ summary(user.id) }}
               </span>
               <button class="icon-btn" (click)="openUserSettings(user)" title="Einstellungen">
-                ⚙
+                <span class="material-icons-round" style="font-size: 16px;">settings</span>
               </button>
             </div>
           }
         </div>
 
+        <div class="options-bar">
+          <label class="toggle-row">
+            <div class="toggle-switch">
+              <input
+                type="checkbox"
+                [checked]="keepExistingAssignments()"
+                (change)="keepExistingAssignments.set($any($event.target).checked)"
+              />
+              <div class="toggle-track"></div>
+            </div>
+            <span class="toggle-label">Vorhandene Zuteilungen übernehmen</span>
+          </label>
+        </div>
+
         <div class="footer">
           <button class="btn-ghost" (click)="close()">Abbrechen</button>
           <button class="btn-primary" (click)="solve()">
-            <span style="font-size:14px;">▶</span> Solver starten
+            <span class="material-icons-round">start</span> Solver starten
           </button>
         </div>
       </div>
@@ -182,10 +259,12 @@ export interface SolverDialogData {
   `,
 })
 export class SolverDialogComponent {
-  dialogRef = inject(DialogRef<UserConstraint[]>);
+  dialogRef = inject(DialogRef<SolverDialogResult>);
   data: SolverDialogData = inject(DIALOG_DATA);
   private dialog = inject(Dialog);
   private constraintsService = inject(ConstraintsService);
+
+  keepExistingAssignments = signal(true);
 
   get monthLabel() {
     return this.data.currentDate.toLocaleDateString('de-AT', { month: 'long', year: 'numeric' });
@@ -230,8 +309,11 @@ export class SolverDialogComponent {
   }
 
   solve() {
-    const all = this.data.users.map((u) => this.constraintsService.get(u.id));
-    this.dialogRef.close(all);
+    const constraints = this.data.users.map((u) => this.constraintsService.get(u.id));
+    this.dialogRef.close({
+      constraints,
+      keepExistingAssignments: this.keepExistingAssignments(),
+    });
   }
 
   onBackdropClick(e: MouseEvent) {

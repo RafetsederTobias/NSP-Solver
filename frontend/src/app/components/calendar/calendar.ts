@@ -14,13 +14,12 @@ import interactionPlugin from '@fullcalendar/interaction';
 import deLocale from '@fullcalendar/core/locales/de';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { StationAssignmentService } from '../../service/station-assignment-service';
 import { SchedulePayload, ScheduleService } from '../../service/schedule-service';
 import { Dialog } from '@angular/cdk/dialog';
-import { UserConstraint, UserService } from '../../service/user-service';
-import { SolverDialogComponent } from '../solver-dialog/solver-dialog';
+import { UserService } from '../../service/user-service';
+import { SolverDialogComponent, SolverDialogResult } from '../solver-dialog/solver-dialog';
 
 @Component({
   selector: 'app-calendar',
@@ -220,13 +219,15 @@ export class CalendarComponent implements OnInit {
       });
 
       ref.closed.subscribe((value) => {
-        const constraints = value as UserConstraint[];
+        const result = value as SolverDialogResult;
+        const constraints = result.constraints;
         let payload: SchedulePayload = {
           currentMonth: month,
           currentYear: year,
           daysInMonth: daysInCurrentMonth,
-          constraints: constraints
-        }
+          keepExistingAssignments: result.keepExistingAssignments,
+          constraints: constraints,
+        };
         if (!constraints) return;
         this.scheduleService
           .loadSchedule(payload)

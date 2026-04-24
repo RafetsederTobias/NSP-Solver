@@ -8,6 +8,7 @@ export interface SchedulePayload {
     currentMonth: number
     currentYear: number
     daysInMonth: number
+    keepExistingAssignments: Boolean
     constraints: UserConstraint[]
 }
 

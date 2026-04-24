@@ -3,7 +3,7 @@ from pathlib import Path
 
 RULES_FILE = Path(__file__).parent / "rules.lp"
 
-def solve_schedule(users: list[str], stations: list[str], days: list[int], constraints: list = None) -> list[dict]:
+def solve_schedule(users: list[str], stations: list[str], days: list[int], constraints: list = None, existing_assignments=None) -> list[dict]:
     ctl = clingo.Control(["--models=1"])
     ctl.load(str(RULES_FILE))
 
@@ -22,6 +22,11 @@ def solve_schedule(users: list[str], stations: list[str], days: list[int], const
     for d in days:
         facts += f"day({d}).\n"
 
+    if existing_assignments:
+        for a in existing_assignments:
+            print(a.user_id, a.station_id, a.date.day)
+            facts += f"assigned({a.user_id}, {a.station_id}, {a.date.day}).\n"
+
     if constraints:
         for c in constraints:
             if c.maxDaysPerMonth is not None:
@@ -39,7 +44,6 @@ def solve_schedule(users: list[str], stations: list[str], days: list[int], const
 
     ctl.add("base", [], facts)
     ctl.ground([("base", [])])
-
     results = []
     with ctl.solve(yield_=True) as handle:
         for model in handle:

@@ -101,7 +101,7 @@ type CalendarMode = 'fixed' | 'blocked';
         <div class="body">
 
           <div>
-            <div class="section-label">Schichten</div>
+            <div class="section-label">Tage</div>
             <div class="radio-group">
 
               <label class="radio-row" [class.active]="mode === 'fulltime'">
