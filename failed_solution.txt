@@ -1,0 +1,3 @@
+1 { assigned(U, S, D) : user(U) } Max :- station(S), day(D), max_assignments(S, Max).
+
+#maximize { 1,U,S,D : assigned(U, S, D) }.

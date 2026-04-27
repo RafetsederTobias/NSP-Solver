@@ -3,10 +3,20 @@ from pathlib import Path
 
 RULES_FILE = Path(__file__).parent / "rules.lp"
 
-def solve_schedule(users: list[str], stations: list[str], days: list[int], constraints: list = None, existing_assignments=None) -> list[dict]:
-    ctl = clingo.Control(["--models=1"])
-    ctl.load(str(RULES_FILE))
+def solve_schedule(users, stations, days, constraints=None, existing_assignments=None) -> list[dict]:
+    facts = _build_facts(users, stations, days, constraints, existing_assignments)
+    
+    result = _run_clingo(facts, strict=True)
+    if result is not None:
+        print("1")
+        return result
 
+    print("2")
+    result = _run_clingo(facts, strict=False)
+    return result if result is not None else []
+
+
+def _build_facts(users, stations, days, constraints, existing_assignments) -> str:
     facts = ""
     for u in users:
         facts += f"user({u.id}).\n"
@@ -24,7 +34,6 @@ def solve_schedule(users: list[str], stations: list[str], days: list[int], const
 
     if existing_assignments:
         for a in existing_assignments:
-            print(a.user_id, a.station_id, a.date.day)
             facts += f"assigned({a.user_id}, {a.station_id}, {a.date.day}).\n"
 
     if constraints:
@@ -42,11 +51,26 @@ def solve_schedule(users: list[str], stations: list[str], days: list[int], const
                 for d in c.blockedDays:
                     facts += f"blocked_day({c.user_id}, {d}).\n"
 
-    ctl.add("base", [], facts)
+    return facts
+
+
+def _run_clingo(facts: str, strict: bool) -> list[dict] | None:
+    ctl = clingo.Control(["--models=1"])
+    ctl.load(str(RULES_FILE))
+
+    station_rule = (
+        "Max { assigned(U, S, D) : user(U) } Max :- station(S), day(D), max_assignments(S, Max)."
+        if strict else
+        "1 { assigned(U, S, D) : user(U) } Max :- station(S), day(D), max_assignments(S, Max)."
+    )
+    ctl.add("base", [], facts + station_rule)
     ctl.ground([("base", [])])
+
     results = []
+    satisfiable = False
     with ctl.solve(yield_=True) as handle:
         for model in handle:
+            satisfiable = True
             for atom in model.symbols(shown=True):
                 if atom.name == "assigned":
                     results.append({
@@ -56,4 +80,4 @@ def solve_schedule(users: list[str], stations: list[str], days: list[int], const
                     })
             break
 
-    return results
+    return results if satisfiable else None
