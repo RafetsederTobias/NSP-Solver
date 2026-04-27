@@ -1,0 +1,3 @@
+"We propose an iterative day-by-day decomposition of the nurse scheduling problem, where each daily subproblem is solved optimally via ASP. Monthly constraints are enforced through cross-iteration state propagation, with a greedy repair pass handling residual min-day violations."
+
+"The decomposition trades global optimality for tractability — a common and accepted tradeoff in large-scale scheduling literature."
