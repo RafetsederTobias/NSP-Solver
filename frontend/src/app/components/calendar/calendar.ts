@@ -222,7 +222,7 @@ export class CalendarComponent implements OnInit {
         const result = value as SolverDialogResult;
         const constraints = result.constraints;
         result.constraints.forEach(c => {
-          c.exactDaysPerMonth=22;
+          c.exactDaysPerMonth=12;
         });
         let payload: SchedulePayload = {
           currentMonth: month,

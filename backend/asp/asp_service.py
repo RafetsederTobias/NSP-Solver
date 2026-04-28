@@ -51,7 +51,7 @@ def _build_facts(users, stations, days, constraints, existing_assignments) -> st
     return facts
 
 
-def _run_clingo(facts: str, timeout_seconds: int = 15) -> list[dict] | None:
+def _run_clingo(facts: str, timeout_seconds: int = 10) -> list[dict] | None:
     ctl = clingo.Control(["--models=0", "--opt-mode=optN"])
     ctl.load(str(RULES_FILE))
     ctl.add("base", [], facts)
