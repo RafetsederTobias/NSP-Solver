@@ -76,7 +76,7 @@ async def schedule(payload: SchedulePayload,db: AsyncSession = Depends(get_db)):
     if not assignments:
         raise HTTPException(
             status_code=409,
-            detail="No valid schedule found - check that enough users have the required skills."
+            detail="Es konnte kein gültiger Dienstplan gefunden werden. Überprüfe die Parameter."
         )
 
 
