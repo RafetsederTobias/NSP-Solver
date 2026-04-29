@@ -6,15 +6,18 @@ export class ConstraintsService {
   private _constraints = signal<Record<string, UserConstraint>>({});
   constraints = this._constraints.asReadonly();
 
-  get(userId: string): UserConstraint {
-    return this._constraints()[userId] ?? {
-      userId,
-      maxDaysPerMonth: null,
-      minDaysPerMonth: null,
-    };
+  get(userId: string, defaultExactDays?: number): UserConstraint {
+    return (
+      this._constraints()[userId] ?? {
+        userId,
+        exactDaysPerMonth: defaultExactDays ?? null,
+        maxDaysPerMonth: null,
+        minDaysPerMonth: null,
+      }
+    );
   }
 
   save(c: UserConstraint) {
-    this._constraints.update(map => ({ ...map, [c.userId]: c }));
+    this._constraints.update((map) => ({ ...map, [c.userId]: c }));
   }
 }

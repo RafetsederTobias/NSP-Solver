@@ -173,13 +173,12 @@ import { SolverDialogComponent, SolverDialogResult } from '../solver-dialog/solv
           <div class="spinner"></div>
           <div>
             <div class="loading-title">Dienstplan wird erstellt…</div>
-            <div class="loading-sub">Das kann 10–15 Sekunden dauern.</div>
+            <div class="loading-sub">Das kann bis zu 10 Sekunden dauern.</div>
           </div>
         </div>
       </div>
     }
 
-    <!-- 409 / error popup -->
     @if (errorMessage()) {
       <div class="error-backdrop" (click)="dismissError()">
         <div class="error-card" (click)="$event.stopPropagation()">
@@ -273,10 +272,6 @@ export class CalendarComponent implements OnInit {
         if (!result?.constraints) return;
 
         const constraints = result.constraints;
-        constraints.forEach((c) => {
-          c.exactDaysPerMonth = 22;
-        });
-
         const payload: SchedulePayload = {
           currentMonth: month,
           currentYear: year,

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ConstraintsService } from '../../service/constraint-service';
 import { UserConstraintsDialogComponent } from '../user-constraints-dialog/user-constraints-dialog';
 import { UserConstraint } from '../../service/user-service';
+import { WorkdayService } from '../../service/workday-service';
 
 export interface SolverDialogData {
   users: { id: string; name: string }[];
@@ -157,7 +158,7 @@ export interface SolverDialogResult {
         height: 14px;
         border-radius: 50%;
         background: white;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
         transition: transform 0.2s;
       }
       .toggle-switch input:checked + .toggle-track {
@@ -263,11 +264,16 @@ export class SolverDialogComponent {
   data: SolverDialogData = inject(DIALOG_DATA);
   private dialog = inject(Dialog);
   private constraintsService = inject(ConstraintsService);
+  private workdayService = inject(WorkdayService);
 
   keepExistingAssignments = signal(true);
 
   get monthLabel() {
     return this.data.currentDate.toLocaleDateString('de-AT', { month: 'long', year: 'numeric' });
+  }
+
+  private workdaysInMonth(): number {
+    return this.workdayService.countWorkdays(this.data.currentDate);
   }
 
   initials(name: string) {
@@ -280,15 +286,17 @@ export class SolverDialogComponent {
   }
 
   hasSummary(userId: string): boolean {
-    const c = this.constraintsService.get(userId);
+    const c = this.constraintsService.get(userId, this.workdaysInMonth());
     return c.maxDaysPerMonth != null || c.minDaysPerMonth != null || c.exactDaysPerMonth != null;
   }
 
   summary(userId: string): string {
-    const c = this.constraintsService.get(userId);
+    const workdays = this.workdaysInMonth();
+    const c = this.constraintsService.get(userId, workdays);
     const parts: string[] = [];
-    if (c.exactDaysPerMonth != null) parts.push(`=${c.exactDaysPerMonth}d`);
-    else {
+    if (c.exactDaysPerMonth != null) {
+      parts.push(c.exactDaysPerMonth === workdays ? 'Vollzeit' : `=${c.exactDaysPerMonth}d`);
+    } else {
       if (c.maxDaysPerMonth != null) parts.push(`Max ${c.maxDaysPerMonth}d`);
       if (c.minDaysPerMonth != null) parts.push(`Min ${c.minDaysPerMonth}d`);
     }
@@ -299,7 +307,7 @@ export class SolverDialogComponent {
     const ref = this.dialog.open(UserConstraintsDialogComponent, {
       data: {
         user,
-        constraints: this.constraintsService.get(user.id),
+        constraints: this.constraintsService.get(user.id, this.workdaysInMonth()),
         currentDate: this.data.currentDate,
       },
     });
@@ -309,7 +317,8 @@ export class SolverDialogComponent {
   }
 
   solve() {
-    const constraints = this.data.users.map((u) => this.constraintsService.get(u.id));
+    const workdays = this.workdaysInMonth();
+    const constraints = this.data.users.map((u) => this.constraintsService.get(u.id, workdays));
     this.dialogRef.close({
       constraints,
       keepExistingAssignments: this.keepExistingAssignments(),
