@@ -31,78 +31,68 @@ STATIONS = [
 ]
 
 USERS = [
-    {"name": "User 1", "skills": ["EKG", "Röntgen"]},
-    {"name": "User 2", "skills": ["Blutabnahme"]},
-    {"name": "User 3", "skills": ["EKG"]},
-    {"name": "User 4", "skills": ["Röntgen"]},
-    {"name": "User 5", "skills": ["Blutabnahme", "EKG"]},
-    {"name": "User 6", "skills": ["Blutabnahme", "Röntgen"]},
-    {"name": "User 7", "skills": ["EKG", "Röntgen"]},
-    {"name": "User 8", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 9", "skills": ["EKG"]},
-    {"name": "User 10", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 11", "skills": ["Blutabnahme"]},
-    {"name": "User 12", "skills": ["EKG", "Röntgen"]},
-    {"name": "User 13", "skills": ["Blutabnahme", "EKG"]},
-    {"name": "User 14", "skills": ["Blutabnahme", "Röntgen"]},
-    {"name": "User 15", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 16", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 17", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 18", "skills": ["EKG", "Röntgen"]},
-    {"name": "User 19", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 20", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 21", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 22", "skills": ["Blutabnahme"]},
-    {"name": "User 23", "skills": ["EKG", "Röntgen"]},
-    {"name": "User 24", "skills": ["Blutabnahme", "EKG"]},
-    {"name": "User 25", "skills": ["Blutabnahme", "Röntgen"]},
-    {"name": "User 26", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 27", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 28", "skills": ["Blutabnahme"]},
-    {"name": "User 29", "skills": ["EKG", "Röntgen"]},
-    {"name": "User 30", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 31", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 32", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 33", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 34", "skills": ["EKG", "Röntgen"]},
-    {"name": "User 35", "skills": ["Blutabnahme", "EKG"]},
-    {"name": "User 36", "skills": ["Blutabnahme", "Röntgen"]},
-    {"name": "User 37", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 38", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 39", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 40", "skills": ["EKG", "Röntgen"]},
-    {"name": "User 41", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 42", "skills": ["EKG"]},
-    {"name": "User 43", "skills": ["Röntgen"]},
-    {"name": "User 44", "skills": ["Blutabnahme"]},
-    {"name": "User 45", "skills": ["EKG", "Röntgen"]},
-    {"name": "User 46", "skills": ["Blutabnahme", "EKG"]},
-    {"name": "User 47", "skills": ["Blutabnahme", "Röntgen"]},
-    {"name": "User 48", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 49", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 50", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
-    {"name": "User 51", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Anna Müller", "skills": ["EKG", "Röntgen"]},
+    {"name": "Lukas Schmidt", "skills": ["Blutabnahme"]},
+    {"name": "Marie Schneider", "skills": ["EKG"]},
+    {"name": "Leon Fischer", "skills": ["Röntgen"]},
+    {"name": "Laura Weber", "skills": ["Blutabnahme", "EKG"]},
+    {"name": "Paul Wagner", "skills": ["Blutabnahme", "Röntgen"]},
+    {"name": "Sophie Becker", "skills": ["EKG", "Röntgen"]},
+    {"name": "Felix Hoffmann", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Emma Schäfer", "skills": ["EKG"]},
+    {"name": "Jonas Koch", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Mia Bauer", "skills": ["Blutabnahme"]},
+    {"name": "Noah Richter", "skills": ["EKG", "Röntgen"]},
+    {"name": "Lena Klein", "skills": ["Blutabnahme", "EKG"]},
+    {"name": "Tim Wolf", "skills": ["Blutabnahme", "Röntgen"]},
+    {"name": "Leonie Schröder", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Ben Neumann", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Clara Schwarz", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "David Zimmermann", "skills": ["EKG", "Röntgen"]},
+    {"name": "Hannah Braun", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Julian Krüger", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Nina Hofmann", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Max Hartmann", "skills": ["Blutabnahme"]},
+    {"name": "Sarah Lange", "skills": ["EKG", "Röntgen"]},
+    {"name": "Tom Schmitt", "skills": ["Blutabnahme", "EKG"]},
+    {"name": "Julia Werner", "skills": ["Blutabnahme", "Röntgen"]},
+    {"name": "Philipp Schmitz", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Katharina Krause", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Daniel Meier", "skills": ["Blutabnahme"]},
+    {"name": "Vanessa Lehmann", "skills": ["EKG", "Röntgen"]},
+    {"name": "Sebastian Schulz", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Alina Maier", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Robin Herrmann", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Melanie König", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Tobias Frank", "skills": ["EKG", "Röntgen"]},
+    {"name": "Franziska Vogel", "skills": ["Blutabnahme", "EKG"]},
+    {"name": "Andreas Graf", "skills": ["Blutabnahme", "Röntgen"]},
+    {"name": "Stefanie Sommer", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Marco Haas", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Carina Seidel", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Patrick Brandt", "skills": ["EKG", "Röntgen"]},
+    {"name": "Lisa Otto", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Erik Sauer", "skills": ["EKG"]},
+    {"name": "Monika Bergmann", "skills": ["Röntgen"]},
+    {"name": "Heike Busch", "skills": ["Blutabnahme"]},
+    {"name": "Dennis Roth", "skills": ["EKG", "Röntgen"]},
+    {"name": "Nadine Lorenz", "skills": ["Blutabnahme", "EKG"]},
+    {"name": "Kevin Dietrich", "skills": ["Blutabnahme", "Röntgen"]},
+    {"name": "Jasmin Günther", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Sven Berger", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Bianca Albrecht", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
+    {"name": "Oliver Pohl", "skills": ["Blutabnahme", "EKG", "Röntgen"]},
 ]
 
 
 async def seed():
     async with SessionLocal() as db:
-        count = await db.scalar(select(func.count()).select_from(Station))
-        if count > 0:
-            print("Already seeded, skipping.")
-            return
+   
 
         result = await db.execute(select(Skill))
         skills_by_name = {s.name: s for s in result.scalars().all()}
 
-        # Stations
-        for data in STATIONS:
-            station = Station(
-                name=data["name"],
-                maxAssignments=1,
-                skill_relations=[skills_by_name[s] for s in data["skills_needed"]]
-            )
-            db.add(station)
+    
 
         # Users
         for data in USERS:
