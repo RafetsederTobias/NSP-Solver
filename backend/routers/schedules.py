@@ -40,7 +40,6 @@ def get_weekdays(year: int, month: int, days: list[int]) -> list[int]:
 
 @router.post("", status_code=201)
 async def schedule(payload: SchedulePayload,db: AsyncSession = Depends(get_db)):
-    print(payload.keepExistingAssignments)
     users_result = await db.execute(
         select(User).options(selectinload(User.skill_relations))
     )

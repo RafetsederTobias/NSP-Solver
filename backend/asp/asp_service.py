@@ -51,18 +51,16 @@ def _build_facts(users, stations, days, constraints, existing_assignments) -> st
     return facts
 
 
-def _run_clingo(facts: str, timeout_seconds: int = 10) -> list[dict] | None:
+def _run_clingo(facts: str, timeout_seconds: int = 15) -> list[dict] | None:
     ctl = clingo.Control(["--models=1"])
     ctl.load(str(RULES_FILE))
     ctl.add("base", [], facts)
     ctl.ground([("base", [])])
 
     best_model: list[dict] = []
-    satisfiable = False
 
     def on_model(model):
-        nonlocal best_model, satisfiable
-        satisfiable = True
+        nonlocal best_model
         current = []
         for atom in model.symbols(shown=True):
             if atom.name == "assigned":
@@ -78,4 +76,4 @@ def _run_clingo(facts: str, timeout_seconds: int = 10) -> list[dict] | None:
     handle.cancel()
     handle.wait()
 
-    return best_model if satisfiable else None
+    return best_model or None

@@ -173,7 +173,7 @@ import { SolverDialogComponent, SolverDialogResult } from '../solver-dialog/solv
           <div class="spinner"></div>
           <div>
             <div class="loading-title">Dienstplan wird erstellt…</div>
-            <div class="loading-sub">Das kann bis zu 10 Sekunden dauern.</div>
+            <div class="loading-sub">Das kann bis zu 15 Sekunden dauern.</div>
           </div>
         </div>
       </div>
@@ -224,16 +224,26 @@ export class CalendarComponent implements OnInit {
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
 
-  calendarOptions: CalendarOptions = {
-    initialView: 'dayGridMonth',
-    weekends: false,
-    plugins: [dayGridPlugin, interactionPlugin],
-    headerToolbar: { center: 'dayGridMonth,dayGridWeek' },
-    locale: deLocale,
-    dateClick: (info: DateClickArg) => {
-      this.router.navigate(['/calendar', info.dateStr]);
+calendarOptions: CalendarOptions = {
+  initialView: 'dayGridMonth',
+  weekends: false,
+  plugins: [dayGridPlugin, interactionPlugin],
+  headerToolbar: { center: 'dayGridMonth,dayGridWeek,dayGridDay' },
+  locale: deLocale,
+  dayMaxEvents: 10,  
+  moreLinkClick: 'day',
+  views: {
+    dayGridDay: {
+      dayMaxEvents: false, 
     },
-  };
+    dayGridWeek: {
+      dayMaxEvents: false
+    }
+  },
+  dateClick: (info: DateClickArg) => {
+    this.router.navigate(['/calendar', info.dateStr]);
+  },
+};
 
   events = computed(() =>
     this.assignments().map((a) => ({

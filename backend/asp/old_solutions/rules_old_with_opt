@@ -1,6 +1,4 @@
-% =============================================================================
 % ELIGIBILITY
-% =============================================================================
 
 % A user is eligible for a station if they have all required skills.
 % Precomputing this drastically reduces the search space in the choice rule.
@@ -8,18 +6,14 @@ eligible(U, S) :-
     user(U), station(S),
     #count { Sk : requires(S, Sk), not has_skill(U, Sk) } = 0.
 
-% =============================================================================
 % CHOICE RULE — core assignment generation
-% =============================================================================
 
 % Assign between 0 and Max eligible users to each station each day.
 % No hard lower bound — understaffing is handled via optimization below.
 { assigned(U, S, D) : eligible(U, S) } Max :-
     station(S), day(D), max_assignments(S, Max).
 
-% =============================================================================
 % HARD CONSTRAINTS
-% =============================================================================
 
 % A user can only work one station per day.
 :- user(U), day(D),
@@ -43,9 +37,7 @@ eligible(U, S) :-
 :- user(U), exact_days(U, Exact),
    #count { D : assigned(U, _, D) } != Exact.
 
-% =============================================================================
 % STAFFING QUALITY — derived facts for optimization
-% =============================================================================
 
 % Number of users assigned to a station on a given day.
 staff_count(S, D, N) :-
@@ -64,12 +56,10 @@ understaffed(S, D) :-
     staff_count(S, D, N),
     N > 0, N < Max.
 
-% =============================================================================
 % OPTIMIZATION
-% =============================================================================
 
-% Priority @2: minimize unstaffed stations (most critical).
-% Priority @1: minimize understaffed stations (secondary).
+% Priority @2: minimize unstaffed stations 
+% Priority @1: minimize understaffed stations
 % Weight 10 vs 1 ensures any unstaffed station is worse than all understaffing.
 #minimize {
     10@2, S, D : unstaffed(S, D);
