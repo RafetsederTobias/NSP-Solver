@@ -298,8 +298,25 @@ import { MatDividerModule } from '@angular/material/divider';
 
     <div class="min-h-screen bg-slate-50 px-6 py-10">
       <div class="max-w-7xl mx-auto">
-        <div class="flex items-center justify-between mb-6">
-          <h1 class="text-2xl font-semibold text-slate-800 tracking-tight">Kalender</h1>
+        <h1 class="text-2xl font-semibold text-slate-800 tracking-tight">Kalender</h1>
+
+        <div class="flex items-center justify-between mt-6">
+          <mat-form-field appearance="outline" style="width: 250px; margin-bottom: 1rem;">
+            <mat-label>Mitarbeiter</mat-label>
+            <mat-select multiple [(ngModel)]="selectedIds" (ngModelChange)="onFilterChange($event)">
+              <div style="padding: 8px 16px; border-bottom: 1px solid #e2e8f0;">
+                <button
+                  (click)="toggleAll(); $event.stopPropagation()"
+                  style="color: #6366f1; font-size: 0.75rem; font-weight: 500; background: none; border: none; cursor: pointer; padding: 0;"
+                >
+                  {{ selectedIds.length === users().length ? 'Alle abwählen' : 'Alle auswählen' }}
+                </button>
+              </div>
+              @for (user of users(); track user.id) {
+                <mat-option [value]="user.id">{{ user.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
           <button
             (click)="openSolverDialog()"
             [disabled]="isLoading()"
@@ -308,22 +325,7 @@ import { MatDividerModule } from '@angular/material/divider';
             <span class="material-icons-round">bolt</span>SOLVE
           </button>
         </div>
-        <mat-form-field appearance="outline" style="width: 250px; margin-bottom: 1rem;">
-          <mat-label>Mitarbeiter</mat-label>
-          <mat-select multiple [(ngModel)]="selectedIds" (ngModelChange)="onFilterChange($event)">
-            <div style="padding: 8px 16px; border-bottom: 1px solid #e2e8f0;">
-              <button
-                (click)="toggleAll(); $event.stopPropagation()"
-                style="color: #6366f1; font-size: 0.75rem; font-weight: 500; background: none; border: none; cursor: pointer; padding: 0;"
-              >
-                {{ selectedIds.length === users().length ? 'Alle abwählen' : 'Alle auswählen' }}
-              </button>
-            </div>
-            @for (user of users(); track user.id) {
-              <mat-option [value]="user.id">{{ user.name }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+
         <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden p-6">
           <full-calendar #cal [options]="calendarOptions" [events]="events()" />
         </div>
