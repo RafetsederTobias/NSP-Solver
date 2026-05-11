@@ -7,8 +7,6 @@ def solve_schedule(users, stations, days, constraints=None, existing_assignments
     facts = _build_facts(users, stations, days, constraints, existing_assignments)
     
     result = _run_clingo(facts)
-    if result is not None:
-        return result
 
     return result if result is not None else []
 
@@ -51,8 +49,8 @@ def _build_facts(users, stations, days, constraints, existing_assignments) -> st
     return facts
 
 
-def _run_clingo(facts: str, timeout_seconds: int = 15) -> list[dict] | None:
-    ctl = clingo.Control(["--models=1"])
+def _run_clingo(facts: str, timeout_seconds: int = 30) -> list[dict] | None:
+    ctl = clingo.Control(["--models=0"])
     ctl.load(str(RULES_FILE))
     ctl.add("base", [], facts)
     ctl.ground([("base", [])])

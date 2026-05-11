@@ -9,7 +9,7 @@ eligible(U, S) :-
 % CHOICE RULE — core assignment generation
 
 % Assign between 0 and Max eligible users to each station each day.
-% No hard lower bound — understaffing is handled via optimization below.
+% No hard lower bound
 { assigned(U, S, D) : eligible(U, S) } Max :-
     station(S), day(D), max_assignments(S, Max).
 
@@ -37,7 +37,7 @@ eligible(U, S) :-
 :- user(U), exact_days(U, Exact),
    #count { D : assigned(U, _, D) } != Exact.
 
-% STAFFING QUALITY — derived facts for optimization
+% STAFFING QUALITY - derived facts for optimization
 
 % Number of users assigned to a station on a given day.
 staff_count(S, D, N) :-

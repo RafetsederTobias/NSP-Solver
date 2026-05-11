@@ -13,5 +13,10 @@ class User(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
     skill_relations = relationship("Skill", secondary=user_skills, passive_deletes=True)
-    station_assignments = relationship("StationAssignment", back_populates="user")
+    station_assignments = relationship(
+        "StationAssignment",
+        back_populates="user",
+        cascade="all, delete-orphan", 
+        passive_deletes=True,
+    )
 

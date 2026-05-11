@@ -3,7 +3,7 @@ from db import SessionLocal
 from models.Station import Station
 from models.Skill import Skill
 from models.User import User
-from sqlalchemy import select, func
+from sqlalchemy import delete, select, func
 
 STATIONS = [
     {"name": "Leitung / V.",  "skills_needed": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie", "Perimetrie"]},
@@ -88,6 +88,9 @@ USERS = [
 async def seed():
     async with SessionLocal() as db:
 
+        await db.execute(delete(Station))
+        await db.execute(delete(User))
+
         result = await db.execute(select(Skill))
         skills_by_name = {s.name: s for s in result.scalars().all()}
 
@@ -108,7 +111,3 @@ async def seed():
 
         await db.commit()
         print("Seeded stations and users.")
-
-
-if __name__ == "__main__":
-    asyncio.run(seed())

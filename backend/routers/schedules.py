@@ -98,4 +98,17 @@ async def schedule(payload: SchedulePayload,db: AsyncSession = Depends(get_db)):
     db.add_all(db_assignments)
     await db.commit()
 
-    return {"created": len(db_assignments)}
+    unassigned_stations = await StationAssignment.get_unassigned_stations(
+        db, year=payload.currentYear, month=payload.currentMonth, scheduled_days=weekdays
+    )
+
+    response = {"created": len(db_assignments)}
+    print(unassigned_stations)
+
+    if unassigned_stations:
+        response["unassigned"] = unassigned_stations
+
+    print(response)
+    print(unassigned_stations)
+
+    return response

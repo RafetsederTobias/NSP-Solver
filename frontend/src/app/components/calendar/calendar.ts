@@ -7,7 +7,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import deLocale from '@fullcalendar/core/locales/de';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { switchMap, catchError } from 'rxjs/operators';
+import { switchMap, catchError, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { StationAssignmentService } from '../../service/station-assignment-service';
@@ -248,11 +248,6 @@ import { MatDividerModule } from '@angular/material/divider';
         font-weight: 700;
         color: #1e293b;
       }
-      .error-message {
-        font-size: 0.875rem;
-        color: #64748b;
-        line-height: 1.5;
-      }
       .error-btn {
         margin-top: 0.25rem;
         padding: 0.5rem 1.5rem;
@@ -267,6 +262,38 @@ import { MatDividerModule } from '@angular/material/divider';
       }
       .error-btn:hover {
         background: #4f46e5;
+      }
+      .error-card.is-warning .error-icon-wrap span {
+        color: #f59e0b;
+      }
+
+      .error-card.is-warning .error-btn {
+        background-color: #f59e0b;
+      }
+      .warning-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 300px;
+        overflow-y: auto;
+        text-align: left;
+        width: 100%;
+      }
+
+      .warning-list li {
+        padding: 4px 8px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        font-size: 0.9rem;
+      }
+
+      .warning-list li:last-child {
+        border-bottom: none;
+      }
+
+      .warning-day {
+        font-weight: 600;
+        min-width: 50px;
+        display: inline-block;
       }
     `,
   ],
@@ -283,15 +310,35 @@ import { MatDividerModule } from '@angular/material/divider';
       </div>
     }
 
-    @if (errorMessage()) {
-      <div class="error-backdrop" (click)="dismissError()">
-        <div class="error-card" (click)="$event.stopPropagation()">
+    @if (errorMessage() || warningList().length) {
+      <div class="error-backdrop" (click)="dismissMessages()">
+        <div
+          class="error-card"
+          [class.is-warning]="warningList().length && !errorMessage()"
+          (click)="$event.stopPropagation()"
+        >
           <div class="error-icon-wrap">
-            <span class="material-icons-round">error_outline</span>
+            <span class="material-icons-round">
+              {{ errorMessage() ? 'error_outline' : 'warning_amber' }}
+            </span>
           </div>
-          <div class="error-title">Kein gültiger Dienstplan gefunden</div>
-          <div class="error-message">{{ errorMessage() }}</div>
-          <button class="error-btn" (click)="dismissError()">Schließen</button>
+          <div class="error-title">
+            {{ errorMessage() ? 'Kein gültiger Dienstplan gefunden' : 'Stationen ohne Benutzer' }}
+          </div>
+
+          @if (errorMessage()) {
+            <div class="error-message">{{ errorMessage() }}</div>
+          } @else {
+            <ul class="warning-list">
+              @for (item of warningList(); track $index) {
+                <li>
+                  <span class="warning-day">Tag {{ item.day }}</span> {{ item.station }}
+                </li>
+              }
+            </ul>
+          }
+
+          <button class="error-btn" (click)="dismissMessages()">Schließen</button>
         </div>
       </div>
     }
@@ -348,6 +395,7 @@ export class CalendarComponent implements OnInit {
   selectedUserIds = signal<Set<number>>(new Set());
   selectedIds: number[] = [];
   users = this.userService.users;
+  warningList = signal<{ station: string; day: number }[]>([]);
 
   onFilterChange(ids: number[]) {
     this.selectedUserIds.set(new Set(ids));
@@ -401,11 +449,10 @@ export class CalendarComponent implements OnInit {
   getDaysInMonth(year: number, month: number): number {
     return new Date(year, month, 0).getDate();
   }
-
-  dismissError() {
+  dismissMessages() {
     this.errorMessage.set(null);
+    this.warningList.set([]);
   }
-
   openSolverDialog() {
     const calApi = this.calendarRef.getApi();
     const currentDate = calApi.getDate();
@@ -435,13 +482,20 @@ export class CalendarComponent implements OnInit {
         this.scheduleService
           .loadSchedule(payload)
           .pipe(
+            tap((response: any) => {
+              if (response.unassigned?.length) {
+                this.warningList.set(response.unassigned);
+              } else {
+                this.warningList.set([]);
+              }
+            }),
             switchMap(() => this.stationassignmentService.loadAll()),
             catchError((err: HttpErrorResponse) => {
               this.isLoading.set(false);
               if (err.status === 409) {
                 const detail =
                   err.error?.detail ??
-                  'Überprüfen Sie, ob genügend Benutzer die erforderlichen Qualifikationen haben.';
+                  'Überprüfen Sie, ob genügend Benutzer die erforderlichen Kompetenzen haben.';
                 this.errorMessage.set(detail);
               } else {
                 this.errorMessage.set(

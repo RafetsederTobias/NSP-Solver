@@ -6,7 +6,7 @@ eligible_day(U, S, D) :-
     eligible(U, S), day(D),
     not blocked_day(U, D).
 
-1 { assigned(U, S, D) : eligible_day(U, S, D) } Max :-
+ { assigned(U, S, D) : eligible_day(U, S, D) } Max :-
     station(S), day(D), max_assignments(S, Max).
 
 % user nicht bei 2 stationen an einem tag
@@ -23,3 +23,33 @@ eligible_day(U, S, D) :-
 
 :- user(U), exact_days(U, Exact),
    #count { D : assigned(U, _, D) } != Exact.
+
+
+   % STAFFING QUALITY - derived facts for optimization
+
+% Number of users assigned to a station on a given day.
+staff_count(S, D, N) :-
+    station(S), day(D),
+    N = #count { U : assigned(U, S, D) }.
+
+% A station is unstaffed if it has zero users on a given day.
+unstaffed(S, D) :-
+    station(S), day(D),
+    staff_count(S, D, 0).
+
+% A station is understaffed if it has fewer than max users (but at least 1).
+understaffed(S, D) :-
+    station(S), day(D),
+    max_assignments(S, Max),
+    staff_count(S, D, N),
+    N > 0, N < Max.
+
+% OPTIMIZATION
+
+% Priority @2: minimize unstaffed stations 
+% Priority @1: minimize understaffed stations
+% Weight 10 vs 1 ensures any unstaffed station is worse than all understaffing.
+#minimize {
+    10@2, S, D : unstaffed(S, D);
+     1@1, S, D : understaffed(S, D)
+}.

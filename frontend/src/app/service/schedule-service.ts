@@ -3,15 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
 import { UserConstraint } from './user-service';
 
-
 export interface SchedulePayload {
-    currentMonth: number
-    currentYear: number
-    daysInMonth: number
-    keepExistingAssignments: Boolean
-    constraints: UserConstraint[]
+  currentMonth: number;
+  currentYear: number;
+  daysInMonth: number;
+  keepExistingAssignments: Boolean;
+  constraints: UserConstraint[];
 }
-
 
 @Injectable({ providedIn: 'root' })
 export class ScheduleService {
