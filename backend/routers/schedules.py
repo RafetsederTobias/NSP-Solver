@@ -102,6 +102,8 @@ async def schedule(payload: SchedulePayload,db: AsyncSession = Depends(get_db)):
         db, year=payload.currentYear, month=payload.currentMonth, scheduled_days=weekdays
     )
 
+    print(unassigned_stations)
+
     response = {"created": len(db_assignments)}
 
     if unassigned_stations:

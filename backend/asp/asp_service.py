@@ -49,31 +49,54 @@ def _build_facts(users, stations, days, constraints, existing_assignments) -> st
     return facts
 
 
-def _run_clingo(facts: str, timeout_seconds: int = 30) -> list[dict] | None:
-    ctl = clingo.Control(["--models=0", "--opt-strategy=usc,pmres"])
-    ctl.load(str(RULES_FILE))
-    ctl.add("base", [], facts)
-    ctl.ground([("base", [])])
+def _run_clingo(facts: str, timeout_seconds: int = 60) -> list[dict] | None:
 
-    best_model: list[dict] = []
+    def solve(extra_rules: str = "") -> list[dict]:
+        ctl = clingo.Control(["--models=0", "--heuristic=Domain"])
+        ctl.load(str(RULES_FILE))
+        ctl.add("base", [], facts)
+        if extra_rules:
+            ctl.add("base", [], extra_rules)
+        ctl.ground([("base", [])])
 
-    def on_model(model):
-        nonlocal best_model
-        current = []
-        for atom in model.symbols(shown=True):
-            if atom.name == "assigned":
-                current.append({
-                    "user_id": int(str(atom.arguments[0])),
-                    "station_id": int(str(atom.arguments[1])),
-                    "day": int(str(atom.arguments[2])),
-                })
-        best_model = current
-        print(f"New best model found, cost: {model.cost}, proven optimal: {model.optimality_proven}")
+        best_model = []
 
+        def on_model(model):
+            nonlocal best_model
+            current = []
+            for atom in model.symbols(shown=True):
+                if atom.name == "assigned":
+                    current.append({
+                        "user_id": int(str(atom.arguments[0])),
+                        "station_id": int(str(atom.arguments[1])),
+                        "day": int(str(atom.arguments[2])),
+                    })
+            best_model = current
+            print(f"New best model found, cost: {model.cost}, proven optimal: {model.optimality_proven}")
 
-    handle = ctl.solve(on_model=on_model, async_=True)
-    handle.wait(timeout_seconds)
-    handle.cancel()
-    handle.wait()
+        handle = ctl.solve(on_model=on_model, async_=True)
+        handle.wait(timeout_seconds)
+        handle.cancel()
+        handle.wait()
+        return best_model
 
-    return best_model or None
+    FORCE_STAFFING = """
+    1 { assigned(U, S, D) : eligible_day(U, S, D) } Max :-
+        station(S), day(D), max_assignments(S, Max).
+    """
+
+    ctl_check = clingo.Control(["--models=1"])
+    ctl_check.load(str(RULES_FILE))
+    ctl_check.add("base", [], facts)
+    ctl_check.add("base", [], FORCE_STAFFING)
+    ctl_check.ground([("base", [])])
+
+    result = ctl_check.solve()
+    sat = result.satisfiable
+
+    if sat:
+        print("Phase 1: forced staffing is feasible, optimizing...")
+        return solve(FORCE_STAFFING)
+    else:
+        print("Phase 2: not enough users, falling back to soft optimization...")
+        return solve()
