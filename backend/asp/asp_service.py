@@ -50,7 +50,7 @@ def _build_facts(users, stations, days, constraints, existing_assignments) -> st
 
 
 def _run_clingo(facts: str, timeout_seconds: int = 30) -> list[dict] | None:
-    ctl = clingo.Control(["--models=0"])
+    ctl = clingo.Control(["--models=0", "--opt-strategy=usc,pmres"])
     ctl.load(str(RULES_FILE))
     ctl.add("base", [], facts)
     ctl.ground([("base", [])])
@@ -68,6 +68,8 @@ def _run_clingo(facts: str, timeout_seconds: int = 30) -> list[dict] | None:
                     "day": int(str(atom.arguments[2])),
                 })
         best_model = current
+        print(f"New best model found, cost: {model.cost}, proven optimal: {model.optimality_proven}")
+
 
     handle = ctl.solve(on_model=on_model, async_=True)
     handle.wait(timeout_seconds)

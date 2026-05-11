@@ -103,12 +103,8 @@ async def schedule(payload: SchedulePayload,db: AsyncSession = Depends(get_db)):
     )
 
     response = {"created": len(db_assignments)}
-    print(unassigned_stations)
 
     if unassigned_stations:
         response["unassigned"] = unassigned_stations
-
-    print(response)
-    print(unassigned_stations)
 
     return response

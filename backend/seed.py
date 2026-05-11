@@ -1,15 +1,15 @@
 import asyncio
 from db import SessionLocal
-from models.Station import Station
+from models.Station import Station, station_skills
 from models.Skill import Skill
-from models.User import User
+from models.User import User, user_skills
 from sqlalchemy import delete, select, func
 
 STATIONS = [
-    {"name": "Leitung / V.",  "skills_needed": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie", "Perimetrie"]},
+    {"name": "Leitung / V.",  "skills_needed": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
     {"name": "Koord. TK",     "skills_needed": ["Spaltlampenuntersuchung", "OCT", "Tonometrie"]},
     {"name": "Koord. Amb.",   "skills_needed": ["Sehtest", "Perimetrie"]},
-    {"name": "OP 1",          "skills_needed": ["Sehtest", "Spaltlampenuntersuchung", "Tonometrie"]},
+    {"name": "OP 1",          "skills_needed": ["Sehtest", "Tonometrie"]},
     {"name": "OP 2",          "skills_needed": ["Sehtest", "Spaltlampenuntersuchung"]},
     {"name": "OP Vorb.",      "skills_needed": ["OCT", "Tonometrie"]},
     {"name": "KAT 1",         "skills_needed": ["Sehtest"]},
@@ -20,74 +20,65 @@ STATIONS = [
     {"name": "Stützpunkt",    "skills_needed": ["Spaltlampenuntersuchung", "Perimetrie"]},
     {"name": "EGR 3",         "skills_needed": ["Sehtest", "Spaltlampenuntersuchung"]},
     {"name": "Vers. Ass.",    "skills_needed": ["OCT"]},
-    {"name": "Akut",          "skills_needed": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie"]},
+    {"name": "Akut",          "skills_needed": ["Sehtest", "OCT", "Tonometrie"]},
     {"name": "Lid",           "skills_needed": ["Spaltlampenuntersuchung"]},
     {"name": "Rondeau",       "skills_needed": ["Sehtest"]},
     {"name": "Allgemein",     "skills_needed": ["OCT", "Perimetrie"]},
-    {"name": "Makula",        "skills_needed": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
+    {"name": "Makula",        "skills_needed": ["Sehtest", "OCT"]},
     {"name": "Refr. VU",      "skills_needed": ["Spaltlampenuntersuchung", "OCT", "Perimetrie"]},
     {"name": "Kat VU",        "skills_needed": ["Sehtest", "Tonometrie"]},
-    {"name": "Springer",      "skills_needed": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie", "Perimetrie"]},
+    {"name": "Springer",      "skills_needed": ["Tonometrie", "Perimetrie"]},
 ]
-
 USERS = [
-    {"name": "Anna Müller", "skills": ["Spaltlampenuntersuchung", "OCT", "Tonometrie"]},
-    {"name": "Lukas Schmidt", "skills": ["Sehtest", "Perimetrie"]},
-    {"name": "Marie Schneider", "skills": ["Spaltlampenuntersuchung"]},
-    {"name": "Leon Fischer", "skills": ["OCT", "Tonometrie"]},
-    {"name": "Laura Weber", "skills": ["Sehtest", "Spaltlampenuntersuchung", "Perimetrie"]},
-    {"name": "Paul Wagner", "skills": ["Sehtest", "OCT"]},
-    {"name": "Sophie Becker", "skills": ["Spaltlampenuntersuchung", "OCT", "Perimetrie"]},
-    {"name": "Felix Hoffmann", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie"]},
-    {"name": "Emma Schäfer", "skills": ["Spaltlampenuntersuchung"]},
+    {"name": "Anna Müller", "skills": ["Spaltlampenuntersuchung", "OCT", "Tonometrie", "Perimetrie"]},
+    {"name": "Lukas Schmidt", "skills": ["Sehtest", "Perimetrie", "OCT"]},
+    {"name": "Marie Schneider", "skills": ["Spaltlampenuntersuchung", "OCT"]},
+    {"name": "Leon Fischer", "skills": ["OCT", "Tonometrie", "Sehtest"]},
+    {"name": "Laura Weber", "skills": ["Sehtest", "Spaltlampenuntersuchung", "Perimetrie", "OCT"]},
+    {"name": "Paul Wagner", "skills": ["Sehtest", "OCT", "Tonometrie"]},
+    {"name": "Sophie Becker", "skills": ["Spaltlampenuntersuchung", "OCT", "Perimetrie", "Sehtest"]},
+    {"name": "Felix Hoffmann", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie", "Perimetrie"]},
+    {"name": "Emma Schäfer", "skills": ["Spaltlampenuntersuchung", "OCT"]},
     {"name": "Jonas Koch", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Perimetrie"]},
-    {"name": "Mia Bauer", "skills": ["Sehtest"]},
-    {"name": "Noah Richter", "skills": ["Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Lena Klein", "skills": ["Sehtest", "Spaltlampenuntersuchung", "Tonometrie"]},
-    {"name": "Tim Wolf", "skills": ["Sehtest", "OCT"]},
-    {"name": "Leonie Schröder", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Perimetrie"]},
-    {"name": "Ben Neumann", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie"]},
+    {"name": "Mia Bauer", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie"]},
+    {"name": "Noah Richter", "skills": ["Spaltlampenuntersuchung", "OCT", "Sehtest"]},
+    {"name": "Lena Klein", "skills": ["Sehtest", "Spaltlampenuntersuchung", "Tonometrie", "OCT"]},
+    {"name": "Tim Wolf", "skills": ["Sehtest", "OCT", "Perimetrie"]},
+    {"name": "Leonie Schröder", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Perimetrie", "Tonometrie"]},
+    {"name": "Ben Neumann", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie", "Perimetrie"]},
     {"name": "Clara Schwarz", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
-    {"name": "David Zimmermann", "skills": ["Spaltlampenuntersuchung", "OCT"]},
+    {"name": "David Zimmermann", "skills": ["Spaltlampenuntersuchung", "OCT", "Sehtest"]},
     {"name": "Hannah Braun", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Perimetrie"]},
-    {"name": "Julian Krüger", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Nina Hofmann", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie"]},
-    {"name": "Max Hartmann", "skills": ["Sehtest"]},
-    {"name": "Sarah Lange", "skills": ["Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Tom Schmitt", "skills": ["Sehtest", "Spaltlampenuntersuchung"]},
-    {"name": "Julia Werner", "skills": ["Sehtest", "OCT"]},
+    {"name": "Julian Krüger", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie"]},
+    {"name": "Nina Hofmann", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie", "Perimetrie"]},
+    {"name": "Max Hartmann", "skills": ["Sehtest", "OCT", "Perimetrie"]},
+    {"name": "Sarah Lange", "skills": ["Spaltlampenuntersuchung", "OCT", "Sehtest"]},
+    {"name": "Tom Schmitt", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
+    {"name": "Julia Werner", "skills": ["Sehtest", "OCT", "Tonometrie"]},
     {"name": "Philipp Schmitz", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Perimetrie"]},
-    {"name": "Katharina Krause", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Daniel Meier", "skills": ["Sehtest"]},
-    {"name": "Vanessa Lehmann", "skills": ["Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Sebastian Schulz", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie"]},
+    {"name": "Katharina Krause", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie"]},
+    {"name": "Daniel Meier", "skills": ["Sehtest", "OCT", "Perimetrie"]},
+    {"name": "Vanessa Lehmann", "skills": ["Spaltlampenuntersuchung", "OCT", "Sehtest"]},
+    {"name": "Sebastian Schulz", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie", "Perimetrie"]},
     {"name": "Alina Maier", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Robin Herrmann", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Melanie König", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Tobias Frank", "skills": ["Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Franziska Vogel", "skills": ["Sehtest", "Spaltlampenuntersuchung"]},
-    {"name": "Andreas Graf", "skills": ["Sehtest", "OCT"]},
-    {"name": "Stefanie Sommer", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Perimetrie"]},
-    {"name": "Marco Haas", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Carina Seidel", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Patrick Brandt", "skills": ["Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Lisa Otto", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Erik Sauer", "skills": ["Spaltlampenuntersuchung"]},
-    {"name": "Monika Bergmann", "skills": ["OCT"]},
-    {"name": "Heike Busch", "skills": ["Sehtest"]},
-    {"name": "Dennis Roth", "skills": ["Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Nadine Lorenz", "skills": ["Sehtest", "Spaltlampenuntersuchung"]},
-    {"name": "Kevin Dietrich", "skills": ["Sehtest", "OCT"]},
-    {"name": "Jasmin Günther", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Perimetrie"]},
-    {"name": "Sven Berger", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Bianca Albrecht", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
-    {"name": "Oliver Pohl", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
+    {"name": "Robin Herrmann", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Perimetrie"]},
+    {"name": "Melanie König", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie"]},
+    {"name": "Tobias Frank", "skills": ["Spaltlampenuntersuchung", "OCT", "Sehtest"]},
+    {"name": "Franziska Vogel", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT"]},
+    {"name": "Andreas Graf", "skills": ["Sehtest", "OCT", "Tonometrie", "Perimetrie"]},
+    {"name": "Stefanie Sommer", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Perimetrie", "Tonometrie"]},
+    {"name": "Marco Haas", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Perimetrie"]},
+    {"name": "Carina Seidel", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie"]},
+    {"name": "Patrick Brandt", "skills": ["Spaltlampenuntersuchung", "OCT", "Tonometrie", "Sehtest"]},
+    {"name": "Lisa Otto", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Perimetrie"]},
 ]
 
 
 async def seed():
     async with SessionLocal() as db:
 
+        await db.execute(delete(station_skills))
+        await db.execute(delete(user_skills))
         await db.execute(delete(Station))
         await db.execute(delete(User))
 
@@ -97,7 +88,7 @@ async def seed():
         for data in STATIONS:
             station = Station(
                 name=data["name"],
-                maxAssignments=1,
+                maxAssignments=3,
                 skill_relations=[skills_by_name[s] for s in data["skills_needed"]]
             )
             db.add(station)
@@ -111,3 +102,6 @@ async def seed():
 
         await db.commit()
         print("Seeded stations and users.")
+
+if __name__ == "__main__":
+    asyncio.run(seed())
