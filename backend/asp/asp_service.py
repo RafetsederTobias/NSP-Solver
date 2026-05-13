@@ -5,10 +5,20 @@ RULES_FILE = Path(__file__).parent / "rules.lp"
 
 def solve_schedule(users, stations, days, constraints=None, existing_assignments=None) -> list[dict]:
     facts = _build_facts(users, stations, days, constraints, existing_assignments)
-    
     result = _run_clingo(facts)
+    assignments = result if result is not None else []
 
-    return result if result is not None else []
+    assigned_pairs = {(a["station_id"], a["day"]) for a in assignments}
+    for s in stations:
+        for d in days:
+            if (s.id, d) not in assigned_pairs:
+                assignments.append({
+                    "user_id": None,
+                    "station_id": s.id,
+                    "day": d,
+                })
+
+    return assignments
 
 
 def _build_facts(users, stations, days, constraints, existing_assignments) -> str:
@@ -49,7 +59,7 @@ def _build_facts(users, stations, days, constraints, existing_assignments) -> st
     return facts
 
 
-def _run_clingo(facts: str, timeout_seconds: int = 60) -> list[dict] | None:
+def _run_clingo(facts: str, timeout_seconds: int = 15) -> list[dict] | None:
 
     def solve(extra_rules: str = "") -> list[dict]:
         ctl = clingo.Control(["--models=0", "--heuristic=Domain"])

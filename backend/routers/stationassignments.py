@@ -17,15 +17,17 @@ class UserRead(BaseModel):
 class StationAssignmentCreate(BaseModel):
     date: Date
     station_id: int
-    user_id: int
+    user_id: int | None = None
 
 class StationAssignmentRead(BaseModel):
     id: int
     date: Date
     station_id: int
-    user_id: int
-    user_name: str | None = None 
-    user: UserRead
+    user_id: int | None = None
+    user_name: str | None = None
+    user: UserRead | None = None
+
+    model_config = {"from_attributes": True}
 
 router = APIRouter(prefix="/api/v1/station-assignments", tags=["station-assignments"])
 

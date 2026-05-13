@@ -74,27 +74,34 @@ interface StationRow {
           >
             <span class="text-sm font-medium text-slate-700">{{ stationName(row.stationId) }}</span>
             <span class="text-sm text-slate-500">
-              {{ row.selectedUserIds.length }} / {{ row.maxAssignments }}
+              {{ row.selectedUserIds.filter(id => id != null).length }} / {{ row.maxAssignments }}
             </span>
 
-            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
-              <mat-select [multiple]="true" [(ngModel)]="row.selectedUserIds" placeholder="—">
-                <mat-option
-                  *ngFor="let user of availableUsers(row)"
-                  [value]="user.id"
-                  [disabled]="isDisabled(row, user.id)"
+            <div class="flex items-center gap-2">
+              <mat-form-field appearance="outline" subscriptSizing="dynamic" class="flex-1">
+                <mat-select
+                  [multiple]="true"
+                  [(ngModel)]="row.selectedUserIds"
+                  placeholder="Nicht festgelegt"
                 >
-                  <span>{{ user.name }}</span>
-                  <span
-                    *ngIf="!hasSkillMatch(user, row.stationId)"
-                    class="skill-mismatch-icon material-icons-round"
-                    [matTooltip]="skillMismatchTooltip(user, row.stationId)"
-                    matTooltipPosition="right"
-                    >warning_amber</span
+                  <mat-option
+                    *ngFor="let user of availableUsers(row)"
+                    [value]="user.id"
+                    [disabled]="isDisabled(row, user.id)"
                   >
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+                    {{ user.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <span
+                *ngIf="row.selectedUserIds.some(id => id == null)"
+                class="material-icons-round text-amber-500 shrink-0"
+                matTooltip="Keine Benutzer zugewiesen"
+              >
+                warning_amber
+              </span>
+            </div>
           </div>
 
           <div class="flex justify-end px-6 py-4 border-t border-slate-100">

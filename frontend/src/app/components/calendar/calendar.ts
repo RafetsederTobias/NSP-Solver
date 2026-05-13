@@ -421,8 +421,16 @@ export class CalendarComponent implements OnInit {
 
   events = computed(() =>
     this.assignments()
-      .filter((a) => this.selectedUserIds().size === 0 || this.selectedUserIds().has(a.user.id))
-      .map((a) => ({ title: a.user.name, date: a.date })),
+      .filter(
+        (a) =>
+          a.user?.id == null ||
+          this.selectedUserIds().size === 0 ||
+          this.selectedUserIds().has(a.user.id),
+      )
+      .map((a) => ({
+        title: a.user?.name ?? 'Placeholder',
+        date: a.date,
+      })),
   );
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
