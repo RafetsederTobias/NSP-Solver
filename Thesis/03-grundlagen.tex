@@ -7,5 +7,29 @@
 
 \section{Answer Set Programming}
 
+Answer Set Programming (ASP) ist ein deklarativer Ansatz  zur Modellierung und Lösung von Such- und Optimierungsproblemen. Es entstand aus der Schnittmenge mehrerer Forschungsgebiete , insbesondere der Wissensrepräsentation, der Logikprogrammierung und der Constraint-Satisfaction, und vereint deren Stärken in einem einheitlichen Framework. ASP erlaubt es, Probleme deklarativ zu formulieren, ohne dass der Programmierer den Suchprozess selbst steuert.
+\subsection{Syntax und Semantik}
+Die grundlegenden Bausteine eines ASP-Programms sind Atome, Literale und Regeln. Atome sind elementare Aussagen mit einem Wahrheitswert, Literale sind entweder Atome oder deren Negation. Regeln haben die allgemeine Form:
+\begin{lstlisting}[language=python]
+a ← b1, . . . , bm, not c1, . . . , not cn
+\end{lstlisting}
+
+Dabei bezeichnet a, also die linke Seite der Regel den Regelkopf, und die rechte Seite den Regelrumpf. Die Regel ist so zu interpretieren: Atom a gilt, sofern alle bm ableitbar sind und keines der cn ableitbar ist. 
+Der Operator not ist nicht als klassische Negation zu verstehen, sondern als Default-Negation, die die Nichtableitbarkeit eines Atoms ausdrückt. 
+Als Beispiel:
+\begin{lstlisting}[language=python]
+broken ← lightning, not lightning_rod
+light_on ←  power_on, not broken 
+\end{lstlisting}
+Hier leuchtet die Lampe, wenn der Strom an ist und es keinen Grund gibt anzunehmen, dass sie kaputt ist. Ist nichts über einen Defekt bekannt, gilt <not broken>, und die Lampe leuchtet.
+Wenn <lightning> als Fakt hinzukommt, wird <broken> ableitbar, und <not broken> gilt nicht mehr, also leuchtet die Lampe nicht mehr.
+Da ASP eng mit der nichtmonotonen Logik verwandt ist, können bereits gezogene Schlussfolgerungen zurückgezogen werden, sobald neue Fakten oder Regeln hinzugefügt werden. Die Default-Negation ist dabei der zentrale Mechanismus, der dieses Verhalten ermöglicht.
+\subsection{Answer Sets als Lösungskonzept}
+Die Semantik von ASP-Programmen basiert auf dem Begriff des Answer Sets, auch früher unter dem Namen "stable model" bekannt, der auf Gelfond und Lifschitz zurückgeht. Ein Answer Set ist eine Menge von Atomen, die in sich konsistent ist und bei der jedes enthaltene Atom durch eine Regelanwendung begründet werden kann. Ein Programm kann dabei mehrere, genau eines oder kein Answer Set besitzen, wobei jedes Answer Set einer gültigen Lösung des modellierten Problems entspricht. \cite{idk} Diese Mehrwertigkeit macht ASP besonders geeignet für Probleme, bei denen mehrere gleichwertige Lösungen existieren können, wie zum Beispiel bei der Dienstplanung.
+\subsection{Verarbeitung und Werkzeuge}
+Die Ausführung eines ASP-Programms erfolgt typischerweise in zwei Schritten. Zunächst übersetzt ein sogenannter Grounder das Programm bestehend aus Prädiketen in eine äquivalente aussagenlogische Form, indem alle Variablen durch konkrete Konstanten ersetzt werden. Anschließend berechnet ein Solver die Answer Sets des resultierenden Programms. Bekannte Systeme sind unter anderem CLASP, DLV und SMODELS. Moderne Solver nutzen dabei Techniken aus dem SAT-Solving, die sicherstellt, dass jedes wahre Atom tatsächlich ableitbar ist.
+\subsection{Anwendungsgebiete}
+Aufgrund seiner Ausdrucksstärke und Flexibilität findet ASP Anwendung in einer Vielzahl von Domänen. Industriell wurde es beispielsweise zur automatisierten Schichtplanung im Containerhafen Gioia Tauro eingesetzt, wo ein ASP-basiertes System die manuelle Planung von mehreren Stunden auf wenige Minuten reduzierte und gleichzeitig die Planqualität verbesserte. Weitere Anwendungsfelder umfassen Entscheidungsunterstützungssysteme, die Analyse biologischer Netzwerke, phylogenetische Systematik sowie klassische kombinatorische Probleme wie den Hamiltonkreis. \cite{idk}
+
 %% 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
