@@ -15,10 +15,12 @@ import { SchedulePayload, ScheduleService } from '../../service/schedule-service
 import { Dialog } from '@angular/cdk/dialog';
 import { UserService } from '../../service/user-service';
 import { SolverDialogComponent, SolverDialogResult } from '../solver-dialog/solver-dialog';
+
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
+import { RescheduleSolverDialog } from '../reschedule-solver-dialog/reschedule-solver-dialog';
 @Component({
   selector: 'app-calendar',
   standalone: true,
@@ -364,13 +366,22 @@ import { MatDividerModule } from '@angular/material/divider';
               }
             </mat-select>
           </mat-form-field>
-          <button
-            (click)="openSolverDialog()"
-            [disabled]="isLoading()"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition-all duration-150 active:scale-95 bg-indigo-500 text-white disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <span class="material-icons-round">bolt</span>SOLVE
-          </button>
+          <div>
+            <button
+              (click)="openRescheduleDialog()"
+              [disabled]="isLoading()"
+              class="inline-flex items-center m-5 gap-2 px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition-all duration-150 active:scale-95 bg-red-500 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span class="material-icons-round">event_busy</span>Spontaner Ausfall
+            </button>
+            <button
+              (click)="openSolverDialog()"
+              [disabled]="isLoading()"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition-all duration-150 active:scale-95 bg-indigo-500 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span class="material-icons-round">calendar_month</span>Monat planen
+            </button>
+          </div>
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden p-6">
@@ -489,6 +500,63 @@ export class CalendarComponent implements OnInit {
         this.isLoading.set(true);
         this.scheduleService
           .loadSchedule(payload)
+          .pipe(
+            tap((response: any) => {
+              if (response.unassigned?.length) {
+                this.warningList.set(response.unassigned);
+              } else {
+                this.warningList.set([]);
+              }
+            }),
+            switchMap(() => this.stationassignmentService.loadAll()),
+            catchError((err: HttpErrorResponse) => {
+              this.isLoading.set(false);
+              if (err.status === 409) {
+                const detail =
+                  err.error?.detail ??
+                  'Überprüfen Sie, ob genügend Benutzer die erforderlichen Kompetenzen haben.';
+                this.errorMessage.set(detail);
+              } else {
+                this.errorMessage.set(
+                  'Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.',
+                );
+              }
+              return EMPTY;
+            }),
+          )
+          .subscribe(() => this.isLoading.set(false));
+      });
+    });
+  }
+
+  openRescheduleDialog() {
+    const calApi = this.calendarRef.getApi();
+    const currentDate = calApi.getDate();
+    const month = currentDate.getMonth() + 1;
+    const year = currentDate.getFullYear();
+    const daysInCurrentMonth = this.getDaysInMonth(year, month);
+
+    this.userService.loadAll().subscribe(() => {
+      const users = this.userService.users();
+      const ref = this.dialog.open(RescheduleSolverDialog, {
+        data: { users, currentDate },
+      });
+
+      ref.closed.subscribe((value) => {
+        const result = value as SolverDialogResult;
+        if (!result?.constraints) return;
+
+        const payload: SchedulePayload = {
+          currentMonth: month,
+          currentYear: year,
+          daysInMonth: daysInCurrentMonth,
+          keepExistingAssignments: result.keepExistingAssignments,
+          constraints: result.constraints,
+        };
+
+        this.isLoading.set(true);
+        this.scheduleService
+          .reschedule(payload)
           .pipe(
             tap((response: any) => {
               if (response.unassigned?.length) {
