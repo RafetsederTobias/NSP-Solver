@@ -13,6 +13,7 @@ export interface UserConstraintsDialogData {
 }
 
 type DayMode = 'fulltime' | 'exact' | 'minmax';
+type CalendarMode = 'fixed' | 'blocked';
 
 @Component({
   selector: 'app-user-constraints-dialog',
@@ -201,9 +202,7 @@ type DayMode = 'fulltime' | 'exact' | 'minmax';
             <div class="avatar">{{ initials }}</div>
             <div>
               <div style="font-size:15px;font-weight:500;color:#1e293b;">{{ data.user.name }}</div>
-              <div style="font-size:12px;color:#94a3b8;margin-top:2px;">
-                Einschränkungen definieren
-              </div>
+              <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Spontaner Ausfall</div>
             </div>
           </div>
           <button class="btn-ghost" style="padding:0.2rem 0.5rem;" (click)="close()">✕</button>
@@ -211,97 +210,20 @@ type DayMode = 'fulltime' | 'exact' | 'minmax';
 
         <div class="body">
           <div>
-            <div class="section-label">Tage</div>
-            <div class="radio-group">
-              <label class="radio-row" [class.active]="mode === 'fulltime'">
-                <input
-                  type="radio"
-                  name="dayMode"
-                  value="fulltime"
-                  [(ngModel)]="mode"
-                  (ngModelChange)="onModeChange()"
-                />
-                <span class="radio-label">Vollzeit</span>
-                <span class="radio-hint">{{ workedaysLabel }}</span>
-              </label>
+            <div>
+              <div class="section-label">Verfügbarkeit</div>
 
-              <label class="radio-row" [class.active]="mode === 'exact'">
-                <input
-                  type="radio"
-                  name="dayMode"
-                  value="exact"
-                  [(ngModel)]="mode"
-                  (ngModelChange)="onModeChange()"
-                />
-                <span class="radio-label">Genau X Tage / Monat</span>
-              </label>
-              @if (mode === 'exact') {
-                <div class="inline-input-row">
-                  <span style="font-size:12px;color:#94a3b8;">Anzahl Tage</span>
-                  <input
-                    type="number"
-                    [(ngModel)]="draft.exactDaysPerMonth"
-                    (ngModelChange)="onExactDaysChange()"
-                    min="1"
-                    [max]="workdays"
-                    placeholder="-"
-                  />
-                </div>
-              }
+              <app-calendar-grid
+                [currentDate]="data.currentDate"
+                [modes]="['blocked']"
+                [blockedDays]="draft.blockedDays ?? []"
+                (selectionChange)="onCalendarChange($event)"
+              />
 
-              <div class="or-divider"><span class="or-label">oder</span></div>
-
-              <label class="radio-row" [class.active]="mode === 'minmax'">
-                <input
-                  type="radio"
-                  name="dayMode"
-                  value="minmax"
-                  [(ngModel)]="mode"
-                  (ngModelChange)="onModeChange()"
-                />
-                <span class="radio-label">Min. / Max. Tage / Monat</span>
-              </label>
-              @if (mode === 'minmax') {
-                <div class="inline-input-row">
-                  <span style="font-size:12px;color:#94a3b8;">Max. Tage</span>
-                  <input
-                    type="number"
-                    [(ngModel)]="draft.maxDaysPerMonth"
-                    min="1"
-                    [max]="workdays"
-                    placeholder="-"
-                  />
-                </div>
-                <div class="inline-input-row" style="margin-top:6px;">
-                  <span style="font-size:12px;color:#94a3b8;">Min. Tage</span>
-                  <input
-                    type="number"
-                    [(ngModel)]="draft.minDaysPerMonth"
-                    min="1"
-                    [max]="workdays"
-                    placeholder="-"
-                  />
-                </div>
-              }
-            </div>
-          </div>
-
-          <div class="divider"></div>
-
-          <div>
-            <div class="section-label">Verfügbarkeit</div>
-
-            <app-calendar-grid
-              [currentDate]="data.currentDate"
-              [fixedDays]="draft.fixedDays ?? []"
-              [blockedDays]="draft.blockedDays ?? []"
-              [fixedCap]="fixedCap"
-              (selectionChange)="onCalendarChange($event)"
-            />
-
-            <div class="footer">
-              <button class="btn-ghost" (click)="close()">Abbrechen</button>
-              <button class="btn-primary" (click)="save()">Speichern</button>
+              <div class="footer">
+                <button class="btn-ghost" (click)="close()">Abbrechen</button>
+                <button class="btn-primary" (click)="save()">Speichern</button>
+              </div>
             </div>
           </div>
         </div>
@@ -309,7 +231,7 @@ type DayMode = 'fulltime' | 'exact' | 'minmax';
     </div>
   `,
 })
-export class UserConstraintsDialogComponent {
+export class RescheduleConstraintDialogComponent {
   dialogRef = inject(DialogRef);
   data: UserConstraintsDialogData = inject(DIALOG_DATA);
   private workdayService = inject(WorkdayService);

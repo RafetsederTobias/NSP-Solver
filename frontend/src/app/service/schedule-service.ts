@@ -1,6 +1,5 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
 import { UserConstraint } from './user-service';
 
 export interface SchedulePayload {
@@ -18,5 +17,9 @@ export class ScheduleService {
 
   loadSchedule(payload: SchedulePayload) {
     return this.http.post(this.base, payload);
+  }
+
+  reschedule(payload:SchedulePayload) {
+    return this.http.post(this.base + "/reschedule", payload);
   }
 }

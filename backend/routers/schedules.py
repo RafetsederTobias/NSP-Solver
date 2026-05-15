@@ -141,3 +141,7 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
         ]
 
     return response
+
+@router.post("/reschedule", status_code=201)
+async def reschedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db)):
+    print(payload)
