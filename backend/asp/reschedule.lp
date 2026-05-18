@@ -60,3 +60,5 @@ added(U, S, D) :-
       2@2, U, S, D : added(U, S, D);
       1@1, S, D : understaffed(S, D)
 }.
+
+#show assigned/3.
