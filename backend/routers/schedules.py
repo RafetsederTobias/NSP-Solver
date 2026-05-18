@@ -4,7 +4,7 @@ from typing import List
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import delete, extract, select, and_
-from asp.asp_service import solve_schedule
+from asp.asp_service import solve_reschedule, solve_schedule
 from models.StationAssignment import StationAssignment
 from models.Station import Station
 from models.User import User
@@ -144,4 +144,104 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
 
 @router.post("/reschedule", status_code=201)
 async def reschedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db)):
-    print(payload)
+    users_result = await db.execute(select(User).options(selectinload(User.skill_relations)))
+    stations_result = await db.execute(select(Station).options(selectinload(Station.skill_relations)))
+    users = users_result.scalars().all()
+    stations = stations_result.scalars().all()
+
+    conflicting_assignments = []
+    for c in payload.constraints:
+        if not c.blockedDays:
+            continue
+        result = await db.execute(
+            select(StationAssignment).where(
+                extract("year", StationAssignment.date) == payload.currentYear,
+                extract("month", StationAssignment.date) == payload.currentMonth,
+                StationAssignment.user_id == c.user_id,
+                extract("day", StationAssignment.date).in_(c.blockedDays),
+            )
+        )
+        conflicting_assignments.extend(result.scalars().all())
+
+    if not conflicting_assignments:
+        return {"message": "No conflicts found, nothing to reschedule."}
+
+    await db.execute(
+        delete(StationAssignment).where(
+            StationAssignment.id.in_([a.id for a in conflicting_assignments])
+        )
+    )
+
+    remaining_result = await db.execute(
+        select(StationAssignment).where(
+            extract("year", StationAssignment.date) == payload.currentYear,
+            extract("month", StationAssignment.date) == payload.currentMonth,
+            StationAssignment.user_id != None,
+            StationAssignment.date >= date.today(),
+        )
+    )
+    remaining_assignments = remaining_result.scalars().all()
+
+    weekdays = get_weekdays(
+        payload.currentYear,
+        payload.currentMonth,
+        list(range(1, payload.daysInMonth + 1))
+    )
+
+    today = date.today()
+    future_weekdays = [d for d in weekdays
+    if date(payload.currentYear, payload.currentMonth, d) >= today
+    ]
+
+    assignments = solve_reschedule(
+        users, stations,
+        all_days=future_weekdays,
+        constraints=payload.constraints,
+        existing_assignments=remaining_assignments,
+    )
+
+    if assignments is None:
+        raise HTTPException(
+            status_code=409,
+            detail="Es konnte kein gültiger Dienstplan gefunden werden. Überprüfe die Parameter."
+        )
+
+    # Replacing full month schedule with new solution
+    # Delete only future assignments
+    await db.execute(
+        delete(StationAssignment).where(
+            extract("year", StationAssignment.date) == payload.currentYear,
+            extract("month", StationAssignment.date) == payload.currentMonth,
+            StationAssignment.date >= today,
+        )
+)
+
+    db_assignments = [
+        StationAssignment(
+            date=date(payload.currentYear, payload.currentMonth, a["day"]),
+            station_id=a["station_id"],
+            user_id=a["user_id"],
+        )
+        for a in assignments
+    ]
+    db.add_all(db_assignments)
+    await db.commit()
+
+    existing_keys = {(a.user_id, a.station_id, a.date.day) for a in remaining_assignments}
+    new_keys = {(a["user_id"], a["station_id"], a["day"]) for a in assignments if a["user_id"]}
+
+    response = {
+        "dropped": len(existing_keys - new_keys),
+        "added": len(new_keys - existing_keys),
+        "unchanged": len(existing_keys & new_keys),
+    }
+
+    unassigned = [a for a in assignments if a["user_id"] is None]
+    if unassigned:
+        station_map = {s.id: s.name for s in stations}
+        response["unassigned"] = [
+            {"station": station_map[a["station_id"]], "day": a["day"]}
+            for a in unassigned
+        ]
+
+    return response

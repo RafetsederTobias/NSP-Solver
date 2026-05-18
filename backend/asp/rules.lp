@@ -53,4 +53,3 @@ understaffed(S, D) :-
     10@2, S, D : unstaffed(S, D);
      1@1, S, D : understaffed(S, D)
 }.
-

@@ -1,0 +1,62 @@
+% ─── ELIGIBILITY ─────────────────────────────────────────────────────────────
+eligible(U, S) :-
+    user(U), station(S),
+    #count { Sk : requires(S, Sk), not has_skill(U, Sk) } = 0.
+
+eligible_day(U, S, D) :-
+    eligible(U, S), day(D),
+    not blocked_day(U, D).
+
+% ─── DECISION SPACE ──────────────────────────────────────────────────────────
+{ assigned(U, S, D) : eligible_day(U, S, D) }.
+
+% ─── HARD CONSTRAINTS ────────────────────────────────────────────────────────
+% Blocked days cannot be assigned
+:- assigned(U, S, D), blocked_day(U, D).
+
+:- user(U), max_days(U, Max),
+   #count { D : assigned(U, _, D) } > Max.
+
+% No user at two stations on the same day
+:- user(U), day(D),
+   #count { S : assigned(U, S, D) } > 1.
+
+% Respect max staffing per station per day
+:- station(S), day(D),
+   #count { U : assigned(U, S, D) } > Max,
+   max_assignments(S, Max).
+
+% ─── STAFFING QUALITY ────────────────────────────────────────────────────────
+staff_count(S, D, N) :-
+    station(S), day(D),
+    N = #count { U : assigned(U, S, D) }.
+
+unstaffed(S, D) :-
+    station(S), day(D),
+    staff_count(S, D, 0).
+
+understaffed(S, D) :-
+    station(S), day(D),
+    max_assignments(S, Max),
+    staff_count(S, D, N),
+    N > 0, N < Max.
+
+% ─── DISRUPTION TRACKING ─────────────────────────────────────────────────────
+dropped(U, S, D) :-
+    was_assigned(U, S, D),
+    not assigned(U, S, D).
+
+added(U, S, D) :-
+    assigned(U, S, D),
+    not was_assigned(U, S, D).
+
+% ─── HEURISTIC: prefer keeping existing assignments ──────────────────────────
+#heuristic assigned(U, S, D) : was_assigned(U, S, D). [10, true]
+
+% ─── OPTIMIZATION ────────────────────────────────────────────────────────────
+#minimize {
+    100@3, S, D : unstaffed(S, D);
+     10@2, U, S, D : dropped(U, S, D);
+      2@2, U, S, D : added(U, S, D);
+      1@1, S, D : understaffed(S, D)
+}.
