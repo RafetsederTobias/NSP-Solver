@@ -1,3 +1,5 @@
+import threading
+
 import clingo
 from pathlib import Path
 
@@ -143,24 +145,19 @@ def _run_clingo(
     rules_file: Path = RULES_FILE,
 ) -> list[dict] | None:
 
-    def solve(extra_rules: str = "") -> list[dict]:
+    def solve(extra_rules: str = "", timeout: int = timeout_seconds) -> list[dict]:
         ctl = clingo.Control(["--models=0", "--heuristic=Domain"])
-
         ctl.load(str(rules_file))
         ctl.add("base", [], facts)
-
         if extra_rules:
             ctl.add("base", [], extra_rules)
-
         ctl.ground([("base", [])])
 
         best_model = []
 
         def on_model(model):
             nonlocal best_model
-
             current = []
-
             for atom in model.symbols(shown=True):
                 if atom.name == "assigned":
                     current.append({
@@ -168,41 +165,33 @@ def _run_clingo(
                         "station_id": int(str(atom.arguments[1])),
                         "day": int(str(atom.arguments[2])),
                     })
-
             best_model = current
-
-            print(
-                f"New best model found, "
-                f"cost: {model.cost}, "
-                f"proven optimal: {model.optimality_proven}"
-            )
+            print(f"New best model found, cost: {model.cost}, proven optimal: {model.optimality_proven}")
 
         handle = ctl.solve(on_model=on_model, async_=True)
 
-        handle.wait(timeout_seconds)
-        handle.cancel()
-        handle.wait()
+        done = threading.Event()
+        threading.Thread(target=lambda: (handle.wait(), done.set()), daemon=True).start()
+
+        if not done.wait(timeout=timeout):
+            print(f"Timeout after {timeout}s, cancelling...")
+            handle.cancel()
+            handle.wait()
+        else:
+            print("Clingo finished before timeout")
 
         return best_model
 
     FORCE_STAFFING = """
-    1 { assigned(U, S, D) : eligible_day(U, S, D) } Max :-
-        station(S), day(D), max_assignments(S, Max).
+    :- station(S), day(D), not assigned(_, S, D).
     """
 
-    ctl_check = clingo.Control(["--models=1"])
+    print("Phase 1: trying with forced staffing...")
+    result = solve(FORCE_STAFFING, timeout=15)
 
-    ctl_check.load(str(rules_file))
-    ctl_check.add("base", [], facts)
-    ctl_check.add("base", [], FORCE_STAFFING)
+    if result:
+        print("Phase 1 found a solution, returning...")
+        return result
 
-    ctl_check.ground([("base", [])])
-
-    result = ctl_check.solve()
-
-    if result.satisfiable:
-        print("Phase 1: forced staffing is feasible, optimizing...")
-        return solve(FORCE_STAFFING)
-
-    print("Phase 2: not enough users, falling back to soft optimization...")
-    return solve()
+    print("Phase 2: falling back to soft optimization...")
+    return solve(timeout=15)

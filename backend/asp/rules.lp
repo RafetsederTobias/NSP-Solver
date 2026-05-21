@@ -35,7 +35,7 @@ staff_count(S, D, N) :-
 % A station is unstaffed if it has zero users on a given day.
 unstaffed(S, D) :-
     station(S), day(D),
-    staff_count(S, D, 0).
+    not assigned(_, S, D).
 
 shortfall(S, D, Gap) :-
     station(S), day(D),
