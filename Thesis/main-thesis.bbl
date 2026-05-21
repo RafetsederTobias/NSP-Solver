@@ -1,0 +1,235 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{apa/apasortcite//global/global/global}
+    \entry{brewkaAnswerSetProgramming2011}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=cc13d7b1adc149ede39626958ab7ef36}{%
+           family={Brewka},
+           familyi={B\bibinitperiod},
+           given={Gerhard},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=afcea6fea5dffb083d7000f489d2a314}{%
+           family={Eiter},
+           familyi={E\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=80e143e6b5fa9f9ba2a421253e9368b1}{%
+           family={Truszczyński},
+           familyi={T\bibinitperiod},
+           given={Mirosław},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{8b138efb1d3de587d7e3ac2fb6a8e108}
+      \strng{fullhash}{1fb95c9785ed7883962e00bc7c9e7478}
+      \strng{fullhashraw}{1fb95c9785ed7883962e00bc7c9e7478}
+      \strng{bibnamehash}{1fb95c9785ed7883962e00bc7c9e7478}
+      \strng{authorbibnamehash}{1fb95c9785ed7883962e00bc7c9e7478}
+      \strng{authornamehash}{8b138efb1d3de587d7e3ac2fb6a8e108}
+      \strng{authorfullhash}{1fb95c9785ed7883962e00bc7c9e7478}
+      \strng{authorfullhashraw}{1fb95c9785ed7883962e00bc7c9e7478}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The motivation and key concepts behind answer set programming---a promising approach to declarative problem solving.}
+      \field{issn}{0001-0782, 1557-7317}
+      \field{journaltitle}{Communications of the ACM}
+      \field{langid}{english}
+      \field{month}{12}
+      \field{number}{12}
+      \field{shortjournal}{Commun. ACM}
+      \field{title}{Answer Set Programming at a Glance}
+      \field{urlday}{15}
+      \field{urlmonth}{5}
+      \field{urlyear}{2026}
+      \field{volume}{54}
+      \field{year}{2011}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{92\bibrangedash 103}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1145/2043174.2043195
+      \endverb
+      \verb{file}
+      \verb C:\Users\tobia\Zotero\storage\3A62YCMI\Brewka et al. - 2011 - Answer set programming at a glance.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://dl.acm.org/doi/10.1145/2043174.2043195
+      \endverb
+      \verb{url}
+      \verb https://dl.acm.org/doi/10.1145/2043174.2043195
+      \endverb
+    \endentry
+    \entry{stableModelSemanticGelfond}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=9ddf8a4d782a7a6f34c25fbc4ca822b1}{%
+           family={Gelfond},
+           familyi={G\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3f9f7c9937297077325233d345cf9c91}{%
+           family={Lifschitz},
+           familyi={L\bibinitperiod},
+           given={Vladimir},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{701aac313c79e95b5099346df9bba24a}
+      \strng{fullhash}{701aac313c79e95b5099346df9bba24a}
+      \strng{fullhashraw}{701aac313c79e95b5099346df9bba24a}
+      \strng{bibnamehash}{701aac313c79e95b5099346df9bba24a}
+      \strng{authorbibnamehash}{701aac313c79e95b5099346df9bba24a}
+      \strng{authornamehash}{701aac313c79e95b5099346df9bba24a}
+      \strng{authorfullhash}{701aac313c79e95b5099346df9bba24a}
+      \strng{authorfullhashraw}{701aac313c79e95b5099346df9bba24a}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Logic Programming}
+      \field{month}{12}
+      \field{title}{The Stable Model Semantics For Logic Programming}
+      \field{volume}{2}
+      \field{year}{2000}
+    \endentry
+  \enddatalist
+  \datalist[entry]{apa/global//global/global/global}
+    \entry{brewkaAnswerSetProgramming2011}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=cc13d7b1adc149ede39626958ab7ef36}{%
+           family={Brewka},
+           familyi={B\bibinitperiod},
+           given={Gerhard},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=afcea6fea5dffb083d7000f489d2a314}{%
+           family={Eiter},
+           familyi={E\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=80e143e6b5fa9f9ba2a421253e9368b1}{%
+           family={Truszczyński},
+           familyi={T\bibinitperiod},
+           given={Mirosław},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{8b138efb1d3de587d7e3ac2fb6a8e108}
+      \strng{fullhash}{1fb95c9785ed7883962e00bc7c9e7478}
+      \strng{fullhashraw}{1fb95c9785ed7883962e00bc7c9e7478}
+      \strng{bibnamehash}{1fb95c9785ed7883962e00bc7c9e7478}
+      \strng{authorbibnamehash}{1fb95c9785ed7883962e00bc7c9e7478}
+      \strng{authornamehash}{8b138efb1d3de587d7e3ac2fb6a8e108}
+      \strng{authorfullhash}{1fb95c9785ed7883962e00bc7c9e7478}
+      \strng{authorfullhashraw}{1fb95c9785ed7883962e00bc7c9e7478}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The motivation and key concepts behind answer set programming---a promising approach to declarative problem solving.}
+      \field{issn}{0001-0782, 1557-7317}
+      \field{journaltitle}{Communications of the ACM}
+      \field{langid}{english}
+      \field{month}{12}
+      \field{number}{12}
+      \field{shortjournal}{Commun. ACM}
+      \field{title}{Answer Set Programming at a Glance}
+      \field{urlday}{15}
+      \field{urlmonth}{5}
+      \field{urlyear}{2026}
+      \field{volume}{54}
+      \field{year}{2011}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{92\bibrangedash 103}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1145/2043174.2043195
+      \endverb
+      \verb{file}
+      \verb C:\Users\tobia\Zotero\storage\3A62YCMI\Brewka et al. - 2011 - Answer set programming at a glance.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://dl.acm.org/doi/10.1145/2043174.2043195
+      \endverb
+      \verb{url}
+      \verb https://dl.acm.org/doi/10.1145/2043174.2043195
+      \endverb
+    \endentry
+    \entry{stableModelSemanticGelfond}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=9ddf8a4d782a7a6f34c25fbc4ca822b1}{%
+           family={Gelfond},
+           familyi={G\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3f9f7c9937297077325233d345cf9c91}{%
+           family={Lifschitz},
+           familyi={L\bibinitperiod},
+           given={Vladimir},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{701aac313c79e95b5099346df9bba24a}
+      \strng{fullhash}{701aac313c79e95b5099346df9bba24a}
+      \strng{fullhashraw}{701aac313c79e95b5099346df9bba24a}
+      \strng{bibnamehash}{701aac313c79e95b5099346df9bba24a}
+      \strng{authorbibnamehash}{701aac313c79e95b5099346df9bba24a}
+      \strng{authornamehash}{701aac313c79e95b5099346df9bba24a}
+      \strng{authorfullhash}{701aac313c79e95b5099346df9bba24a}
+      \strng{authorfullhashraw}{701aac313c79e95b5099346df9bba24a}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Logic Programming}
+      \field{month}{12}
+      \field{title}{The Stable Model Semantics For Logic Programming}
+      \field{volume}{2}
+      \field{year}{2000}
+    \endentry
+  \enddatalist
+  \missing{bib:2013-roland-woot}
+  \missing{bib:2015-roland-thesis-book}
+  \missing{bib:2021-hoeller-foci}
+  \missing{bib:2021-hoeller-iiwas}
+\endrefsection
+\endinput
+

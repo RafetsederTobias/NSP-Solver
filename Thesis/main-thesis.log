@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.3.13)  15 MAY 2026 20:04
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.3.13)  21 MAY 2026 18:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2520,9 +2520,11 @@ Package biblatex Info: ... file 'blx-dm.def' found.
 File: blx-dm.def 2025/07/10 v3.21 biblatex datamodel (PK/MW)
 )
 Package biblatex Info: Trying to load biblatex style data model...
-Package biblatex Info: ... file 'ACM-Reference-Format.dbx' found.
+Package biblatex Info: ... file 'apa.dbx' found.
 
-(./ACM-Reference-Format.dbx)
+(c:/texlive/2026/texmf-dist/tex/latex/biblatex-apa/apa.dbx
+File: apa.dbx 2025/08/27 v9.20 APA biblatex style data model
+)
 Package biblatex Info: Trying to load biblatex custom data model...
 Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
 \c@afterword=\count435
@@ -2561,44 +2563,48 @@ Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
 \c@savedshortauthor=\count468
 \c@shorteditor=\count469
 \c@savedshorteditor=\count470
-\c@labelname=\count471
-\c@savedlabelname=\count472
-\c@institution=\count473
-\c@savedinstitution=\count474
-\c@lista=\count475
-\c@savedlista=\count476
-\c@listb=\count477
-\c@savedlistb=\count478
-\c@listc=\count479
-\c@savedlistc=\count480
-\c@listd=\count481
-\c@savedlistd=\count482
-\c@liste=\count483
-\c@savedliste=\count484
-\c@listf=\count485
-\c@savedlistf=\count486
-\c@location=\count487
-\c@savedlocation=\count488
-\c@organization=\count489
-\c@savedorganization=\count490
-\c@origlocation=\count491
-\c@savedoriglocation=\count492
-\c@origpublisher=\count493
-\c@savedorigpublisher=\count494
-\c@publisher=\count495
-\c@savedpublisher=\count496
-\c@language=\count497
-\c@savedlanguage=\count498
-\c@origlanguage=\count499
-\c@savedoriglanguage=\count500
-\c@urls=\count501
-\c@savedurls=\count502
-\c@urlsraw=\count503
-\c@savedurlsraw=\count504
-\c@school=\count505
-\c@savedschool=\count506
-\c@pageref=\count507
-\c@savedpageref=\count508
+\c@narrator=\count471
+\c@savednarrator=\count472
+\c@execproducer=\count473
+\c@savedexecproducer=\count474
+\c@execdirector=\count475
+\c@savedexecdirector=\count476
+\c@with=\count477
+\c@savedwith=\count478
+\c@labelname=\count479
+\c@savedlabelname=\count480
+\c@institution=\count481
+\c@savedinstitution=\count482
+\c@lista=\count483
+\c@savedlista=\count484
+\c@listb=\count485
+\c@savedlistb=\count486
+\c@listc=\count487
+\c@savedlistc=\count488
+\c@listd=\count489
+\c@savedlistd=\count490
+\c@liste=\count491
+\c@savedliste=\count492
+\c@listf=\count493
+\c@savedlistf=\count494
+\c@location=\count495
+\c@savedlocation=\count496
+\c@organization=\count497
+\c@savedorganization=\count498
+\c@origlocation=\count499
+\c@savedoriglocation=\count500
+\c@origpublisher=\count501
+\c@savedorigpublisher=\count502
+\c@publisher=\count503
+\c@savedpublisher=\count504
+\c@language=\count505
+\c@savedlanguage=\count506
+\c@origlanguage=\count507
+\c@savedoriglanguage=\count508
+\c@citation=\count509
+\c@savedcitation=\count510
+\c@pageref=\count511
+\c@savedpageref=\count512
 \shorthandwidth=\skip108
 \shortjournalwidth=\skip109
 \shortserieswidth=\skip110
@@ -2628,66 +2634,67 @@ Package biblatex Info: ... file 'biblatex.def' found.
 
 (c:/texlive/2026/texmf-dist/tex/latex/biblatex/biblatex.def
 File: biblatex.def 2025/07/10 v3.21 biblatex compatibility (PK/MW)
-\c@textcitecount=\count509
-\c@textcitetotal=\count510
-\c@textcitemaxnames=\count511
-\c@biburlbigbreakpenalty=\count512
-\c@biburlbreakpenalty=\count513
-\c@biburlnumpenalty=\count514
-\c@biburlucpenalty=\count515
-\c@biburllcpenalty=\count516
+\c@textcitecount=\count513
+\c@textcitetotal=\count514
+\c@textcitemaxnames=\count515
+\c@biburlbigbreakpenalty=\count516
+\c@biburlbreakpenalty=\count517
+\c@biburlnumpenalty=\count518
+\c@biburlucpenalty=\count519
+\c@biburllcpenalty=\count520
 \biburlbigskip=\muskip23
 \biburlnumskip=\muskip24
 \biburlucskip=\muskip25
 \biburllcskip=\muskip26
-\c@smartand=\count517
+\c@smartand=\count521
 )
-Package biblatex Info: Trying to load bibliography style 'ACM-Reference-Format'
-...
-Package biblatex Info: ... file 'ACM-Reference-Format.bbx' found.
+Package biblatex Info: Trying to load bibliography style 'apa'...
+Package biblatex Info: ... file 'apa.bbx' found.
 
-(./ACM-Reference-Format.bbx
-File: ACM-Reference-Format.bbx 2021-09-29 v0.2 biblatex bibliography style
-Package biblatex Info: Trying to load bibliography style 'trad-plain'...
-Package biblatex Info: ... file 'trad-plain.bbx' found.
-
-(c:/texlive/2026/texmf-dist/tex/latex/biblatex-trad/trad-plain.bbx
-File: trad-plain.bbx 2021/03/06 v0.5 biblatex-trad plain bibliography style
-Package biblatex Info: Trying to load bibliography style 'trad-standard'...
-Package biblatex Info: ... file 'trad-standard.bbx' found.
-
-(c:/texlive/2026/texmf-dist/tex/latex/biblatex-trad/trad-standard.bbx
-File: trad-standard.bbx 2021/03/06 v0.5 biblatex-trad base bibliography style
+(c:/texlive/2026/texmf-dist/tex/latex/biblatex-apa/apa.bbx
+File: apa.bbx 2025/08/27 v9.20 APA biblatex references style
 Package biblatex Info: Trying to load bibliography style 'standard'...
 Package biblatex Info: ... file 'standard.bbx' found.
 
 (c:/texlive/2026/texmf-dist/tex/latex/biblatex/bbx/standard.bbx
 File: standard.bbx 2025/07/10 v3.21 biblatex bibliography style (PK/MW)
-\c@bbx:relatedcount=\count518
-\c@bbx:relatedtotal=\count519
-))))
-Package biblatex Info: Trying to load citation style 'ACM-Reference-Format'...
-Package biblatex Info: ... file 'ACM-Reference-Format.cbx' found.
+\c@bbx:relatedcount=\count522
+\c@bbx:relatedtotal=\count523
+)
+Package biblatex Info: Delimiter 'nameyeardelim' in context 'bib' already defin
+ed, overwriting.
+Package biblatex Info: Delimiter 'nameyeardelim' in context 'biblist' already d
+efined, overwriting.
+Package biblatex Info: Delimiter 'nonameyeardelim' in context 'bib' already def
+ined, overwriting.
+Package biblatex Info: Delimiter 'nonameyeardelim' in context 'biblist' already
+ defined, overwriting.
+)
+Package biblatex Info: Trying to load citation style 'apa'...
+Package biblatex Info: ... file 'apa.cbx' found.
 
-(./ACM-Reference-Format.cbx
-File: ACM-Reference-Format.cbx 2021-09-29 v0.2 biblatex bibliography style
-Package biblatex Info: Trying to load citation style 'numeric'...
-Package biblatex Info: ... file 'numeric.cbx' found.
-
-(c:/texlive/2026/texmf-dist/tex/latex/biblatex/cbx/numeric.cbx
-File: numeric.cbx 2025/07/10 v3.21 biblatex citation style (PK/MW)
+(c:/texlive/2026/texmf-dist/tex/latex/biblatex-apa/apa.cbx
+File: apa.cbx 2025/08/27 v9.20 APA biblatex citation style
+Package biblatex Info: Delimiter 'nameyeardelim' in context '' already defined,
+ overwriting.
+Package biblatex Info: Delimiter 'andothersdelim' in context '' already defined
+, overwriting.
+Package biblatex Info: Redefining '\fullcite'.
+Package biblatex Info: Redefining '\citeauthor'.
+Package biblatex Info: Redefining '\citeyear'.
 Package biblatex Info: Redefining '\cite'.
+Package biblatex Info: Redefining '\cites'.
 Package biblatex Info: Redefining '\parencite'.
+Package biblatex Info: Redefining '\parencites'.
 Package biblatex Info: Redefining '\footcite'.
+Package biblatex Info: Redefining '\footcites'.
 Package biblatex Info: Redefining '\footcitetext'.
+Package biblatex Info: Redefining '\footcitetexts'.
 Package biblatex Info: Redefining '\smartcite'.
-Package biblatex Info: Redefining '\supercite'.
+Package biblatex Info: Redefining '\smartcites'.
 Package biblatex Info: Redefining '\textcite'.
 Package biblatex Info: Redefining '\textcites'.
-Package biblatex Info: Redefining '\cites'.
-Package biblatex Info: Redefining '\parencites'.
-Package biblatex Info: Redefining '\smartcites'.
-))
+)
 Package biblatex Info: Trying to load configuration file...
 Package biblatex Info: ... file 'biblatex.cfg' found.
 
@@ -2714,18 +2721,18 @@ brarypositioning.code.tex
 File: tikzlibrarypositioning.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 ) (c:/texlive/2026/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2025/03/01 v4.3b Infix arithmetic (KKT,FJ)
-\calc@Acount=\count520
-\calc@Bcount=\count521
+\calc@Acount=\count524
+\calc@Bcount=\count525
 \calc@Adimen=\dimen305
 \calc@Bdimen=\dimen306
 \calc@Askip=\skip122
 \calc@Bskip=\skip123
 LaTeX Info: Redefining \setlength on input line 86.
 LaTeX Info: Redefining \addtolength on input line 87.
-\calc@Ccount=\count522
+\calc@Ccount=\count526
 \calc@Cskip=\skip124
 )
-\c@@todonotes@numberoftodonotes=\count523
+\c@@todonotes@numberoftodonotes=\count527
 ) (c:/texlive/2026/texmf-dist/tex/latex/import/import.sty
 Package: import 2020/04/01  v 6.2
 )
@@ -2747,10 +2754,10 @@ Package: subfigure 2002/03/15 v2.1.5 subfigure package
 \subfigbottomskip=\skip127
 \subfigcapmargin=\dimen308
 \subfiglabelskip=\skip128
-\c@subfigure=\count524
-\c@lofdepth=\count525
-\c@subtable=\count526
-\c@lotdepth=\count527
+\c@subfigure=\count528
+\c@lofdepth=\count529
+\c@subtable=\count530
+\c@lotdepth=\count531
 
 ****************************************
 * Local config file subfigure.cfg used *
@@ -2760,17 +2767,17 @@ Package: subfigure 2002/03/15 v2.1.5 subfigure package
 \subfig@bottom=\skip130
 )
 (c:/texlive/2026/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count528
+\lst@mode=\count532
 \lst@gtempboxa=\box96
 \lst@token=\toks53
-\lst@length=\count529
+\lst@length=\count533
 \lst@currlwidth=\dimen309
-\lst@column=\count530
-\lst@pos=\count531
+\lst@column=\count534
+\lst@pos=\count535
 \lst@lostspace=\dimen310
 \lst@width=\dimen311
-\lst@newlines=\count532
-\lst@lineno=\count533
+\lst@newlines=\count536
+\lst@lineno=\count537
 \lst@maxwidth=\dimen312
 
 (c:/texlive/2026/texmf-dist/tex/latex/listings/lstpatch.sty
@@ -2778,8 +2785,8 @@ File: lstpatch.sty 2025/11/14 1.11b (Carsten Heinz)
 )
 (c:/texlive/2026/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2025/11/14 1.11b (Carsten Heinz)
-\c@lstnumber=\count534
-\lst@skipnumbers=\count535
+\c@lstnumber=\count538
+\lst@skipnumbers=\count539
 \lst@framebox=\box97
 )
 (c:/texlive/2026/texmf-dist/tex/latex/listings/listings.cfg
@@ -2807,26 +2814,26 @@ LaTeX Warning: Label `sec:example' multiply defined.
 )
 \openout1 = `main-thesis.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 182.
-LaTeX Font Info:    ... okay on input line 182.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 182.
-LaTeX Font Info:    ... okay on input line 182.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 182.
-LaTeX Font Info:    ... okay on input line 182.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 182.
-LaTeX Font Info:    ... okay on input line 182.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 182.
-LaTeX Font Info:    ... okay on input line 182.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 182.
-LaTeX Font Info:    ... okay on input line 182.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 182.
-LaTeX Font Info:    ... okay on input line 182.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 182.
-LaTeX Font Info:    ... okay on input line 182.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 182.
-LaTeX Font Info:    ... okay on input line 182.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 182.
-LaTeX Font Info:    ... okay on input line 182.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 186.
+LaTeX Font Info:    ... okay on input line 186.
 
 (c:/texlive/2026/texmf-dist/tex/latex/translations/translations-basic-dictionar
 y-german.trsl
@@ -2834,7 +2841,7 @@ File: translations-basic-dictionary-german.trsl (german translation file `trans
 lations-basic-dictionary')
 )
 Package translations Info: loading dictionary `translations-basic-dictionary' f
-or `german'. on input line 182.
+or `german'. on input line 186.
 
 (c:/texlive/2026/texmf-dist/tex/latex/translations/translations-basic-dictionar
 y-english.trsl
@@ -2842,89 +2849,130 @@ File: translations-basic-dictionary-english.trsl (english translation file `tra
 nslations-basic-dictionary')
 )
 Package translations Info: loading dictionary `translations-basic-dictionary' f
-or `english'. on input line 182.
-Package hyperref Info: Link coloring OFF on input line 182.
+or `english'. on input line 186.
+Package hyperref Info: Link coloring OFF on input line 186.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: listings package is loaded.
 Package caption Info: subfigure package is loaded.
 Package caption Info: End \AtBeginDocument code.
 LaTeX Encoding Info:    Undeclare text command \textquotesingle (encoding TU) o
-n input line 182.
+n input line 186.
 LaTeX Encoding Info:    Redeclaring text symbol \textquotesingle (encoding TS1)
- on input line 182.
+ on input line 186.
  (c:/texlive/2026/texmf-dist/tex/latex/upquote/upquote.sty
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
 tim
 )
-Package scrbase Info: activating ngerman \abstractname on input line 182.
-Package scrbase Info: activating ngerman \keywordsname on input line 182.
-Package scrbase Info: activating ngerman \acronymname on input line 182.
-Package scrbase Info: activating ngerman \acksname on input line 182.
+Package scrbase Info: activating ngerman \abstractname on input line 186.
+Package scrbase Info: activating ngerman \keywordsname on input line 186.
+Package scrbase Info: activating ngerman \acronymname on input line 186.
+Package scrbase Info: activating ngerman \acksname on input line 186.
 Package scrbase Info: activating ngerman \subsectionautorefname on input line 1
-82.
+86.
 Package scrbase Info: activating ngerman \subsubsectionautorefname on input lin
-e 182.
+e 186.
 Package scrbase Info: activating ngerman \subsubsubsectionautorefname on input 
-line 182.
+line 186.
 Package scrbase Info: activating ngerman \subfigureautorefname on input line 18
-2.
+6.
 Package scrbase Info: activating ngerman \jkureport@authorname on input line 18
-2.
+6.
 Package scrbase Info: activating ngerman \jkureport@submissiondepartmentname on
- input line 182.
+ input line 186.
 Package scrbase Info: activating ngerman \jkureport@supervisorname on input lin
-e 182.
+e 186.
 Package scrbase Info: activating ngerman \jkureport@firstsupervisorname on inpu
-t line 182.
+t line 186.
 Package scrbase Info: activating ngerman \jkureport@secondsupervisorname on inp
-ut line 182.
+ut line 186.
 Package scrbase Info: activating ngerman \jkureport@thirdsupervisorname on inpu
-t line 182.
+t line 186.
 Package scrbase Info: activating ngerman \jkureport@assistantsupervisorname on 
-input line 182.
+input line 186.
 Package scrbase Info: activating ngerman \jkureport@phdthesisname on input line
- 182.
+ 186.
 Package scrbase Info: activating ngerman \jkureport@mastersthesisname on input 
-line 182.
+line 186.
 Package scrbase Info: activating ngerman \jkureport@diplomathesisname on input 
-line 182.
+line 186.
 Package scrbase Info: activating ngerman \jkureport@bachelorsthesisname on inpu
-t line 182.
+t line 186.
 Package scrbase Info: activating ngerman \jkureport@conferdegreename on input l
-ine 182.
+ine 186.
 Package scrbase Info: activating ngerman \jkureport@phdprogramname on input lin
-e 182.
+e 186.
 Package scrbase Info: activating ngerman \jkureport@mastersprogramname on input
- line 182.
+ line 186.
 Package scrbase Info: activating ngerman \jkureport@diplomaprogramname on input
- line 182.
+ line 186.
 Package scrbase Info: activating ngerman \jkureport@bachelorsprogramname on inp
-ut line 182.
+ut line 186.
 Package scrbase Info: activating ngerman \jkureport@declarationname on input li
-ne 182.
+ne 186.
+Package biblatex Info: Trying to load language 'ngerman' -> 'ngerman-apa'...
+Package biblatex Info: ... file 'ngerman-apa.lbx' found.
+
+(c:/texlive/2026/texmf-dist/tex/latex/biblatex-apa/ngerman-apa.lbx
+File: ngerman-apa.lbx 2025/08/27 v9.20 APA biblatex localisation
 Package biblatex Info: Trying to load language 'ngerman'...
 Package biblatex Info: ... file 'ngerman.lbx' found.
 
 (c:/texlive/2026/texmf-dist/tex/latex/biblatex/lbx/ngerman.lbx
 File: ngerman.lbx 2025/07/10 v3.21 biblatex localization (PK/MW)
+Package biblatex Info: Trying to load language 'german' -> 'german-apa'...
+Package biblatex Info: ... file 'german-apa.lbx' found.
+
+(c:/texlive/2026/texmf-dist/tex/latex/biblatex-apa/german-apa.lbx
+File: german-apa.lbx 2025/08/27 v9.20 APA biblatex localisation
 Package biblatex Info: Trying to load language 'german'...
 Package biblatex Info: ... file 'german.lbx' found.
 
 (c:/texlive/2026/texmf-dist/tex/latex/biblatex/lbx/german.lbx
 File: german.lbx 2025/07/10 v3.21 biblatex localization (PK/MW)
-)
+)))
+Package biblatex Info: Trying to load language 'ngerman'...
+Package biblatex Info: ... file 'ngerman.lbx' found.
+
+(c:/texlive/2026/texmf-dist/tex/latex/biblatex/lbx/ngerman.lbx
+File: ngerman.lbx 2025/07/10 v3.21 biblatex localization (PK/MW)
+Package biblatex Info: Trying to load language 'german' -> 'german-apa'...
+Package biblatex Info: ... file 'german-apa.lbx' found.
+
+(c:/texlive/2026/texmf-dist/tex/latex/biblatex-apa/german-apa.lbx
+File: german-apa.lbx 2025/08/27 v9.20 APA biblatex localisation
 Package biblatex Info: Trying to load language 'german'...
 Package biblatex Info: ... file 'german.lbx' found.
 
 (c:/texlive/2026/texmf-dist/tex/latex/biblatex/lbx/german.lbx
 File: german.lbx 2025/07/10 v3.21 biblatex localization (PK/MW)
-))
+))))
+Package biblatex Info: Trying to load language 'english' -> 'english-apa'...
+Package biblatex Info: ... file 'english-apa.lbx' found.
+
+(c:/texlive/2026/texmf-dist/tex/latex/biblatex-apa/english-apa.lbx
+File: english-apa.lbx 2025/08/27 v9.20 APA biblatex localisation
 Package biblatex Info: Trying to load language 'english'...
 Package biblatex Info: ... file 'english.lbx' found.
 
 (c:/texlive/2026/texmf-dist/tex/latex/biblatex/lbx/english.lbx
 File: english.lbx 2025/07/10 v3.21 biblatex localization (PK/MW)
 )
+Package biblatex Info: Trying to load language 'american' -> 'american-apa'...
+Package biblatex Info: ... file 'american-apa.lbx' found.
+
+(c:/texlive/2026/texmf-dist/tex/latex/biblatex-apa/american-apa.lbx
+File: american-apa.lbx 2025/08/27 v9.20 APA biblatex localisation
+Package biblatex Info: Trying to load language 'american'...
+Package biblatex Info: ... file 'american.lbx' found.
+
+(c:/texlive/2026/texmf-dist/tex/latex/biblatex/lbx/american.lbx
+File: american.lbx 2025/07/10 v3.21 biblatex localization (PK/MW)
+Package biblatex Info: Trying to load language 'english'...
+Package biblatex Info: ... file 'english.lbx' found.
+
+(c:/texlive/2026/texmf-dist/tex/latex/biblatex/lbx/english.lbx
+File: english.lbx 2025/07/10 v3.21 biblatex localization (PK/MW)
+))))
 Package biblatex Info: XeTeX detected.
 (biblatex)             Assuming input encoding 'utf8'.
 Package biblatex Info: Automatic encoding selection.
@@ -2932,13 +2980,42 @@ Package biblatex Info: Automatic encoding selection.
 \openout4 = `main-thesis.bcf'.
 
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'main-thesis.bbl' not found.
+Package biblatex Info: ... file 'main-thesis.bbl' found.
 
-No file main-thesis.bbl.
-Package biblatex Info: Reference section=0 on input line 182.
-Package biblatex Info: Reference segment=0 on input line 182.
-\c@lstlisting=\count536
-Package tocbasic Info: setting babel extension for `lol' on input line 182.
+(./main-thesis.bbl
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                bib:2013-roland-woot
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                bib:2015-roland-thesis-book
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                bib:2021-hoeller-foci
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                bib:2021-hoeller-iiwas
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+)
+Package biblatex Info: Reference section=0 on input line 186.
+Package biblatex Info: Reference segment=0 on input line 186.
+\c@lstlisting=\count540
+Package tocbasic Info: setting babel extension for `lol' on input line 186.
 \scr@dte@lstlisting@maxnumwidth=\skip131
 Requested font "cmr10" at 0.00043pt
  -> c:/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
@@ -2976,13 +3053,13 @@ Requested font "[fonts/PublicSans-Regular.ttf]/OT:script=latn;language=dflt;map
 ping=tex-text;" at 11.0pt
  -> ./fonts/PublicSans-Regular.ttf
 LaTeX Font Info:    Font shape `TU/FiraMath-Regular.otf(1)/m/n' will be
-(Font)              scaled to size 7.2pt on input line 230.
+(Font)              scaled to size 7.2pt on input line 234.
 Requested font "[FiraMath-Regular.otf]/OT:script=math;language=dflt;+lnum;+tnum
 ;+ssty=0;" at 7.2pt
  -> c:/texlive/2026/texmf-dist/fonts/opentype/public/firamath/FiraMath-Regular.
 otf
 LaTeX Font Info:    Font shape `TU/FiraMath-Regular.otf(1)/m/n' will be
-(Font)              scaled to size 5.8pt on input line 230.
+(Font)              scaled to size 5.8pt on input line 234.
 Requested font "[FiraMath-Regular.otf]/OT:script=math;language=dflt;+lnum;+tnum
 ;+ssty=1;" at 5.8pt
  -> c:/texlive/2026/texmf-dist/fonts/opentype/public/firamath/FiraMath-Regular.
@@ -2992,37 +3069,37 @@ Requested font "cmmi7" at 7.2pt
 Requested font "cmmi5" at 5.8pt
  -> c:/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmmi5.tfm
 LaTeX Font Info:    Font shape `TU/FiraMath-Regular.otf(2)/m/n' will be
-(Font)              scaled to size 10.00107pt on input line 230.
+(Font)              scaled to size 10.00107pt on input line 234.
 Requested font "[FiraMath-Regular.otf]/OT:script=math;language=dflt;+lnum;+tnum
 ;" at 10.00107pt
  -> c:/texlive/2026/texmf-dist/fonts/opentype/public/firamath/FiraMath-Regular.
 otf
 LaTeX Font Info:    Font shape `TU/FiraMath-Regular.otf(2)/m/n' will be
-(Font)              scaled to size 7.20076pt on input line 230.
+(Font)              scaled to size 7.20076pt on input line 234.
 Requested font "[FiraMath-Regular.otf]/OT:script=math;language=dflt;+lnum;+tnum
 ;+ssty=0;" at 7.20076pt
  -> c:/texlive/2026/texmf-dist/fonts/opentype/public/firamath/FiraMath-Regular.
 otf
 LaTeX Font Info:    Font shape `TU/FiraMath-Regular.otf(2)/m/n' will be
-(Font)              scaled to size 5.80061pt on input line 230.
+(Font)              scaled to size 5.80061pt on input line 234.
 Requested font "[FiraMath-Regular.otf]/OT:script=math;language=dflt;+lnum;+tnum
 ;+ssty=1;" at 5.80061pt
  -> c:/texlive/2026/texmf-dist/fonts/opentype/public/firamath/FiraMath-Regular.
 otf
 LaTeX Font Info:    Font shape `TU/FiraMath-Regular.otf(3)/m/n' will be
-(Font)              scaled to size 9.99893pt on input line 230.
+(Font)              scaled to size 9.99893pt on input line 234.
 Requested font "[FiraMath-Regular.otf]/OT:script=math;language=dflt;+lnum;+tnum
 ;" at 9.99893pt
  -> c:/texlive/2026/texmf-dist/fonts/opentype/public/firamath/FiraMath-Regular.
 otf
 LaTeX Font Info:    Font shape `TU/FiraMath-Regular.otf(3)/m/n' will be
-(Font)              scaled to size 7.19922pt on input line 230.
+(Font)              scaled to size 7.19922pt on input line 234.
 Requested font "[FiraMath-Regular.otf]/OT:script=math;language=dflt;+lnum;+tnum
 ;+ssty=0;" at 7.19922pt
  -> c:/texlive/2026/texmf-dist/fonts/opentype/public/firamath/FiraMath-Regular.
 otf
 LaTeX Font Info:    Font shape `TU/FiraMath-Regular.otf(3)/m/n' will be
-(Font)              scaled to size 5.79938pt on input line 230.
+(Font)              scaled to size 5.79938pt on input line 234.
 Requested font "[FiraMath-Regular.otf]/OT:script=math;language=dflt;+lnum;+tnum
 ;+ssty=1;" at 5.79938pt
  -> c:/texlive/2026/texmf-dist/fonts/opentype/public/firamath/FiraMath-Regular.
@@ -3043,8 +3120,8 @@ Requested font "[fonts/Merriweather-Italic.ttf]/OT:script=latn;language=dflt;ma
 pping=tex-text;" at 5.8pt
  -> ./fonts/Merriweather-Italic.ttf
 LaTeX Font Info:    Trying to load font information for U+zeur on input line 23
-0.
-(c:/texlive/2026/texmf-dist/tex/latex/eulervm/uzeur.fd
+4.
+ (c:/texlive/2026/texmf-dist/tex/latex/eulervm/uzeur.fd
 File: uzeur.fd 2005/01/11 v4.0 (WaS)
 )
 Requested font "zeurm10" at 10.0pt
@@ -3053,7 +3130,7 @@ Requested font "zeurm7" at 7.2pt
  -> c:/texlive/2026/texmf-dist/fonts/tfm/public/eulervm/zeurm7.tfm
 Requested font "zeurm5" at 5.8pt
  -> c:/texlive/2026/texmf-dist/fonts/tfm/public/eulervm/zeurm5.tfm
-LaTeX Font Info:    Trying to load font information for U+msa on input line 230
+LaTeX Font Info:    Trying to load font information for U+msa on input line 234
 .
 
 (c:/texlive/2026/texmf-dist/tex/latex/amsfonts/umsa.fd
@@ -3065,7 +3142,7 @@ Requested font "msam7" at 7.2pt
  -> c:/texlive/2026/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam7.tfm
 Requested font "msam5" at 5.8pt
  -> c:/texlive/2026/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm
-LaTeX Font Info:    Trying to load font information for U+msb on input line 230
+LaTeX Font Info:    Trying to load font information for U+msb on input line 234
 .
 
 (c:/texlive/2026/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -3168,6 +3245,11 @@ put line 71.
 LaTeX Warning: Citation 'bib:2015-roland-thesis-book' on page 3 undefined on in
 put line 71.
 
+
+Underfull \hbox (badness 1874) in paragraph at lines 71--72
+[][] [] \TU/Merriweather(0)/m/n/10 proposes a
+ []
+
 [3
 
 
@@ -3181,17 +3263,6 @@ e 72.
 
 LaTeX Warning: Citation 'bib:2013-roland-woot' on page 4 undefined on input lin
 e 72.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 72--73
-[][] \TU/Merriweather(0)/m/n/10 [[]] uncovered a flaw in
- []
-
-
-Underfull \hbox (badness 2326) in paragraph at lines 72--73
-\TU/Merriweather(0)/m/n/10 legacy-support of the MasterCard contactless payment
- protocols that
- []
 
 
 LaTeX Warning: Citation 'bib:2021-hoeller-foci' on page 4 undefined on input li
@@ -3236,8 +3307,8 @@ us analyses of
  []
 
 
-Underfull \hbox (badness 1028) in paragraph at lines 78--79
-\TU/Merriweather(0)/m/n/10 the Tor network have been performed recently [[],
+Underfull \hbox (badness 1924) in paragraph at lines 78--79
+\TU/Merriweather(0)/m/n/10 the Tor network have been performed recently [];
  []
 
 [4]) (././03-grundlagen.tex [5]
@@ -3253,20 +3324,13 @@ g=tex-text;" at 12.0pt
  -> ./fonts/PublicSans-Bold.ttf
 (c:/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2025/11/14 1.11b listings language file
-)
-
-LaTeX Warning: Citation 'idk' on page 6 undefined on input line 28.
-
-[6
+) [6
 
 
 
 
-]
-
-LaTeX Warning: Citation 'idk' on page 7 undefined on input line 32.
-
-) (././09-conclusion.tex [7]
+])
+(././09-conclusion.tex [7]
 chapter 4.
 ) [8
 
@@ -3274,19 +3338,20 @@ chapter 4.
 
 
 ]
+chapter without number
+(././91-appendix.tex [9
 
-LaTeX Warning: Empty bibliography on input line 303.
 
-(././91-appendix.tex
+
+
+]
 chapter A.
 ) (c:/texlive/2026/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 )
 (c:/texlive/2026/texmf-dist/tex/generic/stringenc/se-utf32be.def
 File: se-utf32be.def 2019/11/29 v1.12 stringenc: UTF-32BE
-) [9
-
-
+) [10
 
 
 
@@ -3299,27 +3364,19 @@ L3 programming layer <2026-01-19>
  ***********
 
 
-LaTeX Warning: There were undefined references.
-
-
 LaTeX Warning: There were multiply-defined labels.
-
-
-Package biblatex Warning: Please (re)run Biber on the file:
-(biblatex)                main-thesis
-(biblatex)                and rerun LaTeX afterwards.
 
 Package logreq Info: Writing requests to 'main-thesis.run.xml'.
 \openout1 = `main-thesis.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 58178 strings out of 468168
- 1267226 string characters out of 5436524
- 2440416 words of memory out of 5000000
- 86027 multiletter control sequences out of 15000+600000
+ 58875 strings out of 468168
+ 1282411 string characters out of 5436524
+ 2566952 words of memory out of 5000000
+ 86711 multiletter control sequences out of 15000+600000
  633569 words of font info for 142 fonts, out of 8000000 for 9000
  1350 hyphenation exceptions out of 8191
- 130i,25n,137p,11214b,32835s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 130i,25n,137p,11214b,32834s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main-thesis.pdf (13 pages).
+Output written on main-thesis.pdf (14 pages).

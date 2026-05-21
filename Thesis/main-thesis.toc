@@ -14,7 +14,9 @@
 \contentsline {subsection}{\numberline {3.1.2}Answer Sets als Lösungskonzept}{7}{subsection.3.1.2}%
 \contentsline {subsection}{\numberline {3.1.3}Verarbeitung und Werkzeuge}{7}{subsection.3.1.3}%
 \contentsline {subsection}{\numberline {3.1.4}Anwendungsgebiete}{7}{subsection.3.1.4}%
+\contentsline {section}{\numberline {3.2}Clingo}{7}{section.3.2}%
 \contentsline {chapter}{\numberline {4}Conclusion and Outlook}{8}{chapter.4}%
+\contentsline {chapter}{\nonumberline Literatur}{9}{chapter*.8}%
 \def \@chapapp {\appendixname }
-\contentsline {appendixchapter}{\numberline {A}An Appendix}{9}{appendix.A}%
+\contentsline {appendixchapter}{\numberline {A}An Appendix}{10}{appendix.A}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
