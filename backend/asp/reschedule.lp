@@ -35,12 +35,13 @@ unstaffed(S, D) :-
     station(S), day(D),
     staff_count(S, D, 0).
 
-understaffed(S, D) :-
+shortfall(S, D, Gap) :-
     station(S), day(D),
     max_assignments(S, Max),
     staff_count(S, D, N),
-    N > 0, N < Max.
-
+    N > 0,
+    Gap = Max - N,
+    Gap > 0.
 % ─── DISRUPTION TRACKING ─────────────────────────────────────────────────────
 dropped(U, S, D) :-
     was_assigned(U, S, D),
@@ -58,7 +59,8 @@ added(U, S, D) :-
     100@3, S, D : unstaffed(S, D);
      10@2, U, S, D : dropped(U, S, D);
       2@2, U, S, D : added(U, S, D);
-      1@1, S, D : understaffed(S, D)
+     2@1, S, D     : shortfall(S, D, 2);
+     1@1, S, D     : shortfall(S, D, 1)
 }.
 
 #show assigned/3.

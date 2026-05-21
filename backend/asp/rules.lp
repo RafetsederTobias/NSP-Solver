@@ -37,12 +37,14 @@ unstaffed(S, D) :-
     station(S), day(D),
     staff_count(S, D, 0).
 
-% A station is understaffed if it has fewer than max users (but at least 1).
-understaffed(S, D) :-
+shortfall(S, D, Gap) :-
     station(S), day(D),
     max_assignments(S, Max),
     staff_count(S, D, N),
-    N > 0, N < Max.
+    N > 0,
+    Gap = Max - N,
+    Gap > 0.
+
 
 % OPTIMIZATION
 
@@ -51,5 +53,6 @@ understaffed(S, D) :-
 % Weight 10 vs 1 ensures any unstaffed station is worse than all understaffing.
 #minimize {
     10@2, S, D : unstaffed(S, D);
-     1@1, S, D : understaffed(S, D)
+     2@1, S, D     : shortfall(S, D, 2);
+     1@1, S, D     : shortfall(S, D, 1)
 }.
