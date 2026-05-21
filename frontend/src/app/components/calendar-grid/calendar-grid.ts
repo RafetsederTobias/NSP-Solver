@@ -67,7 +67,7 @@ export interface CalendarGridSelection {
         transition: all 0.1s;
         user-select: none;
       }
-      .cal-day:hover:not(.empty):not(.weekend):not(.blocked-by-other) {
+      .cal-day:hover:not(.empty):not(.weekend):not(.blocked-by-other):not(.past-day) {
         background: #f1f5f9;
       }
       .cal-day.empty {
@@ -90,6 +90,11 @@ export interface CalendarGridSelection {
         font-weight: 600;
       }
       .cal-day.blocked-by-other {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+      }
+      .cal-day.past-day {
         opacity: 0.3;
         cursor: not-allowed;
         pointer-events: none;
@@ -167,6 +172,7 @@ export interface CalendarGridSelection {
           [class.selected-fixed]="cell !== null && isFixed(cell)"
           [class.selected-blocked]="cell !== null && isBlocked(cell)"
           [class.blocked-by-other]="cell !== null && isBlockedByOther(cell)"
+          [class.past-day]="cell !== null && isPastDay(cell)"
           (click)="cell !== null && toggleDay(cell)"
         >
           {{ cell ?? '' }}
@@ -204,6 +210,7 @@ export class CalendarGridComponent implements OnChanges {
 
   protected _fixedDays: number[] = [];
   protected _blockedDays: number[] = [];
+
   ngOnChanges() {
     this._fixedDays = [...this.fixedDays];
     this._blockedDays = [...this.blockedDays];
@@ -234,9 +241,21 @@ export class CalendarGridComponent implements OnChanges {
     return dow === 0 || dow === 6;
   }
 
+  /**
+   * Past days should not be selectable as blocked
+   */
+  isPastDay(day: number): boolean {
+    if (this.calMode !== 'blocked') return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const cellDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), day);
+    return cellDate < today;
+  }
+
   isFixed(day: number) {
     return this._fixedDays.includes(day);
   }
+
   isBlocked(day: number) {
     return this._blockedDays.includes(day);
   }
@@ -248,6 +267,8 @@ export class CalendarGridComponent implements OnChanges {
   }
 
   toggleDay(day: number) {
+    if (this.calMode === 'blocked' && this.isPastDay(day)) return;
+
     if (this.calMode === 'fixed') {
       const idx = this._fixedDays.indexOf(day);
       if (idx >= 0) this._fixedDays.splice(idx, 1);
