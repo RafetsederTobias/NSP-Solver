@@ -26,6 +26,10 @@ eligible_day(U, S, D) :-
    #count { U : assigned(U, S, D) } > Max,
    max_assignments(S, Max).
 
+unstaffed(S, D) :-
+    station(S), day(D),
+    not assigned(_, S, D).
+
 % ─── DISRUPTION TRACKING ─────────────────────────────────────────────────────
 dropped(U, S, D) :-
     was_assigned(U, S, D),
@@ -35,14 +39,15 @@ added(U, S, D) :-
     assigned(U, S, D),
     not was_assigned(U, S, D).
 
+
 % ─── HEURISTIC: prefer keeping existing assignments ──────────────────────────
 #heuristic assigned(U, S, D) : was_assigned(U, S, D). [10, true]
 
 % ─── OPTIMIZATION ────────────────────────────────────────────────────────────
 #minimize {
     100@3, S, D : unstaffed(S, D);
-     5@2, U, S, D : dropped(U, S, D);
-     5@2, U, S, D : added(U, S, D)
+     10@2, U, S, D : dropped(U, S, D);
+      2@2, U, S, D : added(U, S, D)
 }.
 
 #show assigned/3.

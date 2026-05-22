@@ -25,7 +25,7 @@ def solve_schedule(
         for a in existing_assignments:
             facts += f"assigned({a.user_id}, {a.station_id}, {a.date.day}).\n"
 
-    result = _run_clingo(facts)
+    result = _run_clingo(facts, isReschedule=False)
     assignments = result if result is not None else []
 
     return _fill_unassigned_slots(assignments, stations, days)
@@ -48,7 +48,7 @@ def solve_reschedule(
     for a in existing_assignments:
         facts += f"was_assigned({a.user_id}, {a.station_id}, {a.date.day}).\n"
 
-    result = _run_clingo(facts, rules_file=RESCHEDULE_RULES_FILE)
+    result = _run_clingo(facts, isReschedule=True, rules_file=RESCHEDULE_RULES_FILE)
     assignments = result if result is not None else []
 
     return _fill_unassigned_slots(assignments, stations, all_days)
@@ -141,11 +141,11 @@ def _fill_unassigned_slots(assignments, stations, days) -> list[dict]:
 
 def _run_clingo(
     facts: str,
-    timeout_seconds: int = 15,
+    isReschedule: bool,
     rules_file: Path = RULES_FILE,
 ) -> list[dict] | None:
 
-    def solve(extra_rules: str = "", timeout: int = timeout_seconds) -> list[dict]:
+    def solve(extra_rules: str = "", timeout: int = 15) -> list[dict]:
         ctl = clingo.Control(["--models=0", "--heuristic=Domain"])
         ctl.load(str(rules_file))
         ctl.add("base", [], facts)
@@ -182,16 +182,17 @@ def _run_clingo(
 
         return best_model
 
-    FORCE_STAFFING = """
-    :- station(S), day(D), not assigned(_, S, D).
-    """
+    if not isReschedule:
+        FORCE_STAFFING = """
+        :- station(S), day(D), not assigned(_, S, D).
+        """
 
-    print("Phase 1: trying with forced staffing...")
-    result = solve(FORCE_STAFFING, timeout=15)
+        print("Phase 1: trying with forced staffing...")
+        result = solve(FORCE_STAFFING, timeout=15)
 
-    if result:
-        print("Phase 1 found a solution, returning...")
-        return result
+        if result:
+            print("Phase 1 found a solution, returning...")
+            return result
 
     print("Phase 2: falling back to soft optimization...")
-    return solve(timeout=60)
+    return solve(timeout=30)

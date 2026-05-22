@@ -52,7 +52,7 @@ shortfall(S, D, Gap) :-
 % Priority @1: minimize understaffed stations
 % Weight 10 vs 1 ensures any unstaffed station is worse than all understaffing.
 #minimize {
-    10@2, S, D : unstaffed(S, D);
+    50@2, S, D : unstaffed(S, D);
      2@1, S, D     : shortfall(S, D, 2);
      1@1, S, D     : shortfall(S, D, 1)
 }.
