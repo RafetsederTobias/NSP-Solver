@@ -487,12 +487,11 @@ export class CalendarComponent implements OnInit {
     this.assignments()
       .filter(
         (a) =>
-          a.user?.id == null ||
-          this.selectedUserIds().size === 0 ||
-          this.selectedUserIds().has(a.user.id),
+          a.user?.id != null && // exclude unassigned
+          (this.selectedUserIds().size === 0 || this.selectedUserIds().has(a.user.id)),
       )
       .map((a) => ({
-        title: a.user?.name ?? 'Placeholder',
+        title: a.user!.name,
         date: a.date,
       })),
   );
