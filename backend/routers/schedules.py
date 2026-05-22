@@ -227,14 +227,33 @@ async def reschedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db
     db.add_all(db_assignments)
     await db.commit()
 
-    existing_keys = {(a.user_id, a.station_id, a.date.day) for a in remaining_assignments}
-    new_keys = {(a["user_id"], a["station_id"], a["day"]) for a in assignments if a["user_id"]}
+    user_map = {u.id: u.name for u in users}
+    station_map = {s.id: s.name for s in stations}
+
+    conflicting_set = {(a.user_id, a.station_id, a.date.day) for a in conflicting_assignments}
+    existing_set = {(a.user_id, a.station_id, a.date.day) for a in remaining_assignments} | conflicting_set
+
+    new_set = {(a["user_id"], a["station_id"], a["day"]) for a in assignments if a["user_id"]}
+
+    def format_assignment(user_id, station_id, day):
+        return {
+            "day": day,
+            "person": user_map.get(user_id, f"User {user_id}"),
+            "station": station_map.get(station_id, f"Station {station_id}"),
+        }
+
 
     response = {
-        "dropped": len(existing_keys - new_keys),
-        "added": len(new_keys - existing_keys),
-        "unchanged": len(existing_keys & new_keys),
+        "dropped": [
+            format_assignment(uid, sid, day)
+            for uid, sid, day in (existing_set - new_set)
+        ],
+        "added": [
+            format_assignment(uid, sid, day)
+            for uid, sid, day in (new_set - existing_set)
+        ],
     }
+
 
     unassigned = [a for a in assignments if a["user_id"] is None]
     if unassigned:
@@ -244,4 +263,5 @@ async def reschedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db
             for a in unassigned
         ]
 
+    print(response)
     return response

@@ -187,11 +187,11 @@ def _run_clingo(
     """
 
     print("Phase 1: trying with forced staffing...")
-    result = solve(FORCE_STAFFING, timeout=60)
+    result = solve(FORCE_STAFFING, timeout=15)
 
     if result:
         print("Phase 1 found a solution, returning...")
         return result
 
     print("Phase 2: falling back to soft optimization...")
-    return solve(timeout=180)
+    return solve(timeout=60)

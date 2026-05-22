@@ -26,22 +26,6 @@ eligible_day(U, S, D) :-
    #count { U : assigned(U, S, D) } > Max,
    max_assignments(S, Max).
 
-% ─── STAFFING QUALITY ────────────────────────────────────────────────────────
-staff_count(S, D, N) :-
-    station(S), day(D),
-    N = #count { U : assigned(U, S, D) }.
-
-unstaffed(S, D) :-
-    station(S), day(D),
-    staff_count(S, D, 0).
-
-shortfall(S, D, Gap) :-
-    station(S), day(D),
-    max_assignments(S, Max),
-    staff_count(S, D, N),
-    N > 0,
-    Gap = Max - N,
-    Gap > 0.
 % ─── DISRUPTION TRACKING ─────────────────────────────────────────────────────
 dropped(U, S, D) :-
     was_assigned(U, S, D),
@@ -57,10 +41,8 @@ added(U, S, D) :-
 % ─── OPTIMIZATION ────────────────────────────────────────────────────────────
 #minimize {
     100@3, S, D : unstaffed(S, D);
-     10@2, U, S, D : dropped(U, S, D);
-      2@2, U, S, D : added(U, S, D);
-     2@1, S, D     : shortfall(S, D, 2);
-     1@1, S, D     : shortfall(S, D, 1)
+     5@2, U, S, D : dropped(U, S, D);
+     5@2, U, S, D : added(U, S, D)
 }.
 
 #show assigned/3.
