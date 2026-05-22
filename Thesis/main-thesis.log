@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.3.13)  21 MAY 2026 18:27
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.3.13)  22 MAY 2026 21:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -3195,13 +3195,13 @@ chapter 1.
 Requested font "[fonts/PublicSans-Bold.ttf]/OT:script=latn;language=dflt;mappin
 g=tex-text;" at 14.4pt
  -> ./fonts/PublicSans-Bold.ttf
-[1
+) (././02-example.tex [1
 
 
 
 
 
-]) (././02-example.tex [2]
+] [2]
 chapter 2.
 File: ./images/jku_learningcenter.jpg Graphic file (type bmp)
 <./images/jku_learningcenter.jpg>
@@ -3314,32 +3314,56 @@ Underfull \hbox (badness 1924) in paragraph at lines 78--79
 [4]) (././03-grundlagen.tex [5]
 chapter 3.
 
-Underfull \hbox (badness 1389) in paragraph at lines 10--11
+Underfull \hbox (badness 1389) in paragraph at lines 19--20
 \TU/Merriweather(0)/m/n/10 Answer Set Programming (ASP) ist ein deklarativer An
 satz zur Modellie-
  []
 
+[6
+
+
+
+
+]
 Requested font "[fonts/PublicSans-Bold.ttf]/OT:script=latn;language=dflt;mappin
 g=tex-text;" at 12.0pt
  -> ./fonts/PublicSans-Bold.ttf
-(c:/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty
+ (c:/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2025/11/14 1.11b listings language file
-) [6
+) [7]
+Underfull \hbox (badness 2142) in paragraph at lines 49--50
+[]\TU/Merriweather(0)/m/n/10 Ein weiterer wichtiger Bestandteil von Clingo ist 
+die bereitgestellte Pro-
+ []
+
+[8]
+Underfull \hbox (badness 10000) in paragraph at lines 51--52
+[]\TU/Merriweather(0)/m/n/10 Die Integration von beispielsweise Python erfolgt 
+über das \TU/Merriweather(0)/m/it/10 Directive
+ []
 
 
+Underfull \hbox (badness 2846) in paragraph at lines 51--52
+\TU/Inconsolata(0)/m/n/10 #script(python)\TU/Merriweather(0)/m/n/10 . Innerhalb
+ eines solchen Skriptblocks kann eine main-
+ []
 
 
-])
-(././09-conclusion.tex [7]
+Underfull \hbox (badness 1331) in paragraph at lines 51--52
+\TU/Merriweather(0)/m/n/10 Funktion definiert werden, die Zugriff auf ein Kontr
+ollobjekt erhält. Über
+ []
+
+) (././09-conclusion.tex [9]
 chapter 4.
-) [8
+) [10
 
 
 
 
 ]
 chapter without number
-(././91-appendix.tex [9
+(././91-appendix.tex [11
 
 
 
@@ -3351,7 +3375,7 @@ File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 )
 (c:/texlive/2026/texmf-dist/tex/generic/stringenc/se-utf32be.def
 File: se-utf32be.def 2019/11/29 v1.12 stringenc: UTF-32BE
-) [10
+) [12
 
 
 
@@ -3366,17 +3390,21 @@ L3 programming layer <2026-01-19>
 
 LaTeX Warning: There were multiply-defined labels.
 
+
+Package biblatex Warning: Please rerun LaTeX.
+(biblatex)                Page breaks have changed.
+
 Package logreq Info: Writing requests to 'main-thesis.run.xml'.
 \openout1 = `main-thesis.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 58875 strings out of 468168
- 1282411 string characters out of 5436524
- 2566952 words of memory out of 5000000
- 86711 multiletter control sequences out of 15000+600000
+ 58896 strings out of 468168
+ 1283155 string characters out of 5436524
+ 2570325 words of memory out of 5000000
+ 86732 multiletter control sequences out of 15000+600000
  633569 words of font info for 142 fonts, out of 8000000 for 9000
  1350 hyphenation exceptions out of 8191
- 130i,25n,137p,11214b,32834s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 130i,26n,137p,11214b,32835s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main-thesis.pdf (14 pages).
+Output written on main-thesis.pdf (16 pages).

@@ -85,6 +85,78 @@
       \verb https://dl.acm.org/doi/10.1145/2043174.2043195
       \endverb
     \endentry
+    \entry{gebserMultishotASPSolving2018}{online}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=a296fbe902a96f2ceebb7398463f3e13}{%
+           family={Gebser},
+           familyi={G\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=75758236531a52ffc97ef10f8b482f05}{%
+           family={Kaminski},
+           familyi={K\bibinitperiod},
+           given={Roland},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3fe0253f0b3212a4109e50143a91fede}{%
+           family={Kaufmann},
+           familyi={K\bibinitperiod},
+           given={Benjamin},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3c55d70c19bd5f5a654a6ad7ae64450c}{%
+           family={Schaub},
+           familyi={S\bibinitperiod},
+           given={Torsten},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{980252df49c9c725a120aee1519288fc}
+      \strng{fullhash}{6ff2ecbb0dace9a796d510f578f069a3}
+      \strng{fullhashraw}{6ff2ecbb0dace9a796d510f578f069a3}
+      \strng{bibnamehash}{6ff2ecbb0dace9a796d510f578f069a3}
+      \strng{authorbibnamehash}{6ff2ecbb0dace9a796d510f578f069a3}
+      \strng{authornamehash}{980252df49c9c725a120aee1519288fc}
+      \strng{authorfullhash}{6ff2ecbb0dace9a796d510f578f069a3}
+      \strng{authorfullhashraw}{6ff2ecbb0dace9a796d510f578f069a3}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We introduce a new flexible paradigm of grounding and solving in Answer Set Programming (ASP), which we refer to as multi-shot ASP solving, and present its implementation in the ASP system clingo. Multi-shot ASP solving features grounding and solving processes that deal with continuously changing logic programs. In doing so, they remain operative and accommodate changes in a seamless way. For instance, such processes allow for advanced forms of search, as in optimization or theory solving, or interaction with an environment, as in robotics or query-answering. Common to them is that the problem specification evolves during the reasoning process, either because data or constraints are added, deleted, or replaced. This evolutionary aspect adds another dimension to ASP since it brings about state changing operations. We address this issue by providing an operational semantics that characterizes grounding and solving processes in multi-shot ASP solving. This characterization provides a semantic account of grounder and solver states along with the operations manipulating them.}
+      \field{day}{20}
+      \field{eprintclass}{cs}
+      \field{eprinttype}{arXiv}
+      \field{langid}{english}
+      \field{month}{3}
+      \field{title}{Multi-Shot {{ASP}} Solving with Clingo}
+      \field{urlday}{22}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{year}{2018}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.48550/arXiv.1705.09811
+      \endverb
+      \verb{eprint}
+      \verb 1705.09811
+      \endverb
+      \verb{file}
+      \verb C:\Users\tobia\Zotero\storage\VIWYYNFH\Gebser et al. - 2018 - Multi-shot ASP solving with clingo.pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/1705.09811
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1705.09811
+      \endverb
+      \keyw{Computer Science - Artificial Intelligence}
+    \endentry
     \entry{stableModelSemanticGelfond}{article}{}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=9ddf8a4d782a7a6f34c25fbc4ca822b1}{%
@@ -120,6 +192,59 @@
       \field{title}{The Stable Model Semantics For Logic Programming}
       \field{volume}{2}
       \field{year}{2000}
+    \endentry
+    \entry{Oughalime2008}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=df5c52353f2c7a56e24108aa3677c925}{%
+           family={Oughalime},
+           familyi={O\bibinitperiod},
+           given={Ahmed},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6a524e204a1858fd4b614fdd0951b8f1}{%
+           family={Ismail},
+           familyi={I\bibinitperiod},
+           given={Wan\bibnamedelima Rosmanira},
+           giveni={W\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fa15f9acbff5b9e42a172bf84396a524}{%
+           family={Liong},
+           familyi={L\bibinitperiod},
+           given={Choong\bibnamedelima Yeun},
+           giveni={C\bibinitperiod\bibinitdelim Y\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{2ebfbe23c520e79e604536da8c696d37}
+      \strng{fullhash}{bd33d6c40b32d8e0d471f957e9de4dd5}
+      \strng{fullhashraw}{bd33d6c40b32d8e0d471f957e9de4dd5}
+      \strng{bibnamehash}{bd33d6c40b32d8e0d471f957e9de4dd5}
+      \strng{authorbibnamehash}{bd33d6c40b32d8e0d471f957e9de4dd5}
+      \strng{authornamehash}{2ebfbe23c520e79e604536da8c696d37}
+      \strng{authorfullhash}{bd33d6c40b32d8e0d471f957e9de4dd5}
+      \strng{authorfullhashraw}{bd33d6c40b32d8e0d471f957e9de4dd5}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Proceedings - International Symposium on Information Technology 2008, ITSim}
+      \field{note}{Cited by: 17}
+      \field{source}{Scopus}
+      \field{title}{A tabu search approach to the nurse scheduling problem}
+      \field{type}{Conference paper}
+      \field{volume}{1}
+      \field{year}{2008}
+      \verb{doi}
+      \verb 10.1109/ITSIM.2008.4631604
+      \endverb
+      \verb{urlraw}
+      \verb https://www.scopus.com/inward/record.uri?eid=2-s2.0-57349187987&doi=10.1109%2fITSIM.2008.4631604&partnerID=40&md5=32f2cb164994f919d53d66dea59d8332
+      \endverb
+      \verb{url}
+      \verb https://www.scopus.com/inward/record.uri?eid=2-s2.0-57349187987&doi=10.1109%2fITSIM.2008.4631604&partnerID=40&md5=32f2cb164994f919d53d66dea59d8332
+      \endverb
     \endentry
   \enddatalist
   \datalist[entry]{apa/global//global/global/global}
@@ -189,6 +314,78 @@
       \verb https://dl.acm.org/doi/10.1145/2043174.2043195
       \endverb
     \endentry
+    \entry{gebserMultishotASPSolving2018}{online}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=a296fbe902a96f2ceebb7398463f3e13}{%
+           family={Gebser},
+           familyi={G\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=75758236531a52ffc97ef10f8b482f05}{%
+           family={Kaminski},
+           familyi={K\bibinitperiod},
+           given={Roland},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3fe0253f0b3212a4109e50143a91fede}{%
+           family={Kaufmann},
+           familyi={K\bibinitperiod},
+           given={Benjamin},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3c55d70c19bd5f5a654a6ad7ae64450c}{%
+           family={Schaub},
+           familyi={S\bibinitperiod},
+           given={Torsten},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{980252df49c9c725a120aee1519288fc}
+      \strng{fullhash}{6ff2ecbb0dace9a796d510f578f069a3}
+      \strng{fullhashraw}{6ff2ecbb0dace9a796d510f578f069a3}
+      \strng{bibnamehash}{6ff2ecbb0dace9a796d510f578f069a3}
+      \strng{authorbibnamehash}{6ff2ecbb0dace9a796d510f578f069a3}
+      \strng{authornamehash}{980252df49c9c725a120aee1519288fc}
+      \strng{authorfullhash}{6ff2ecbb0dace9a796d510f578f069a3}
+      \strng{authorfullhashraw}{6ff2ecbb0dace9a796d510f578f069a3}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We introduce a new flexible paradigm of grounding and solving in Answer Set Programming (ASP), which we refer to as multi-shot ASP solving, and present its implementation in the ASP system clingo. Multi-shot ASP solving features grounding and solving processes that deal with continuously changing logic programs. In doing so, they remain operative and accommodate changes in a seamless way. For instance, such processes allow for advanced forms of search, as in optimization or theory solving, or interaction with an environment, as in robotics or query-answering. Common to them is that the problem specification evolves during the reasoning process, either because data or constraints are added, deleted, or replaced. This evolutionary aspect adds another dimension to ASP since it brings about state changing operations. We address this issue by providing an operational semantics that characterizes grounding and solving processes in multi-shot ASP solving. This characterization provides a semantic account of grounder and solver states along with the operations manipulating them.}
+      \field{day}{20}
+      \field{eprintclass}{cs}
+      \field{eprinttype}{arXiv}
+      \field{langid}{english}
+      \field{month}{3}
+      \field{title}{Multi-Shot {{ASP}} Solving with Clingo}
+      \field{urlday}{22}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{year}{2018}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.48550/arXiv.1705.09811
+      \endverb
+      \verb{eprint}
+      \verb 1705.09811
+      \endverb
+      \verb{file}
+      \verb C:\Users\tobia\Zotero\storage\VIWYYNFH\Gebser et al. - 2018 - Multi-shot ASP solving with clingo.pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/1705.09811
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1705.09811
+      \endverb
+      \keyw{Computer Science - Artificial Intelligence}
+    \endentry
     \entry{stableModelSemanticGelfond}{article}{}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=9ddf8a4d782a7a6f34c25fbc4ca822b1}{%
@@ -224,6 +421,59 @@
       \field{title}{The Stable Model Semantics For Logic Programming}
       \field{volume}{2}
       \field{year}{2000}
+    \endentry
+    \entry{Oughalime2008}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=df5c52353f2c7a56e24108aa3677c925}{%
+           family={Oughalime},
+           familyi={O\bibinitperiod},
+           given={Ahmed},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6a524e204a1858fd4b614fdd0951b8f1}{%
+           family={Ismail},
+           familyi={I\bibinitperiod},
+           given={Wan\bibnamedelima Rosmanira},
+           giveni={W\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fa15f9acbff5b9e42a172bf84396a524}{%
+           family={Liong},
+           familyi={L\bibinitperiod},
+           given={Choong\bibnamedelima Yeun},
+           giveni={C\bibinitperiod\bibinitdelim Y\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{2ebfbe23c520e79e604536da8c696d37}
+      \strng{fullhash}{bd33d6c40b32d8e0d471f957e9de4dd5}
+      \strng{fullhashraw}{bd33d6c40b32d8e0d471f957e9de4dd5}
+      \strng{bibnamehash}{bd33d6c40b32d8e0d471f957e9de4dd5}
+      \strng{authorbibnamehash}{bd33d6c40b32d8e0d471f957e9de4dd5}
+      \strng{authornamehash}{2ebfbe23c520e79e604536da8c696d37}
+      \strng{authorfullhash}{bd33d6c40b32d8e0d471f957e9de4dd5}
+      \strng{authorfullhashraw}{bd33d6c40b32d8e0d471f957e9de4dd5}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Proceedings - International Symposium on Information Technology 2008, ITSim}
+      \field{note}{Cited by: 17}
+      \field{source}{Scopus}
+      \field{title}{A tabu search approach to the nurse scheduling problem}
+      \field{type}{Conference paper}
+      \field{volume}{1}
+      \field{year}{2008}
+      \verb{doi}
+      \verb 10.1109/ITSIM.2008.4631604
+      \endverb
+      \verb{urlraw}
+      \verb https://www.scopus.com/inward/record.uri?eid=2-s2.0-57349187987&doi=10.1109%2fITSIM.2008.4631604&partnerID=40&md5=32f2cb164994f919d53d66dea59d8332
+      \endverb
+      \verb{url}
+      \verb https://www.scopus.com/inward/record.uri?eid=2-s2.0-57349187987&doi=10.1109%2fITSIM.2008.4631604&partnerID=40&md5=32f2cb164994f919d53d66dea59d8332
+      \endverb
     \endentry
   \enddatalist
   \missing{bib:2013-roland-woot}
