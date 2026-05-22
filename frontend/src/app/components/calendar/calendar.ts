@@ -345,6 +345,55 @@ import { RescheduleSolverDialog } from '../reschedule-solver-dialog/reschedule-s
       </div>
     }
 
+    @if (rescheduleResult()) {
+      <div class="error-backdrop" (click)="rescheduleResult.set(null)">
+        <div
+          class="error-card is-warning"
+          (click)="$event.stopPropagation()"
+          style="max-width: 520px;"
+        >
+          <div class="error-icon-wrap">
+            <span class="material-icons-round">swap_horiz</span>
+          </div>
+          <div class="error-title">Umplanung abgeschlossen</div>
+
+          @if (rescheduleResult()!.dropped.length) {
+            <div style="width:100%">
+              <div style="font-weight:600; font-size:0.8125rem; color:#ef4444; margin-bottom:4px;">
+                Entfernt ({{ rescheduleResult()!.dropped.length }})
+              </div>
+              <ul class="warning-list">
+                @for (item of rescheduleResult()!.dropped; track $index) {
+                  <li>
+                    <span class="warning-day">Tag {{ item.day }}</span>
+                    {{ item.person }} – {{ item.station }}
+                  </li>
+                }
+              </ul>
+            </div>
+          }
+
+          @if (rescheduleResult()!.added.length) {
+            <div style="width:100%">
+              <div style="font-weight:600; font-size:0.8125rem; color:#22c55e; margin-bottom:4px;">
+                Hinzugefügt ({{ rescheduleResult()!.added.length }})
+              </div>
+              <ul class="warning-list">
+                @for (item of rescheduleResult()!.added; track $index) {
+                  <li>
+                    <span class="warning-day">Tag {{ item.day }}</span>
+                    {{ item.person }} – {{ item.station }}
+                  </li>
+                }
+              </ul>
+            </div>
+          }
+
+          <button class="error-btn" (click)="rescheduleResult.set(null)">Schließen</button>
+        </div>
+      </div>
+    }
+
     <div class="min-h-screen bg-slate-50 px-6 py-10">
       <div class="max-w-7xl mx-auto">
         <h1 class="text-2xl font-semibold text-slate-800 tracking-tight">Kalender</h1>
@@ -407,7 +456,10 @@ export class CalendarComponent implements OnInit {
   selectedIds: number[] = [];
   users = this.userService.users;
   warningList = signal<{ station: string; day: number }[]>([]);
-
+  rescheduleResult = signal<{
+    dropped: { day: number; person: string; station: string }[];
+    added: { day: number; person: string; station: string }[];
+  } | null>(null);
 
   onFilterChange(ids: number[]) {
     this.selectedUserIds.set(new Set(ids));
@@ -472,6 +524,7 @@ export class CalendarComponent implements OnInit {
   dismissMessages() {
     this.errorMessage.set(null);
     this.warningList.set([]);
+    this.rescheduleResult.set(null);
   }
   openSolverDialog() {
     const calApi = this.calendarRef.getApi();
@@ -564,6 +617,12 @@ export class CalendarComponent implements OnInit {
                 this.warningList.set(response.unassigned);
               } else {
                 this.warningList.set([]);
+              }
+              if (response.dropped?.length || response.added?.length) {
+                this.rescheduleResult.set({
+                  dropped: response.dropped ?? [],
+                  added: response.added ?? [],
+                });
               }
             }),
             switchMap(() => this.stationassignmentService.loadAll()),
