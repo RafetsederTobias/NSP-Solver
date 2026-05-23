@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import delete, extract, select, and_
 from asp.asp_service import solve_reschedule, solve_schedule
 from models.StationAssignment import StationAssignment
+from models.Schedule import Schedule
 from models.Station import Station
 from models.User import User
 from db import get_db
@@ -108,11 +109,13 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
         for a in existing_assignments
     }
 
+
     db_assignments = [
         StationAssignment(
             date=date(payload.currentYear, payload.currentMonth, a["day"]),
             station_id=a["station_id"],
             user_id=a["user_id"],
+            schedule_id = 1
         )
         for a in assignments
         if a["user_id"] is None or (a["user_id"], a["station_id"], a["day"]) not in existing_keys

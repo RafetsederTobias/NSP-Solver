@@ -15,6 +15,8 @@ class StationAssignment(Base):
 
     station = relationship("Station", back_populates="station_assignments")
     user = relationship("User", back_populates="station_assignments")
+    schedule = relationship("Schedule", back_populates="station_assignments")
+
 
     __table_args__ = (
         UniqueConstraint("schedule_id", "date", "user_id", name="uq_user_per_day_per_schedule"),
