@@ -197,8 +197,7 @@ def _run_clingo(
             max_assignments(S, Max),
             staff_count(S, D, N),
             N > 0,
-            Gap = Max - N,
-            Gap > 0.
+            Gap = Max - N.
 
         #minimize {
             Gap*Gap @10, S, D :
@@ -207,7 +206,7 @@ def _run_clingo(
         """
 
         print("Phase 1: trying with forced staffing and fairness...")
-        result = solve(EXTRA_FACTS, timeout=30)
+        result = solve(EXTRA_FACTS, timeout=60)
 
         if result:
             print("Phase 1 found a solution, returning...")
