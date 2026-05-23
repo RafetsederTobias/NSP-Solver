@@ -196,7 +196,6 @@ def _run_clingo(
             station(S), day(D),
             max_assignments(S, Max),
             staff_count(S, D, N),
-            N > 0,
             Gap = Max - N.
 
         #minimize {
