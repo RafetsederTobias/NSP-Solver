@@ -146,7 +146,11 @@ def _run_clingo(
 ) -> list[dict] | None:
 
     def solve(extra_rules: str = "", timeout: int = 15) -> list[dict]:
-        ctl = clingo.Control(["--models=0", "--heuristic=Domain"])
+        if isReschedule:
+            ctl = clingo.Control(["--opt-mode=opt", "--heuristic=Domain"])
+        else:
+            ctl = clingo.Control(["--opt-mode=opt"])
+
         ctl.load(str(rules_file))
         ctl.add("base", [], facts)
         if extra_rules:
@@ -165,7 +169,9 @@ def _run_clingo(
                         "station_id": int(str(atom.arguments[1])),
                         "day": int(str(atom.arguments[2])),
                     })
+
             best_model = current
+            
             print(f"New best model found, cost: {model.cost}, proven optimal: {model.optimality_proven}")
 
         handle = ctl.solve(on_model=on_model, async_=True)
@@ -183,12 +189,25 @@ def _run_clingo(
         return best_model
 
     if not isReschedule:
-        FORCE_STAFFING = """
+        EXTRA_FACTS = """
         :- station(S), day(D), not assigned(_, S, D).
+
+        shortfall(S, D, Gap) :-
+            station(S), day(D),
+            max_assignments(S, Max),
+            staff_count(S, D, N),
+            N > 0,
+            Gap = Max - N,
+            Gap > 0.
+
+        #minimize {
+            Gap*Gap @10, S, D :
+            shortfall(S, D, Gap)
+        }.
         """
 
-        print("Phase 1: trying with forced staffing...")
-        result = solve(FORCE_STAFFING, timeout=15)
+        print("Phase 1: trying with forced staffing and fairness...")
+        result = solve(EXTRA_FACTS, timeout=30)
 
         if result:
             print("Phase 1 found a solution, returning...")

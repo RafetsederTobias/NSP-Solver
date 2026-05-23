@@ -37,22 +37,9 @@ unstaffed(S, D) :-
     station(S), day(D),
     not assigned(_, S, D).
 
-shortfall(S, D, Gap) :-
-    station(S), day(D),
-    max_assignments(S, Max),
-    staff_count(S, D, N),
-    N > 0,
-    Gap = Max - N,
-    Gap > 0.
-
-
 % OPTIMIZATION
 
 % Priority @2: minimize unstaffed stations 
-% Priority @1: minimize understaffed stations
-% Weight 10 vs 1 ensures any unstaffed station is worse than all understaffing.
 #minimize {
-    50@2, S, D : unstaffed(S, D);
-     2@1, S, D     : shortfall(S, D, 2);
-     1@1, S, D     : shortfall(S, D, 1)
+    10@1, S, D : unstaffed(S, D)
 }.
