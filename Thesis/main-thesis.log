@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.3.13)  22 MAY 2026 21:22
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.3.13)  24 MAY 2026 13:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2811,6 +2811,9 @@ Package babel Info: 'ngerman' activates 'german' shorthands.
 
 LaTeX Warning: Label `sec:example' multiply defined.
 
+
+LaTeX Warning: Label `sec:example' multiply defined.
+
 )
 \openout1 = `main-thesis.aux'.
 
@@ -3354,16 +3357,23 @@ Underfull \hbox (badness 1331) in paragraph at lines 51--52
 ollobjekt erhält. Über
  []
 
-) (././09-conclusion.tex [9]
+) (././04-related-work.tex [9]
 chapter 4.
-) [10
+) (././09-conclusion.tex [10
+
+
+
+
+]
+chapter 5.
+) [11
 
 
 
 
 ]
 chapter without number
-(././91-appendix.tex [11
+(././91-appendix.tex [12
 
 
 
@@ -3375,7 +3385,7 @@ File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 )
 (c:/texlive/2026/texmf-dist/tex/generic/stringenc/se-utf32be.def
 File: se-utf32be.def 2019/11/29 v1.12 stringenc: UTF-32BE
-) [12
+) [13
 
 
 
@@ -3390,21 +3400,17 @@ L3 programming layer <2026-01-19>
 
 LaTeX Warning: There were multiply-defined labels.
 
-
-Package biblatex Warning: Please rerun LaTeX.
-(biblatex)                Page breaks have changed.
-
 Package logreq Info: Writing requests to 'main-thesis.run.xml'.
 \openout1 = `main-thesis.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 58896 strings out of 468168
- 1283155 string characters out of 5436524
- 2570325 words of memory out of 5000000
- 86732 multiletter control sequences out of 15000+600000
+ 58911 strings out of 468168
+ 1283451 string characters out of 5436524
+ 2570401 words of memory out of 5000000
+ 86744 multiletter control sequences out of 15000+600000
  633569 words of font info for 142 fonts, out of 8000000 for 9000
  1350 hyphenation exceptions out of 8191
  130i,26n,137p,11214b,32835s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main-thesis.pdf (16 pages).
+Output written on main-thesis.pdf (17 pages).

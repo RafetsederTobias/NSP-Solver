@@ -1,0 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+\cleardoubleoddpage%  Make sure to start each chapter on a new odd page
+\chapter{Vergleich bestehender Systeme}
+\label{sec:example}
+Im Zuge der Entwurfsphase des NSP-Solvers wurde eine Literaturrecherche zu bestehenden 
+Systemen und Ansätzen durchgeführt. Auf ähnliche ASP-basierte Implementierungen im Gesundheitssektor wird in den nächsten Punkten eingegangen.
+
+\section{Das ASP-basierte Nurse Scheduling System an dem Krankenhaus der Universität von Yamanashi}
+An dem Krankenhaus der Universität von Yamanashi wurde ein \textit{Nurse Scheduling System} mit Clingo umgesetzt. 
+Dabei wurden Einschränkungen wie \textit{Workdays}, \textit{Weekly Rest Days}, \textit{Requested Shifts}, \textit{Average Working Hours}, \textit{Consecutive Workdays}, \textit{Shift Frequency} sowie \textit{Daily Staffing} berücksichtigt. Das dort entwickelte System wird als Web-Service bereitgestellt, was Pflegeleitungen erlaubt, über den Browser Dienstpläne zu erstellen und zu modifizieren. Fokus der Arbeit war das Erstellen von komplexen Dienstplänen alle vier Wochen.
+
+Die Applikation unterstützt nicht nur die automatische Erstellung von Dienstplänen, sondern auch eine interaktiven Nachbearbeitung und Anpassung bestehender Pläne. Pflegeleitungen können einzelne Schichten manuell ändern, gewünschte oder unerwünschte Dienste definieren sowie bestimmte Zuweisungen fixieren, damit diese bei späteren Optimierungsschritten erhalten bleiben. Dies ist besonders relevant, da in der Praxis häufig kurzfristige Änderungen durch Krankheitsausfälle oder andere unvorhersehbare Ereignisse auftreten und somit ein \textit{Rescheduling} erforderlich wird.
+
+Ein weiterer zentraler Aspekt des Systems ist die Minimierung unnötiger Änderungen an bereits bestehenden Dienstplänen. Dadurch soll der Aufwand für die Überprüfung der Pläne reduziert und vermieden werden, dass Pflegekräfte ständig über größere Änderungen informiert werden müssen. Zur Umsetzung dieses Ansatzes wird die Methode \textit{Large Neighborhood Prioritized Search (LNPS)} eingesetzt. Im Gegensatz zu klassischen Verfahren der Minimal Perturbation werden dabei bestehende Schichtzuweisungen bevorzugt beibehalten, ohne sie jedoch vollständig zu fixieren. Dadurch bleibt die Lösung flexibel genug, um weiterhin Optimierungen durchführen und neue Randbedingungen berücksichtigen zu können. Die Priorisierung wird mithilfe von Heuristiken des ASP-Solvers \textit{Clingo} umgesetzt.
+
+
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

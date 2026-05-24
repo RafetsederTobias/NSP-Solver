@@ -170,6 +170,9 @@ def _run_clingo(
                         "day": int(str(atom.arguments[2])),
                     })
 
+                if atom.name=="staff_count":
+                    print(atom.arguments[0], atom.arguments[1], atom.arguments[2])
+
             best_model = current
             
             print(f"New best model found, cost: {model.cost}, proven optimal: {model.optimality_proven}")
@@ -190,7 +193,7 @@ def _run_clingo(
 
     if not isReschedule:
         EXTRA_FACTS = """
-        :- station(S), day(D), not assigned(_, S, D).
+        :- station(S), day(D), staff_count(S,D,0).
 
         shortfall(S, D, Gap) :-
             station(S), day(D),
