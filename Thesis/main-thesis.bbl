@@ -19,6 +19,75 @@
 
 \refsection{0}
   \datalist[entry]{apa/apasortcite//global/global/global}
+    \entry{alvianoNurseReschedulingAnswer2019}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=4251092d5873b2e2fb3366039c8a5937}{%
+           family={Alviano},
+           familyi={A\bibinitperiod},
+           given={Mario},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5dab82e1316a61875fa864346d121e08}{%
+           family={Dodaro},
+           familyi={D\bibinitperiod},
+           given={Carmine},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a65827edc12272b7d5310245c1a17588}{%
+           family={Maratea},
+           familyi={M\bibinitperiod},
+           given={Marco},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {SAGE Publications}%
+      }
+      \strng{namehash}{1d65cd3d0ded5694c17fcf00839d7b41}
+      \strng{fullhash}{2153451de2a56c0a158fea5dbb0a64bf}
+      \strng{fullhashraw}{2153451de2a56c0a158fea5dbb0a64bf}
+      \strng{bibnamehash}{2153451de2a56c0a158fea5dbb0a64bf}
+      \strng{authorbibnamehash}{2153451de2a56c0a158fea5dbb0a64bf}
+      \strng{authornamehash}{1d65cd3d0ded5694c17fcf00839d7b41}
+      \strng{authorfullhash}{2153451de2a56c0a158fea5dbb0a64bf}
+      \strng{authorfullhashraw}{2153451de2a56c0a158fea5dbb0a64bf}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The goal of the Nurse Scheduling Problem is to find an assignment of nurses to shifts according to specific requirements. Frequently, a computed schedule may become not usable because of sudden absences of some nurses. In this cases, Nurse Rescheduling amounts to the computation of a new schedule, which has to satisfy the original requirements and the new absences. Additionally, a good solution to the Nurse Rescheduling Problem must be as similar as possible to the original schedule, which practically means that the number of changes has to be minimized. This paper focuses on the requirements specified by an Italian hospital, and recently addressed by an approach based on Answer Set Programming (ASP). Even if promising results have been obtained with ASP, the original encoding presents some intrinsic weaknesses, which are identified and eventually circumvented in this paper. The new encoding is designed by taking into account both intrinsic properties of Nurse Scheduling and internal details of ASP solvers, such as cardinality and weight constraint propagators. The performance gain of clingo and wasp is empirically verified on instances from ASP literature. As an additional contribution, the performance of clingo and wasp is compared to other declarative frameworks, namely SAT and ILP; the best performance is obtained by clingo running the new ASP encoding. The advanced ASP encodings are then extended to solve Nurse Rescheduling, and an empirical evaluation is conducted with clingo and wasp.}
+      \field{day}{29}
+      \field{issn}{1724-8035}
+      \field{journaltitle}{Intelligenza Artificiale}
+      \field{langid}{english}
+      \field{month}{1}
+      \field{number}{2}
+      \field{title}{Nurse ({{Re}})Scheduling via Answer Set Programming1}
+      \field{urlday}{11}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{volume}{12}
+      \field{year}{2019}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{109\bibrangedash 124}
+      \range{pages}{16}
+      \verb{doi}
+      \verb 10.3233/IA-170030
+      \endverb
+      \verb{file}
+      \verb C:\Users\tobia\Zotero\storage\VU8ERVZZ\Alviano et al. - 2019 - Nurse (Re)scheduling via answer set programming1.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://journals.sagepub.com/action/showAbstract
+      \endverb
+      \verb{url}
+      \verb https://journals.sagepub.com/action/showAbstract
+      \endverb
+    \endentry
     \entry{brewkaAnswerSetProgramming2011}{article}{}{}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=cc13d7b1adc149ede39626958ab7ef36}{%
@@ -83,6 +152,80 @@
       \endverb
       \verb{url}
       \verb https://dl.acm.org/doi/10.1145/2043174.2043195
+      \endverb
+    \endentry
+    \entry{cardellini2023solvingrehabilitationschedulingproblems}{misc}{}{}
+      \name{author}{7}{}{%
+        {{un=0,uniquepart=base,hash=9388543cf808a4885ad1b21879c2cd3f}{%
+           family={Cardellini},
+           familyi={C\bibinitperiod},
+           given={Matteo},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=907a6cb4f96055abc5faa552631222c1}{%
+           family={Nardi},
+           familyi={N\bibinitperiod},
+           given={Paolo\bibnamedelima De},
+           giveni={P\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5dab82e1316a61875fa864346d121e08}{%
+           family={Dodaro},
+           familyi={D\bibinitperiod},
+           given={Carmine},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d861239445883e0309fb2d90ea3f6f06}{%
+           family={Galatà},
+           familyi={G\bibinitperiod},
+           given={Giuseppe},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8b026ad42b80ae0837e642d76b1e9eef}{%
+           family={Giardini},
+           familyi={G\bibinitperiod},
+           given={Anna},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a65827edc12272b7d5310245c1a17588}{%
+           family={Maratea},
+           familyi={M\bibinitperiod},
+           given={Marco},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=79df2c2122fac6d6b17e7a683d50fe1e}{%
+           family={Porro},
+           familyi={P\bibinitperiod},
+           given={Ivan},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{7761dbf20a90956ef609c3604c6a3457}
+      \strng{fullhash}{82470b23bd7dca8703896c3769145db0}
+      \strng{fullhashraw}{82470b23bd7dca8703896c3769145db0}
+      \strng{bibnamehash}{82470b23bd7dca8703896c3769145db0}
+      \strng{authorbibnamehash}{82470b23bd7dca8703896c3769145db0}
+      \strng{authornamehash}{7761dbf20a90956ef609c3604c6a3457}
+      \strng{authorfullhash}{82470b23bd7dca8703896c3769145db0}
+      \strng{authorfullhashraw}{82470b23bd7dca8703896c3769145db0}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.LO}
+      \field{eprinttype}{arXiv}
+      \field{title}{Solving Rehabilitation Scheduling problems via a Two-Phase ASP approach}
+      \field{year}{2023}
+      \verb{eprint}
+      \verb 2303.08709
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2303.08709
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2303.08709
       \endverb
     \endentry
     \entry{gebserMultishotASPSolving2018}{online}{}{}
@@ -192,6 +335,83 @@
       \field{title}{The Stable Model Semantics For Logic Programming}
       \field{volume}{2}
       \field{year}{2000}
+    \endentry
+    \entry{nabeshimaASPbasedNurseScheduling2026}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=7cc8929eb50474109004308210bd8f57}{%
+           family={Nabeshima},
+           familyi={N\bibinitperiod},
+           given={Hidetomo},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=55702d312e484b411817588ef6e8b45d}{%
+           family={Banbara},
+           familyi={B\bibinitperiod},
+           given={Mutsunori},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3c55d70c19bd5f5a654a6ad7ae64450c}{%
+           family={Schaub},
+           familyi={S\bibinitperiod},
+           given={Torsten},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ff1e2b9892efb3538dc0b1b2bc6ae51c}{%
+           family={Soh},
+           familyi={S\bibinitperiod},
+           given={Takehide},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{b9ff3081f7ce8ffa63d3fcdbdec1c44f}
+      \strng{fullhash}{457aba25a66fe48c13bf2241b7ccfb7d}
+      \strng{fullhashraw}{457aba25a66fe48c13bf2241b7ccfb7d}
+      \strng{bibnamehash}{457aba25a66fe48c13bf2241b7ccfb7d}
+      \strng{authorbibnamehash}{457aba25a66fe48c13bf2241b7ccfb7d}
+      \strng{authornamehash}{b9ff3081f7ce8ffa63d3fcdbdec1c44f}
+      \strng{authorfullhash}{457aba25a66fe48c13bf2241b7ccfb7d}
+      \strng{authorfullhashraw}{457aba25a66fe48c13bf2241b7ccfb7d}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We present the design principles of a nurse scheduling system built using Answer Set Programming (ASP) and successfully deployed at the University of Yamanashi Hospital. Nurse scheduling is a complex optimization problem requiring the reconciliation of individual nurse preferences with hospital staffing needs across various wards. This involves balancing hard and soft constraints and the flexibility of interactive adjustments. While extensively studied in academia, real-world nurse scheduling presents unique challenges that go beyond typical benchmark problems and competitions. This paper details the practical application of ASP to address these challenges at the University of Yamanashi Hospital, focusing on the insights gained and the advancements in ASP technology necessary to effectively manage the complexities of real-world deployment.}
+      \field{day}{8}
+      \field{eprintclass}{cs}
+      \field{eprinttype}{arXiv}
+      \field{issn}{2075-2180}
+      \field{journaltitle}{Electronic Proceedings in Theoretical Computer Science}
+      \field{month}{1}
+      \field{shortjournal}{Electron. Proc. Theor. Comput. Sci.}
+      \field{title}{The {{ASP-based Nurse Scheduling System}} at the {{University}} of {{Yamanashi Hospital}}}
+      \field{urlday}{11}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{volume}{439}
+      \field{year}{2026}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{334\bibrangedash 348}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.4204/EPTCS.439.23
+      \endverb
+      \verb{eprint}
+      \verb 2506.13600
+      \endverb
+      \verb{file}
+      \verb C\:\\Users\\tobia\\Zotero\\storage\\RETRTQHU\\Nabeshima et al. - 2026 - The ASP-based Nurse Scheduling System at the University of Yamanashi Hospital.pdf;C\:\\Users\\tobia\\Zotero\\storage\\D77ZNXCS\\2506.html
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/2506.13600
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/2506.13600
+      \endverb
+      \keyw{Computer Science - Artificial Intelligence}
     \endentry
     \entry{Oughalime2008}{inproceedings}{}{}
       \name{author}{3}{}{%
@@ -248,6 +468,75 @@
     \endentry
   \enddatalist
   \datalist[entry]{apa/global//global/global/global}
+    \entry{alvianoNurseReschedulingAnswer2019}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=4251092d5873b2e2fb3366039c8a5937}{%
+           family={Alviano},
+           familyi={A\bibinitperiod},
+           given={Mario},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5dab82e1316a61875fa864346d121e08}{%
+           family={Dodaro},
+           familyi={D\bibinitperiod},
+           given={Carmine},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a65827edc12272b7d5310245c1a17588}{%
+           family={Maratea},
+           familyi={M\bibinitperiod},
+           given={Marco},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {SAGE Publications}%
+      }
+      \strng{namehash}{1d65cd3d0ded5694c17fcf00839d7b41}
+      \strng{fullhash}{2153451de2a56c0a158fea5dbb0a64bf}
+      \strng{fullhashraw}{2153451de2a56c0a158fea5dbb0a64bf}
+      \strng{bibnamehash}{2153451de2a56c0a158fea5dbb0a64bf}
+      \strng{authorbibnamehash}{2153451de2a56c0a158fea5dbb0a64bf}
+      \strng{authornamehash}{1d65cd3d0ded5694c17fcf00839d7b41}
+      \strng{authorfullhash}{2153451de2a56c0a158fea5dbb0a64bf}
+      \strng{authorfullhashraw}{2153451de2a56c0a158fea5dbb0a64bf}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The goal of the Nurse Scheduling Problem is to find an assignment of nurses to shifts according to specific requirements. Frequently, a computed schedule may become not usable because of sudden absences of some nurses. In this cases, Nurse Rescheduling amounts to the computation of a new schedule, which has to satisfy the original requirements and the new absences. Additionally, a good solution to the Nurse Rescheduling Problem must be as similar as possible to the original schedule, which practically means that the number of changes has to be minimized. This paper focuses on the requirements specified by an Italian hospital, and recently addressed by an approach based on Answer Set Programming (ASP). Even if promising results have been obtained with ASP, the original encoding presents some intrinsic weaknesses, which are identified and eventually circumvented in this paper. The new encoding is designed by taking into account both intrinsic properties of Nurse Scheduling and internal details of ASP solvers, such as cardinality and weight constraint propagators. The performance gain of clingo and wasp is empirically verified on instances from ASP literature. As an additional contribution, the performance of clingo and wasp is compared to other declarative frameworks, namely SAT and ILP; the best performance is obtained by clingo running the new ASP encoding. The advanced ASP encodings are then extended to solve Nurse Rescheduling, and an empirical evaluation is conducted with clingo and wasp.}
+      \field{day}{29}
+      \field{issn}{1724-8035}
+      \field{journaltitle}{Intelligenza Artificiale}
+      \field{langid}{english}
+      \field{month}{1}
+      \field{number}{2}
+      \field{title}{Nurse ({{Re}})Scheduling via Answer Set Programming1}
+      \field{urlday}{11}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{volume}{12}
+      \field{year}{2019}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{109\bibrangedash 124}
+      \range{pages}{16}
+      \verb{doi}
+      \verb 10.3233/IA-170030
+      \endverb
+      \verb{file}
+      \verb C:\Users\tobia\Zotero\storage\VU8ERVZZ\Alviano et al. - 2019 - Nurse (Re)scheduling via answer set programming1.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://journals.sagepub.com/action/showAbstract
+      \endverb
+      \verb{url}
+      \verb https://journals.sagepub.com/action/showAbstract
+      \endverb
+    \endentry
     \entry{brewkaAnswerSetProgramming2011}{article}{}{}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=cc13d7b1adc149ede39626958ab7ef36}{%
@@ -312,6 +601,80 @@
       \endverb
       \verb{url}
       \verb https://dl.acm.org/doi/10.1145/2043174.2043195
+      \endverb
+    \endentry
+    \entry{cardellini2023solvingrehabilitationschedulingproblems}{misc}{}{}
+      \name{author}{7}{}{%
+        {{un=0,uniquepart=base,hash=9388543cf808a4885ad1b21879c2cd3f}{%
+           family={Cardellini},
+           familyi={C\bibinitperiod},
+           given={Matteo},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=907a6cb4f96055abc5faa552631222c1}{%
+           family={Nardi},
+           familyi={N\bibinitperiod},
+           given={Paolo\bibnamedelima De},
+           giveni={P\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5dab82e1316a61875fa864346d121e08}{%
+           family={Dodaro},
+           familyi={D\bibinitperiod},
+           given={Carmine},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d861239445883e0309fb2d90ea3f6f06}{%
+           family={Galatà},
+           familyi={G\bibinitperiod},
+           given={Giuseppe},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8b026ad42b80ae0837e642d76b1e9eef}{%
+           family={Giardini},
+           familyi={G\bibinitperiod},
+           given={Anna},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a65827edc12272b7d5310245c1a17588}{%
+           family={Maratea},
+           familyi={M\bibinitperiod},
+           given={Marco},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=79df2c2122fac6d6b17e7a683d50fe1e}{%
+           family={Porro},
+           familyi={P\bibinitperiod},
+           given={Ivan},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{7761dbf20a90956ef609c3604c6a3457}
+      \strng{fullhash}{82470b23bd7dca8703896c3769145db0}
+      \strng{fullhashraw}{82470b23bd7dca8703896c3769145db0}
+      \strng{bibnamehash}{82470b23bd7dca8703896c3769145db0}
+      \strng{authorbibnamehash}{82470b23bd7dca8703896c3769145db0}
+      \strng{authornamehash}{7761dbf20a90956ef609c3604c6a3457}
+      \strng{authorfullhash}{82470b23bd7dca8703896c3769145db0}
+      \strng{authorfullhashraw}{82470b23bd7dca8703896c3769145db0}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.LO}
+      \field{eprinttype}{arXiv}
+      \field{title}{Solving Rehabilitation Scheduling problems via a Two-Phase ASP approach}
+      \field{year}{2023}
+      \verb{eprint}
+      \verb 2303.08709
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2303.08709
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2303.08709
       \endverb
     \endentry
     \entry{gebserMultishotASPSolving2018}{online}{}{}
@@ -422,6 +785,83 @@
       \field{volume}{2}
       \field{year}{2000}
     \endentry
+    \entry{nabeshimaASPbasedNurseScheduling2026}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=7cc8929eb50474109004308210bd8f57}{%
+           family={Nabeshima},
+           familyi={N\bibinitperiod},
+           given={Hidetomo},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=55702d312e484b411817588ef6e8b45d}{%
+           family={Banbara},
+           familyi={B\bibinitperiod},
+           given={Mutsunori},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3c55d70c19bd5f5a654a6ad7ae64450c}{%
+           family={Schaub},
+           familyi={S\bibinitperiod},
+           given={Torsten},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ff1e2b9892efb3538dc0b1b2bc6ae51c}{%
+           family={Soh},
+           familyi={S\bibinitperiod},
+           given={Takehide},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{b9ff3081f7ce8ffa63d3fcdbdec1c44f}
+      \strng{fullhash}{457aba25a66fe48c13bf2241b7ccfb7d}
+      \strng{fullhashraw}{457aba25a66fe48c13bf2241b7ccfb7d}
+      \strng{bibnamehash}{457aba25a66fe48c13bf2241b7ccfb7d}
+      \strng{authorbibnamehash}{457aba25a66fe48c13bf2241b7ccfb7d}
+      \strng{authornamehash}{b9ff3081f7ce8ffa63d3fcdbdec1c44f}
+      \strng{authorfullhash}{457aba25a66fe48c13bf2241b7ccfb7d}
+      \strng{authorfullhashraw}{457aba25a66fe48c13bf2241b7ccfb7d}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We present the design principles of a nurse scheduling system built using Answer Set Programming (ASP) and successfully deployed at the University of Yamanashi Hospital. Nurse scheduling is a complex optimization problem requiring the reconciliation of individual nurse preferences with hospital staffing needs across various wards. This involves balancing hard and soft constraints and the flexibility of interactive adjustments. While extensively studied in academia, real-world nurse scheduling presents unique challenges that go beyond typical benchmark problems and competitions. This paper details the practical application of ASP to address these challenges at the University of Yamanashi Hospital, focusing on the insights gained and the advancements in ASP technology necessary to effectively manage the complexities of real-world deployment.}
+      \field{day}{8}
+      \field{eprintclass}{cs}
+      \field{eprinttype}{arXiv}
+      \field{issn}{2075-2180}
+      \field{journaltitle}{Electronic Proceedings in Theoretical Computer Science}
+      \field{month}{1}
+      \field{shortjournal}{Electron. Proc. Theor. Comput. Sci.}
+      \field{title}{The {{ASP-based Nurse Scheduling System}} at the {{University}} of {{Yamanashi Hospital}}}
+      \field{urlday}{11}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{volume}{439}
+      \field{year}{2026}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{334\bibrangedash 348}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.4204/EPTCS.439.23
+      \endverb
+      \verb{eprint}
+      \verb 2506.13600
+      \endverb
+      \verb{file}
+      \verb C\:\\Users\\tobia\\Zotero\\storage\\RETRTQHU\\Nabeshima et al. - 2026 - The ASP-based Nurse Scheduling System at the University of Yamanashi Hospital.pdf;C\:\\Users\\tobia\\Zotero\\storage\\D77ZNXCS\\2506.html
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/2506.13600
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/2506.13600
+      \endverb
+      \keyw{Computer Science - Artificial Intelligence}
+    \endentry
     \entry{Oughalime2008}{inproceedings}{}{}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=df5c52353f2c7a56e24108aa3677c925}{%
@@ -476,10 +916,6 @@
       \endverb
     \endentry
   \enddatalist
-  \missing{bib:2013-roland-woot}
-  \missing{bib:2015-roland-thesis-book}
-  \missing{bib:2021-hoeller-foci}
-  \missing{bib:2021-hoeller-iiwas}
 \endrefsection
 \endinput
 

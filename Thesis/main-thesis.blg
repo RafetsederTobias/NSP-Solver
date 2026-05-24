@@ -1,24 +1,19 @@
 [0] Config.pm:328> INFO - This is Biber 2.21
 [0] Config.pm:331> INFO - Logfile is 'main-thesis.blg'
-[75] biber-MSWIN64:342> INFO - === 
-[101] Biber.pm:421> INFO - Reading 'main-thesis.bcf'
-[192] Biber.pm:1002> INFO - Found 8 citekeys in bib section 0
-[206] Biber.pm:4487> INFO - Processing section 0
-[217] Biber.pm:4678> INFO - Looking for bibtex file 'references.bib' for section 0
-[257] bibtex.pm:1713> INFO - LaTeX decoding ...
-[277] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
-[323] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'variable = shifted' with 'variable = non-ignorable'
-[323] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[323] Biber.pm:4307> INFO - Sorting list 'apa/apasortcite//global/global/global' of type 'entry' with template 'apa' and locale 'de-DE'
-[323] Biber.pm:4313> INFO - No sort tailoring available for locale 'de-DE'
-[333] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[333] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'variable = shifted' with 'variable = non-ignorable'
-[333] Biber.pm:4307> INFO - Sorting list 'apa/global//global/global/global' of type 'entry' with template 'apa' and locale 'de-DE'
-[333] Biber.pm:4313> INFO - No sort tailoring available for locale 'de-DE'
-[341] bbl.pm:676> INFO - Writing 'main-thesis.bbl' with encoding 'UTF-8'
-[346] bbl.pm:779> INFO - Output to main-thesis.bbl
-[346] Biber.pm:132> WARN - I didn't find a database entry for 'bib:2021-hoeller-iiwas' (section 0)
-[346] Biber.pm:132> WARN - I didn't find a database entry for 'bib:2015-roland-thesis-book' (section 0)
-[346] Biber.pm:132> WARN - I didn't find a database entry for 'bib:2013-roland-woot' (section 0)
-[346] Biber.pm:132> WARN - I didn't find a database entry for 'bib:2021-hoeller-foci' (section 0)
-[346] Biber.pm:134> INFO - WARNINGS: 4
+[80] biber-MSWIN64:342> INFO - === 
+[109] Biber.pm:421> INFO - Reading 'main-thesis.bcf'
+[205] Biber.pm:1002> INFO - Found 7 citekeys in bib section 0
+[221] Biber.pm:4487> INFO - Processing section 0
+[233] Biber.pm:4678> INFO - Looking for bibtex file 'references.bib' for section 0
+[292] bibtex.pm:1713> INFO - LaTeX decoding ...
+[318] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
+[385] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'variable = shifted' with 'variable = non-ignorable'
+[385] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[385] Biber.pm:4307> INFO - Sorting list 'apa/apasortcite//global/global/global' of type 'entry' with template 'apa' and locale 'de-DE'
+[386] Biber.pm:4313> INFO - No sort tailoring available for locale 'de-DE'
+[402] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[402] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'variable = shifted' with 'variable = non-ignorable'
+[402] Biber.pm:4307> INFO - Sorting list 'apa/global//global/global/global' of type 'entry' with template 'apa' and locale 'de-DE'
+[402] Biber.pm:4313> INFO - No sort tailoring available for locale 'de-DE'
+[413] bbl.pm:676> INFO - Writing 'main-thesis.bbl' with encoding 'UTF-8'
+[425] bbl.pm:779> INFO - Output to main-thesis.bbl

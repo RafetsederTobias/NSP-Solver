@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.3.13)  24 MAY 2026 13:26
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.3.13)  24 MAY 2026 18:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2811,9 +2811,6 @@ Package babel Info: 'ngerman' activates 'german' shorthands.
 
 LaTeX Warning: Label `sec:example' multiply defined.
 
-
-LaTeX Warning: Label `sec:example' multiply defined.
-
 )
 \openout1 = `main-thesis.aux'.
 
@@ -2985,36 +2982,7 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main-thesis.bbl' found.
 
-(./main-thesis.bbl
-
-Package biblatex Warning: The following entry could not be found
-(biblatex)                in the database:
-(biblatex)                bib:2013-roland-woot
-(biblatex)                Please verify the spelling and rerun
-(biblatex)                LaTeX afterwards.
-
-
-Package biblatex Warning: The following entry could not be found
-(biblatex)                in the database:
-(biblatex)                bib:2015-roland-thesis-book
-(biblatex)                Please verify the spelling and rerun
-(biblatex)                LaTeX afterwards.
-
-
-Package biblatex Warning: The following entry could not be found
-(biblatex)                in the database:
-(biblatex)                bib:2021-hoeller-foci
-(biblatex)                Please verify the spelling and rerun
-(biblatex)                LaTeX afterwards.
-
-
-Package biblatex Warning: The following entry could not be found
-(biblatex)                in the database:
-(biblatex)                bib:2021-hoeller-iiwas
-(biblatex)                Please verify the spelling and rerun
-(biblatex)                LaTeX afterwards.
-
-)
+(./main-thesis.bbl)
 Package biblatex Info: Reference section=0 on input line 186.
 Package biblatex Info: Reference segment=0 on input line 186.
 \c@lstlisting=\count540
@@ -3184,7 +3152,13 @@ chapter without number
 
 
 
-] (./main-thesis.toc)
+] (./main-thesis.toc
+Underfull \hbox (badness 3199) in paragraph at lines 20--20
+ [][] [][]\TU/Merriweather(0)/m/n/10 Ein ASP-basiertes Rehabilitationsplanungss
+ystem für die ICS 
+ []
+
+)
 \tf@toc=\write5
 \openout5 = `main-thesis.toc'.
 
@@ -3198,131 +3172,21 @@ chapter 1.
 Requested font "[fonts/PublicSans-Bold.ttf]/OT:script=latn;language=dflt;mappin
 g=tex-text;" at 14.4pt
  -> ./fonts/PublicSans-Bold.ttf
-) (././02-example.tex [1
+[1
 
 
 
 
 
-] [2]
+]) (././03-grundlagen.tex [2]
 chapter 2.
-File: ./images/jku_learningcenter.jpg Graphic file (type bmp)
-<./images/jku_learningcenter.jpg>
-Requested font "[fonts/Merriweather-Bold.ttf]/OT:script=latn;language=dflt;mapp
-ing=tex-text;" at 10.0pt
- -> ./fonts/Merriweather-Bold.ttf
-Requested font "[fonts/Inconsolata-Regular.ttf]/OT:script=latn;language=dflt;" 
-at 11.60004pt
- -> ./fonts/Inconsolata-Regular.ttf
-(c:/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2025/11/14 1.11b listings language file
-)
-(c:/texlive/2026/texmf-dist/tex/latex/listings/lstmisc.sty
-File: lstmisc.sty 2025/11/14 1.11b (Carsten Heinz)
-)
-LaTeX Font Info:    Font shape `TU/ttcondensed/m/n' will be
-(Font)              scaled to size 11.60004pt on input line 48.
-Requested font "[fonts/InconsolataCondensed-Regular.ttf]/OT:script=latn;languag
-e=dflt;" at 11.60004pt
- -> ./fonts/InconsolataCondensed-Regular.ttf
-LaTeX Font Info:    Font shape `TU/ttcondensed/m/n' will be
-(Font)              scaled to size 6.96002pt on input line 49.
-Requested font "[fonts/InconsolataCondensed-Regular.ttf]/OT:script=latn;languag
-e=dflt;" at 6.96002pt
- -> ./fonts/InconsolataCondensed-Regular.ttf
-LaTeX Font Info:    Font shape `TU/ttcondensed/b/n' will be
-(Font)              scaled to size 11.60004pt on input line 49.
-Requested font "[fonts/InconsolataCondensed-Regular.ttf]/OT:script=latn;languag
-e=dflt;embolden=1.5;" at 11.60004pt
- -> ./fonts/InconsolataCondensed-Regular.ttf
-
-
-LaTeX Warning: Citation 'bib:2021-hoeller-iiwas' on page 3 undefined on input l
-ine 70.
-
-
-LaTeX Warning: Citation 'bib:2015-roland-thesis-book' on page 3 undefined on in
-put line 71.
-
-
-LaTeX Warning: Citation 'bib:2015-roland-thesis-book' on page 3 undefined on in
-put line 71.
-
-
-Underfull \hbox (badness 1874) in paragraph at lines 71--72
-[][] [] \TU/Merriweather(0)/m/n/10 proposes a
- []
-
-[3
-
-
-
-
-]
-
-LaTeX Warning: Citation 'bib:2013-roland-woot' on page 4 undefined on input lin
-e 72.
-
-
-LaTeX Warning: Citation 'bib:2013-roland-woot' on page 4 undefined on input lin
-e 72.
-
-
-LaTeX Warning: Citation 'bib:2021-hoeller-foci' on page 4 undefined on input li
-ne 73.
-
-
-LaTeX Warning: Citation 'bib:2021-hoeller-foci' on page 4 undefined on input li
-ne 73.
-
-
-LaTeX Warning: Citation 'bib:2021-hoeller-iiwas' on page 4 undefined on input l
-ine 74.
-
-
-LaTeX Warning: Citation 'bib:2021-hoeller-iiwas' on page 4 undefined on input l
-ine 74.
-
-
-LaTeX Warning: Citation 'bib:2021-hoeller-foci' on page 4 undefined on input li
-ne 78.
-
-
-LaTeX Warning: Citation 'bib:2021-hoeller-iiwas' on page 4 undefined on input l
-ine 78.
-
-
-Underfull \hbox (badness 1953) in paragraph at lines 78--79
-[]\TU/Merriweather(0)/m/n/10 You sometimes also paraphrase from multiple source
-s. For that pur-
- []
-
-
-Underfull \hbox (badness 2134) in paragraph at lines 78--79
-\TU/Merriweather(0)/m/n/10 pose, the \cite command accepts a list of multiple c
-omma-separated
- []
-
-
-Underfull \hbox (badness 3058) in paragraph at lines 78--79
-\TU/Merriweather(0)/m/n/10 references. Do not add spaces in between them. Vario
-us analyses of
- []
-
-
-Underfull \hbox (badness 1924) in paragraph at lines 78--79
-\TU/Merriweather(0)/m/n/10 the Tor network have been performed recently [];
- []
-
-[4]) (././03-grundlagen.tex [5]
-chapter 3.
 
 Underfull \hbox (badness 1389) in paragraph at lines 19--20
 \TU/Merriweather(0)/m/n/10 Answer Set Programming (ASP) ist ein deklarativer An
 satz zur Modellie-
  []
 
-[6
+[3
 
 
 
@@ -3333,13 +3197,34 @@ g=tex-text;" at 12.0pt
  -> ./fonts/PublicSans-Bold.ttf
  (c:/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2025/11/14 1.11b listings language file
-) [7]
+)
+LaTeX Font Info:    Font shape `TU/ttcondensed/m/n' will be
+(Font)              scaled to size 11.60004pt on input line 22.
+Requested font "[fonts/InconsolataCondensed-Regular.ttf]/OT:script=latn;languag
+e=dflt;" at 11.60004pt
+ -> ./fonts/InconsolataCondensed-Regular.ttf
+LaTeX Font Info:    Font shape `TU/ttcondensed/m/n' will be
+(Font)              scaled to size 6.96002pt on input line 23.
+Requested font "[fonts/InconsolataCondensed-Regular.ttf]/OT:script=latn;languag
+e=dflt;" at 6.96002pt
+ -> ./fonts/InconsolataCondensed-Regular.ttf
+LaTeX Font Info:    Font shape `TU/ttcondensed/b/n' will be
+(Font)              scaled to size 11.60004pt on input line 23.
+Requested font "[fonts/InconsolataCondensed-Regular.ttf]/OT:script=latn;languag
+e=dflt;embolden=1.5;" at 11.60004pt
+ -> ./fonts/InconsolataCondensed-Regular.ttf
+LaTeX Font Info:    Font shape `TU/Inconsolata(0)/m/n' will be
+(Font)              scaled to size 11.60004pt on input line 26.
+Requested font "[fonts/Inconsolata-Regular.ttf]/OT:script=latn;language=dflt;" 
+at 11.60004pt
+ -> ./fonts/Inconsolata-Regular.ttf
+ [4]
 Underfull \hbox (badness 2142) in paragraph at lines 49--50
 []\TU/Merriweather(0)/m/n/10 Ein weiterer wichtiger Bestandteil von Clingo ist 
 die bereitgestellte Pro-
  []
 
-[8]
+[5]
 Underfull \hbox (badness 10000) in paragraph at lines 51--52
 []\TU/Merriweather(0)/m/n/10 Die Integration von beispielsweise Python erfolgt 
 über das \TU/Merriweather(0)/m/it/10 Directive
@@ -3357,23 +3242,23 @@ Underfull \hbox (badness 1331) in paragraph at lines 51--52
 ollobjekt erhält. Über
  []
 
-) (././04-related-work.tex [9]
+) (././04-related-work.tex [6]
+chapter 3.
+[7
+
+
+
+
+] [8]) (././09-conclusion.tex [9]
 chapter 4.
-) (././09-conclusion.tex [10
-
-
-
-
-]
-chapter 5.
-) [11
+) [10
 
 
 
 
 ]
 chapter without number
-(././91-appendix.tex [12
+(././91-appendix.tex [11
 
 
 
@@ -3385,7 +3270,7 @@ File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 )
 (c:/texlive/2026/texmf-dist/tex/generic/stringenc/se-utf32be.def
 File: se-utf32be.def 2019/11/29 v1.12 stringenc: UTF-32BE
-) [13
+) [12
 
 
 
@@ -3405,12 +3290,12 @@ Package logreq Info: Writing requests to 'main-thesis.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 58911 strings out of 468168
- 1283451 string characters out of 5436524
- 2570401 words of memory out of 5000000
- 86744 multiletter control sequences out of 15000+600000
- 633569 words of font info for 142 fonts, out of 8000000 for 9000
+ 58786 strings out of 468168
+ 1281715 string characters out of 5436524
+ 2570178 words of memory out of 5000000
+ 86639 multiletter control sequences out of 15000+600000
+ 633561 words of font info for 141 fonts, out of 8000000 for 9000
  1350 hyphenation exceptions out of 8191
  130i,26n,137p,11214b,32835s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main-thesis.pdf (17 pages).
+Output written on main-thesis.pdf (16 pages).

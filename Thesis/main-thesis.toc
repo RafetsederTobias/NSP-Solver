@@ -6,20 +6,20 @@
 \contentsline {chapter}{\numberline {1}Einleitung}{1}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Einleitung}{1}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Ziel}{1}{section.1.2}%
-\contentsline {chapter}{\numberline {2}Example}{3}{chapter.2}%
-\contentsline {section}{\numberline {2.1}How to Start?}{3}{section.2.1}%
-\contentsline {chapter}{\numberline {3}Grundlagen}{6}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Nurse Scheduling Problem}{6}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Answer Set Programming}{7}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Syntax und Semantik}{7}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Answer Sets als Lösungskonzept}{7}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Verarbeitung und Werkzeuge}{8}{subsection.3.2.3}%
-\contentsline {subsection}{\numberline {3.2.4}Anwendungsgebiete}{8}{subsection.3.2.4}%
-\contentsline {section}{\numberline {3.3}Clingo}{8}{section.3.3}%
-\contentsline {chapter}{\numberline {4}Vergleich bestehender Systeme}{10}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Das ASP-basierte Nurse Scheduling System an dem Krankenhaus der Universität von Yamanashi}{10}{section.4.1}%
-\contentsline {chapter}{\numberline {5}Conclusion and Outlook}{11}{chapter.5}%
-\contentsline {chapter}{\nonumberline Literatur}{12}{chapter*.8}%
+\contentsline {chapter}{\numberline {2}Grundlagen}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Nurse Scheduling Problem}{3}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Answer Set Programming}{4}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Syntax und Semantik}{4}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Answer Sets als Lösungskonzept}{4}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Verarbeitung und Werkzeuge}{5}{subsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.2.4}Anwendungsgebiete}{5}{subsection.2.2.4}%
+\contentsline {section}{\numberline {2.3}Clingo}{5}{section.2.3}%
+\contentsline {chapter}{\numberline {3}Vergleich bestehender Systeme}{7}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Das ASP-basierte Nurse Scheduling System an dem Krankenhaus der Universität von Yamanashi}{7}{section.3.1}%
+\contentsline {section}{\numberline {3.2}ASP-basierte Nurse (Re)Scheduling-Ansätze in einem italienischen Krankenhaus}{8}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Ein ASP-basiertes Rehabilitationsplanungssystem für die ICS Maugeri}{8}{section.3.3}%
+\contentsline {chapter}{\numberline {4}Conclusion and Outlook}{10}{chapter.4}%
+\contentsline {chapter}{\nonumberline Literatur}{11}{chapter*.5}%
 \def \@chapapp {\appendixname }
-\contentsline {appendixchapter}{\numberline {A}An Appendix}{13}{appendix.A}%
+\contentsline {appendixchapter}{\numberline {A}An Appendix}{12}{appendix.A}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

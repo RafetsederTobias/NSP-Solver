@@ -23,15 +23,15 @@ Die grundlegenden Bausteine eines ASP-Programms sind Atome, Literale und Regeln.
 a ← b1, . . . , bm, not c1, . . . , not cn
 \end{lstlisting}
 
-Dabei bezeichnet a, also die linke Seite der Regel den Regelkopf, und die rechte Seite den Regelrumpf. Die Regel ist so zu interpretieren: Atom a gilt, sofern alle bm ableitbar sind und keines der cn ableitbar ist. 
+Dabei bezeichnet \texttt{a}, also die linke Seite der Regel den Regelkopf, und die rechte Seite den Regelrumpf. Die Regel ist so zu interpretieren: Atom \texttt{a} gilt, sofern alle \texttt{bm} ableitbar sind und keines der \texttt{cn} ableitbar ist. 
 Der Operator not ist nicht als klassische Negation zu verstehen, sondern als Default-Negation, die die Nichtableitbarkeit eines Atoms ausdrückt. 
 Als Beispiel:
 \begin{lstlisting}[language=python]
 broken ← lightning, not lightning_rod
 light_on ←  power_on, not broken 
 \end{lstlisting}
-Hier leuchtet die Lampe, wenn der Strom an ist und es keinen Grund gibt anzunehmen, dass sie kaputt ist. Ist nichts über einen Defekt bekannt, gilt <not broken>, und die Lampe leuchtet.
-Wenn <lightning> als Fakt hinzukommt, wird <broken> ableitbar, und <not broken> gilt nicht mehr, also leuchtet die Lampe nicht mehr.
+Hier leuchtet die Lampe, wenn der Strom an ist und es keinen Grund gibt anzunehmen, dass sie kaputt ist. Ist nichts über einen Defekt bekannt, gilt \texttt{not broken}, und die Lampe leuchtet.
+Wenn \texttt{lightning} als Fakt hinzukommt, wird \texttt{broken} ableitbar, und \texttt{not broken} gilt nicht mehr, also leuchtet die Lampe nicht mehr.
 Da ASP eng mit der nichtmonotonen Logik verwandt ist, können bereits gezogene Schlussfolgerungen zurückgezogen werden, sobald neue Fakten oder Regeln hinzugefügt werden. Die Default-Negation ist dabei der zentrale Mechanismus, der dieses Verhalten ermöglicht.
 \subsection{Answer Sets als Lösungskonzept}
 Die Semantik von ASP-Programmen basiert auf dem Begriff des Answer Sets, auch früher unter dem Namen \textit{stable models} bekannt, der auf \cite{stableModelSemanticGelfond} zurückgeht. Ein Answer Set ist eine Menge von Atomen, die in sich konsistent ist und bei der jedes enthaltene Atom durch eine Regelanwendung begründet werden kann. Ein Programm kann dabei mehrere, genau eines oder kein Answer Set besitzen, wobei jedes Answer Set einer gültigen Lösung des modellierten Problems entspricht \parencite{brewkaAnswerSetProgramming2011}. Diese Mehrwertigkeit macht ASP besonders geeignet für Probleme, bei denen mehrere gleichwertige Lösungen existieren können, wie zum Beispiel bei der Dienstplanung.
