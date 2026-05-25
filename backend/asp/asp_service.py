@@ -147,10 +147,9 @@ def _run_clingo(
 
     def solve(extra_rules: str = "", timeout: int = 15) -> list[dict]:
         if isReschedule:
-            ctl = clingo.Control(["--opt-mode=opt", "--heuristic=Domain"])
+            ctl = clingo.Control(["--opt-mode=optN", "--heuristic=Domain"])
         else:
-            ctl = clingo.Control(["--opt-mode=opt"])
-
+            ctl = clingo.Control(["--opt-mode=optN"])
         ctl.load(str(rules_file))
         ctl.add("base", [], facts)
         if extra_rules:
@@ -169,9 +168,6 @@ def _run_clingo(
                         "station_id": int(str(atom.arguments[1])),
                         "day": int(str(atom.arguments[2])),
                     })
-
-                if atom.name=="staff_count":
-                    print(atom.arguments[0], atom.arguments[1], atom.arguments[2])
 
             best_model = current
             
@@ -193,18 +189,19 @@ def _run_clingo(
 
     if not isReschedule:
         EXTRA_FACTS = """
-        :- station(S), day(D), staff_count(S,D,0).
+            1{ assigned(U, S, D) : eligible_day(U, S, D) } Max :-
+                station(S), day(D), max_assignments(S, Max).
 
-        shortfall(S, D, Gap) :-
+            shortfall(S, D, Gap, GapSq) :-
             station(S), day(D),
             max_assignments(S, Max),
             staff_count(S, D, N),
-            Gap = Max - N.
+            Gap = Max - N,
+            GapSq = Gap * Gap.
 
-        #minimize {
-            Gap*Gap @10, S, D :
-            shortfall(S, D, Gap)
-        }.
+            #minimize {
+                GapSq @10, S, D : shortfall(S, D, _, GapSq), GapSq > 0
+            }.
         """
 
         print("Phase 1: trying with forced staffing and fairness...")
@@ -215,4 +212,4 @@ def _run_clingo(
             return result
 
     print("Phase 2: falling back to soft optimization...")
-    return solve(timeout=30)
+    return solve(timeout=15)

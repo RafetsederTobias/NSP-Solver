@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.3.13)  24 MAY 2026 18:03
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.3.13)  24 MAY 2026 18:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -3292,7 +3292,7 @@ Package logreq Info: Writing requests to 'main-thesis.run.xml'.
 Here is how much of TeX's memory you used:
  58786 strings out of 468168
  1281715 string characters out of 5436524
- 2570178 words of memory out of 5000000
+ 2570177 words of memory out of 5000000
  86639 multiletter control sequences out of 15000+600000
  633561 words of font info for 141 fonts, out of 8000000 for 9000
  1350 hyphenation exceptions out of 8191

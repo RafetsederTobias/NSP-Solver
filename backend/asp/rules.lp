@@ -41,5 +41,5 @@ unstaffed(S, D) :-
 
 % Priority @2: minimize unstaffed stations 
 #minimize {
-    10@1, S, D : unstaffed(S, D)
+    1@1, S, D : unstaffed(S, D)
 }.

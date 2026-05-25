@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, Date, ForeignKey, UniqueConstraint, extract, select
 from sqlalchemy.orm import relationship
+from models.Schedule import Schedule 
 from db import Base
 from sqlalchemy.ext.asyncio import AsyncSession
 
