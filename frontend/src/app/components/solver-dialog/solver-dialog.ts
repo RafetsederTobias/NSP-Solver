@@ -14,6 +14,8 @@ export interface SolverDialogData {
 export interface SolverDialogResult {
   constraints: UserConstraint[];
   keepExistingAssignments: boolean;
+  newPlan: boolean;
+  alternativePlan: boolean;
 }
 
 @Component({
@@ -247,8 +249,29 @@ export interface SolverDialogResult {
             </div>
             <span class="toggle-label">Vorhandene Zuteilungen übernehmen</span>
           </label>
+          <label class="toggle-row" style="margin-top: 0.5rem;">
+            <div class="toggle-switch">
+              <input
+                type="checkbox"
+                [checked]="newPlan()"
+                (change)="newPlan.set($any($event.target).checked)"
+              />
+              <div class="toggle-track"></div>
+            </div>
+            <span class="toggle-label">Neuen Plan erstellen (Überschreibung per default)</span>
+          </label>
+          <label class="toggle-row" style="margin-top: 0.5rem;">
+            <div class="toggle-switch">
+              <input
+                type="checkbox"
+                [checked]="alternativePlan()"
+                (change)="alternativePlan.set($any($event.target).checked)"
+              />
+              <div class="toggle-track"></div>
+            </div>
+            <span class="toggle-label">Alternativpläne</span>
+          </label>
         </div>
-
         <div class="footer">
           <button class="btn-ghost" (click)="close()">Abbrechen</button>
           <button class="btn-primary" (click)="solve()">
@@ -267,6 +290,8 @@ export class SolverDialogComponent {
   private workdayService = inject(WorkdayService);
 
   keepExistingAssignments = signal(true);
+  newPlan = signal(false);
+  alternativePlan = signal(false);
 
   get monthLabel() {
     return this.data.currentDate.toLocaleDateString('de-AT', { month: 'long', year: 'numeric' });
@@ -322,6 +347,8 @@ export class SolverDialogComponent {
     this.dialogRef.close({
       constraints,
       keepExistingAssignments: this.keepExistingAssignments(),
+      newPlan: this.newPlan(),
+      alternativePlan: this.alternativePlan()
     });
   }
 

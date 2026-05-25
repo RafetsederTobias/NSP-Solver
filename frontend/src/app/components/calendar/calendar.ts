@@ -547,8 +547,12 @@ export class CalendarComponent implements OnInit {
           currentYear: year,
           daysInMonth: daysInCurrentMonth,
           keepExistingAssignments: result.keepExistingAssignments,
+          newPlan: result.newPlan,
+          alternativePlan: result.alternativePlan,
           constraints: result.constraints,
         };
+
+        console.log(payload);
 
         this.isLoading.set(true);
         this.scheduleService
@@ -604,6 +608,8 @@ export class CalendarComponent implements OnInit {
           currentYear: year,
           daysInMonth: daysInCurrentMonth,
           keepExistingAssignments: result.keepExistingAssignments,
+          newPlan: false,
+          alternativePlan: false,
           constraints: result.constraints,
         };
 

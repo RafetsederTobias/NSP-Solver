@@ -3,7 +3,7 @@ from typing import List
 
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import delete, extract, select, and_
+from sqlalchemy import delete, extract, select, update, func
 from asp.asp_service import solve_reschedule, solve_schedule
 from models.StationAssignment import StationAssignment
 from models.Schedule import Schedule
@@ -31,6 +31,8 @@ class SchedulePayload(BaseModel):
     currentYear: int
     daysInMonth: int
     keepExistingAssignments: bool
+    newPlan: bool
+    alternativePlan: bool
     constraints: List[UserConstraint]
 
 
@@ -39,6 +41,49 @@ def get_weekdays(year: int, month: int, days: list[int]) -> list[int]:
         d for d in days
         if date(year, month, d).weekday() < 5
     ]
+
+async def get_or_create_schedule(
+    db: AsyncSession,
+    year: int,
+    month: int,
+    new_plan: bool
+) -> int:
+    count_result = await db.execute(
+        select(func.count()).where(
+            Schedule.year == year,
+            Schedule.month == month,
+        )
+    )
+    count = count_result.scalar()
+    name = f"Plan {year}-{month:02d}" if count == 0 else f"Plan {year}-{month:02d} #{count + 1}"
+
+    if new_plan:
+        await db.execute(
+            update(Schedule)
+            .where(Schedule.year == year, Schedule.month == month, Schedule.is_loaded == True)
+            .values(is_loaded=False)
+        )
+        new_schedule = Schedule(name=name, year=year, month=month, is_loaded=True)
+        db.add(new_schedule)
+        await db.flush()
+        return new_schedule.id
+    else:
+        result = await db.execute(
+            select(Schedule).where(
+                Schedule.year == year,
+                Schedule.month == month,
+                Schedule.is_loaded == True
+            )
+        )
+        existing_schedule = result.scalar_one_or_none()
+
+        if existing_schedule is None:
+            new_schedule = Schedule(name=name, year=year, month=month, is_loaded=True)
+            db.add(new_schedule)
+            await db.flush()
+            return new_schedule.id
+
+        return existing_schedule.id
 
 
 @router.post("", status_code=201)
@@ -53,35 +98,37 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
     users = users_result.scalars().all()
     stations = stations_result.scalars().all()
 
-    existing_assignments = []
-    if payload.keepExistingAssignments:
-        existing_result = await db.execute(
-            select(StationAssignment).where(
-                extract("year", StationAssignment.date) == payload.currentYear,
-                extract("month", StationAssignment.date) == payload.currentMonth,
-                StationAssignment.user_id != None,
-            )
-        )
-        existing_assignments = existing_result.scalars().all()
+    if payload.newPlan:
+        # Create a new schedule — old one is untouched entirely
+        schedule_id = await get_or_create_schedule(db, payload.currentYear, payload.currentMonth, new_plan=True)
+        existing_assignments = []
+    else:
+        # Reuse the existing loaded schedule
+        schedule_id = await get_or_create_schedule(db, payload.currentYear, payload.currentMonth, new_plan=False)
 
-    await db.execute(
-        delete(StationAssignment).where(
-            and_(
-                extract("year", StationAssignment.date) == payload.currentYear,
-                extract("month", StationAssignment.date) == payload.currentMonth,
-                StationAssignment.user_id == None,
-            )
-        )
-    )
-
-    if not payload.keepExistingAssignments:
-        await db.execute(
-            delete(StationAssignment).where(
-                and_(
-                    extract("year", StationAssignment.date) == payload.currentYear,
-                    extract("month", StationAssignment.date) == payload.currentMonth,
+        if payload.keepExistingAssignments:
+            # Load existing user assignments to pass to solver
+            existing_result = await db.execute(
+                select(StationAssignment).where(
+                    StationAssignment.schedule_id == schedule_id,
                     StationAssignment.user_id != None,
                 )
+            )
+            existing_assignments = existing_result.scalars().all()
+        else:
+            # Wipe everything in this schedule
+            await db.execute(
+                delete(StationAssignment).where(
+                    StationAssignment.schedule_id == schedule_id
+                )
+            )
+            existing_assignments = []
+
+        # Always clear placeholders for the current schedule before re-solving
+        await db.execute(
+            delete(StationAssignment).where(
+                StationAssignment.schedule_id == schedule_id,
+                StationAssignment.user_id == None,
             )
         )
 
@@ -109,13 +156,12 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
         for a in existing_assignments
     }
 
-
     db_assignments = [
         StationAssignment(
             date=date(payload.currentYear, payload.currentMonth, a["day"]),
             station_id=a["station_id"],
             user_id=a["user_id"],
-            schedule_id = 1
+            schedule_id=schedule_id
         )
         for a in assignments
         if a["user_id"] is None or (a["user_id"], a["station_id"], a["day"]) not in existing_keys
@@ -127,8 +173,7 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
     placeholder_result = await db.execute(
         select(StationAssignment)
         .where(
-            extract("year", StationAssignment.date) == payload.currentYear,
-            extract("month", StationAssignment.date) == payload.currentMonth,
+            StationAssignment.schedule_id == schedule_id,
             StationAssignment.user_id == None,
         )
         .options(selectinload(StationAssignment.station))
@@ -224,6 +269,7 @@ async def reschedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db
             date=date(payload.currentYear, payload.currentMonth, a["day"]),
             station_id=a["station_id"],
             user_id=a["user_id"],
+            schedule_id = 1
         )
         for a in assignments
     ]

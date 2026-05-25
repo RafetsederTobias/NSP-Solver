@@ -5,6 +5,7 @@ from sqlalchemy.future import select
 from datetime import date as Date
 from db import get_db
 from models.StationAssignment import StationAssignment
+from models.Schedule import Schedule
 from sqlalchemy import delete as sa_delete
 from sqlalchemy.orm import selectinload
 
@@ -35,10 +36,11 @@ router = APIRouter(prefix="/api/v1/station-assignments", tags=["station-assignme
 async def get_all(db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(StationAssignment)
+        .join(StationAssignment.schedule)
+        .where(Schedule.is_loaded == True)
         .options(selectinload(StationAssignment.user))
     )
     return result.scalars().all()
-
 @router.get("", response_model=list[StationAssignmentRead])
 async def get_by_date(date: Date, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(StationAssignment).where(StationAssignment.date == date).options(selectinload(StationAssignment.user)))

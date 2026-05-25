@@ -297,7 +297,9 @@ export class RescheduleSolverDialog {
     }));
     this.dialogRef.close({
       constraints,
-      keepExistingAssignments: false
+      keepExistingAssignments: false,
+      newPlan: false,
+      alternativePlan: false
     });
   }
 
