@@ -18,8 +18,14 @@
 \contentsline {section}{\numberline {3.1}Das ASP-basierte Nurse Scheduling System an dem Krankenhaus der Universität von Yamanashi}{7}{section.3.1}%
 \contentsline {section}{\numberline {3.2}ASP-basierte Nurse (Re)Scheduling-Ansätze in einem italienischen Krankenhaus}{8}{section.3.2}%
 \contentsline {section}{\numberline {3.3}Ein ASP-basiertes Rehabilitationsplanungssystem für die ICS Maugeri}{8}{section.3.3}%
-\contentsline {chapter}{\numberline {4}Conclusion and Outlook}{10}{chapter.4}%
-\contentsline {chapter}{\nonumberline Literatur}{11}{chapter*.5}%
+\contentsline {chapter}{\numberline {4}Anforderungen, Systemarchitektur und Datenmodell}{10}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Anforderungen}{10}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Systemarchitektur}{11}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Datenmodell}{12}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Entitäten}{12}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Assoziationstabellen}{12}{subsection.4.3.2}%
+\contentsline {chapter}{\numberline {5}Conclusion and Outlook}{14}{chapter.5}%
+\contentsline {chapter}{\nonumberline Literatur}{15}{chapter*.8}%
 \def \@chapapp {\appendixname }
-\contentsline {appendixchapter}{\numberline {A}An Appendix}{12}{appendix.A}%
+\contentsline {appendixchapter}{\numberline {A}An Appendix}{16}{chapter.A}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
