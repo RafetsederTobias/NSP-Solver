@@ -22,7 +22,7 @@ export class SkillsService {
       tap(skills => this._skills.set(skills))
     );
   }
-
+// not used
   getById(id: number) {
     return this.http.get<Skill>(`${this.base}/${id}`);
   }
@@ -32,7 +32,7 @@ export class SkillsService {
       tap(skill => this._skills.update(list => [...list, skill]))
     );
   }
-
+// not used
   update(id: number, data: SkillPayload) {
     return this.http.put<Skill>(`${this.base}/${id}`, data).pipe(
       tap(updated => this._skills.update(list =>

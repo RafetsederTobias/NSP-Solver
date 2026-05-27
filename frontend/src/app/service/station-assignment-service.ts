@@ -40,19 +40,19 @@ export class StationAssignmentService {
   getByDate(date: string): Observable<StationAssignment[]> {
     return this.http.get<StationAssignment[]>(this.base, { params: { date } });
   }
-
+// not used
   getById(id: number): Observable<StationAssignment> {
     return this.http.get<StationAssignment>(`${this.base}/${id}`);
   }
-
+// not used
   create(body: StationAssignmentCreate): Observable<StationAssignment> {
     return this.http.post<StationAssignment>(this.base, body);
   }
-
+// not used
   update(id: number, body: StationAssignmentCreate): Observable<StationAssignment> {
     return this.http.patch<StationAssignment>(`${this.base}/${id}`, body);
   }
-
+// not used
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.base}/${id}`);
   }

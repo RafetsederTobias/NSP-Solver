@@ -1,0 +1,112 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+\cleardoubleoddpage%  Make sure to start each chapter on a new odd page
+\chapter{REST-Schnittstellen}
+\begin{table}[h]
+	\centering
+	\caption{REST-Schnittstellen}\label{tab:rest-api}
+	\begin{tabularx}{\linewidth}{l >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X}
+		\toprule
+		\textbf{Methode} & \textbf{Pfad} & \textbf{Beschreibung} \\
+		\midrule
+		\multicolumn{3}{l}{\textit{Schedule}} \\
+		\midrule
+		\texttt{POST}   & \texttt{/api/v1/schedule}                          & Dienstplan neu erstellen \\
+		\texttt{POST}   & \texttt{/api/v1/schedule/reschedule}               & Dienstplan neu berechnen \\
+		\midrule
+		\multicolumn{3}{l}{\textit{Skills}} \\
+		\midrule
+		\texttt{GET}    & \texttt{/api/v1/skills}                            & Alle Skills laden \\
+		\texttt{POST}   & \texttt{/api/v1/skills}                            & Neuen Skill anlegen \\
+		\texttt{DELETE} & \texttt{/api/v1/skills/:id}                        & Skill löschen \\
+		\midrule
+		\multicolumn{3}{l}{\textit{Station Assignments}} \\
+		\midrule
+		\texttt{GET}    & \texttt{/api/v1/station-assignments/all}           & Alle Zuweisungen laden \\
+		\texttt{GET}    & \texttt{/api/v1/station-assignments/:date}               & Zuweisungen nach Datum filtern \\
+		\texttt{PUT}    & \texttt{/api/v1/station-assignments/replace/:date} & Zuweisungen eines Datums ersetzen \\
+		\midrule
+		\multicolumn{3}{l}{\textit{Stations}} \\
+		\midrule
+		\texttt{GET}    & \texttt{/api/v1/stations}                          & Alle Stationen laden \\
+		\texttt{GET}    & \texttt{/api/v1/stations/:id}                      & Station nach ID laden \\
+		\texttt{POST}   & \texttt{/api/v1/stations}                          & Neue Station anlegen \\
+		\texttt{PUT}    & \texttt{/api/v1/stations/:id}                      & Station aktualisieren \\
+		\texttt{DELETE} & \texttt{/api/v1/stations/:id}                      & Station löschen \\
+		\midrule
+		\multicolumn{3}{l}{\textit{Users}} \\
+		\midrule
+		\texttt{GET}    & \texttt{/api/v1/users}                             & Alle Benutzer laden \\
+		\texttt{GET}    & \texttt{/api/v1/users/:id}                         & Benutzer nach ID laden \\
+		\texttt{POST}   & \texttt{/api/v1/users}                             & Neuen Benutzer anlegen \\
+		\texttt{PUT}    & \texttt{/api/v1/users/:id}                         & Benutzer aktualisieren \\
+		\texttt{DELETE} & \texttt{/api/v1/users/:id}                         & Benutzer löschen \\
+		\bottomrule
+	\end{tabularx}
+\end{table}
+
+\section{Data Transfer Objects}
+Die Kommunikation zwischen Frontend und Backend basiert auf klar definierten Data Transfer Objects (DTOs). 
+Im Folgenden werden die wichtigsten Strukturen erläutert.
+
+\begin{lstlisting}[language=Python, caption={User \& UserConstraint}]
+	interface User {
+		id: number;
+		name: string;
+		skills: string[];
+	}
+	
+	interface UserConstraint {
+		userId: string;
+		maxDaysPerMonth?: number | null;
+		minDaysPerMonth?: number | null;
+		exactDaysPerMonth?: number | null;
+		fixedDays?: number[] | null;
+		blockedDays?: number[] | null;
+	}
+\end{lstlisting}
+
+Ein Benutzer besitzt eine Liste von Skills. \texttt{UserConstraint} definiert 
+die individuellen Planungsrestriktionen, etwa Mindest- und Maximaleinsatztage 
+oder gesperrte Tage.
+
+\begin{lstlisting}[language=Python, caption={Station \& StationAssignment}]
+	interface Station {
+		id: number;
+		name: string;
+		maxAssignments: number;
+		skills_needed: string[];
+	}
+	
+	interface StationAssignment {
+		id: number;
+		date: string; // YYYY-MM-DD
+		station_id: number;
+		user_id: number;
+		user: { id: number; name: string };
+	}
+\end{lstlisting}
+
+Eine Station gibt an, wie viele Personen maximal zugewiesen werden dürfen und 
+welche Skills dafür erforderlich sind. \texttt{StationAssignment} verknüpft 
+einen Benutzer mit einer Station an einem konkreten Datum.
+
+\begin{lstlisting}[language=Python, caption={SchedulePayload}]
+	interface SchedulePayload {
+		currentMonth: number;
+		currentYear: number;
+		daysInMonth: number;
+		keepExistingAssignments: boolean;
+		newPlan: boolean;
+		alternativePlan: boolean;
+		constraints: UserConstraint[];
+	}
+\end{lstlisting}
+
+\texttt{SchedulePayload} wird beim Erstellen oder Neuberechnen eines Dienstplans 
+an das Backend übermittelt. Die Flags steuern das Planungsverhalten, die 
+\texttt{constraints} bündeln die individuellen Vorgaben aller Benutzer.
+
+
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

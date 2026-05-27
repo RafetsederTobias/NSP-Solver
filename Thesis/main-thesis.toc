@@ -24,8 +24,10 @@
 \contentsline {section}{\numberline {4.3}Datenmodell}{12}{section.4.3}%
 \contentsline {subsection}{\numberline {4.3.1}Entitäten}{12}{subsection.4.3.1}%
 \contentsline {subsection}{\numberline {4.3.2}Assoziationstabellen}{12}{subsection.4.3.2}%
-\contentsline {chapter}{\numberline {5}Conclusion and Outlook}{14}{chapter.5}%
-\contentsline {chapter}{\nonumberline Literatur}{15}{chapter*.8}%
+\contentsline {chapter}{\numberline {5}REST-Schnittstellen}{14}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Data Transfer Objects}{15}{section.5.1}%
+\contentsline {chapter}{\numberline {6}Conclusion and Outlook}{17}{chapter.6}%
+\contentsline {chapter}{\nonumberline Literatur}{18}{chapter*.9}%
 \def \@chapapp {\appendixname }
-\contentsline {appendixchapter}{\numberline {A}An Appendix}{16}{chapter.A}%
+\contentsline {appendixchapter}{\numberline {A}An Appendix}{19}{appendix.A}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
