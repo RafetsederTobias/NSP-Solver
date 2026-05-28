@@ -147,9 +147,9 @@ def _run_clingo(
 
     def solve(extra_rules: str = "", timeout: int = 15) -> list[dict]:
         if isReschedule:
-            ctl = clingo.Control(["--opt-mode=optN", "--heuristic=Domain"])
+            ctl = clingo.Control(["--opt-mode=opt", "--heuristic=Domain"])
         else:
-            ctl = clingo.Control(["--opt-mode=optN"])
+            ctl = clingo.Control(["--opt-mode=opt"])
         ctl.load(str(rules_file))
         ctl.add("base", [], facts)
         if extra_rules:

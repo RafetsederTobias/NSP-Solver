@@ -205,9 +205,7 @@ import { RescheduleConstraintDialogComponent } from '../reschedule-constraint-di
             <div style="font-size:15px;font-weight:500;color:#1e293b;">
               Solver - {{ monthLabel }}
             </div>
-            <div style="font-size:12px;color:#94a3b8;margin-top:2px;">
-              Ausfälle definieren
-            </div>
+            <div style="font-size:12px;color:#94a3b8;margin-top:2px;">Ausfälle definieren</div>
           </div>
           <button class="btn-ghost" style="padding:0.2rem 0.5rem;" (click)="close()">✕</button>
         </div>
@@ -227,6 +225,20 @@ import { RescheduleConstraintDialogComponent } from '../reschedule-constraint-di
           }
         </div>
 
+        <div class="options-bar">
+          <label class="toggle-row" style="margin-top: 0.5rem;">
+            <div class="toggle-switch">
+              <input
+                type="checkbox"
+                [checked]="alternativePlan()"
+                (change)="alternativePlan.set($any($event.target).checked)"
+              />
+              <div class="toggle-track"></div>
+            </div>
+            <span class="toggle-label">Alternativpläne</span>
+          </label>
+        </div>
+
         <div class="footer">
           <button class="btn-ghost" (click)="close()">Abbrechen</button>
           <button class="btn-primary" (click)="solve()">
@@ -243,7 +255,7 @@ export class RescheduleSolverDialog {
   private dialog = inject(Dialog);
   private constraintsService = inject(ConstraintsService);
   private workdayService = inject(WorkdayService);
-
+  alternativePlan = signal(false);
 
   get monthLabel() {
     return this.data.currentDate.toLocaleDateString('de-AT', { month: 'long', year: 'numeric' });
@@ -283,7 +295,7 @@ export class RescheduleSolverDialog {
         currentDate: this.data.currentDate,
       },
     });
-    ref.closed.subscribe((result : any) => {
+    ref.closed.subscribe((result: any) => {
       if (result != null)
         this.constraintsService.saveMissingDays(user.id, result.blockedDays ?? []);
     });
@@ -299,7 +311,7 @@ export class RescheduleSolverDialog {
       constraints,
       keepExistingAssignments: false,
       newPlan: false,
-      alternativePlan: false
+      alternativePlan: this.alternativePlan()
     });
   }
 

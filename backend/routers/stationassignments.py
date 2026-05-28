@@ -43,7 +43,15 @@ async def get_all(db: AsyncSession = Depends(get_db)):
     return result.scalars().all()
 @router.get("", response_model=list[StationAssignmentRead])
 async def get_by_date(date: Date, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(StationAssignment).where(StationAssignment.date == date).options(selectinload(StationAssignment.user)))
+    result = await db.execute(
+        select(StationAssignment)
+        .join(StationAssignment.schedule)
+        .where(
+            StationAssignment.date == date,
+            Schedule.is_loaded == True
+        )
+        .options(selectinload(StationAssignment.user))
+    )
     return result.scalars().all()
 
 

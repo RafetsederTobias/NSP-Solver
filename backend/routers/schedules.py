@@ -3,7 +3,7 @@ from typing import List
 
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import delete, extract, select, update, func
+from sqlalchemy import delete, extract, select, update, func, select
 from asp.asp_service import solve_reschedule, solve_schedule
 from models.StationAssignment import StationAssignment
 from models.Schedule import Schedule
@@ -99,7 +99,7 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
     stations = stations_result.scalars().all()
 
     if payload.newPlan:
-        # Create a new schedule — old one is untouched entirely
+        # Create a new schedule
         schedule_id = await get_or_create_schedule(db, payload.currentYear, payload.currentMonth, new_plan=True)
         existing_assignments = []
     else:
@@ -264,12 +264,24 @@ async def reschedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db
         )
 )
 
+    result = await db.execute(
+        select(Schedule).where(
+            Schedule.year == payload.currentYear,
+            Schedule.month == payload.currentMonth,
+            Schedule.is_loaded == True
+        )
+    )
+    loaded_schedule = result.scalar_one_or_none()
+
+    if loaded_schedule is None:
+        raise HTTPException(status_code=404, detail="No loaded schedule found for the given month/year")
+
     db_assignments = [
         StationAssignment(
             date=date(payload.currentYear, payload.currentMonth, a["day"]),
             station_id=a["station_id"],
             user_id=a["user_id"],
-            schedule_id = 1
+            schedule_id=loaded_schedule.id
         )
         for a in assignments
     ]
