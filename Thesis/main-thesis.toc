@@ -24,10 +24,17 @@
 \contentsline {section}{\numberline {4.3}Datenmodell}{12}{section.4.3}%
 \contentsline {subsection}{\numberline {4.3.1}Entitäten}{12}{subsection.4.3.1}%
 \contentsline {subsection}{\numberline {4.3.2}Assoziationstabellen}{12}{subsection.4.3.2}%
-\contentsline {chapter}{\numberline {5}REST-Schnittstellen}{14}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Data Transfer Objects}{15}{section.5.1}%
-\contentsline {chapter}{\numberline {6}Conclusion and Outlook}{17}{chapter.6}%
-\contentsline {chapter}{\nonumberline Literatur}{18}{chapter*.9}%
+\contentsline {chapter}{\numberline {5}REST-Schnittstellen und DTOs}{14}{chapter.5}%
+\contentsline {section}{\numberline {5.1}REST-Schnittstellen}{14}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Data Transfer Objects}{15}{section.5.2}%
+\contentsline {chapter}{\numberline {6}ASP-Logik}{17}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Fakten-Generierung}{17}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Regelwerk}{18}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Zweiphasen-Lösungsanstz}{18}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Rescheduling-Logik}{18}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Timeout NP-hartes Problem}{18}{section.6.5}%
+\contentsline {chapter}{\numberline {7}Conclusion and Outlook}{19}{chapter.7}%
+\contentsline {chapter}{\nonumberline Literatur}{20}{chapter*.11}%
 \def \@chapapp {\appendixname }
-\contentsline {appendixchapter}{\numberline {A}An Appendix}{19}{appendix.A}%
+\contentsline {appendixchapter}{\numberline {A}An Appendix}{21}{appendix.A}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

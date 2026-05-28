@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.3.13)  27 MAY 2026 15:11
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.3.13)  28 MAY 2026 18:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2771,18 +2771,32 @@ Package: chngcntr 2018/04/09 v1.1a change counter resetting
 Package chngcntr Info: \counterwithout already defined.
 (chngcntr)             Quitting chngcntr on input line 21.
 )
+(c:/texlive/2026/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count532
+\float@exts=\toks53
+\float@box=\box96
+\@float@everytoks=\toks54
+\@floatcapt=\box97
+)
+(c:/texlive/2026/texmf-dist/tex/latex/floatbytocbasic/floatbytocbasic.sty
+Package: floatbytocbasic 2023-08-16 v1.0 improved float package using tocbasic
+
+(c:/texlive/2026/texmf-dist/tex/latex/xpatch/xpatch.sty
+Package: xpatch 2020/03/25 v0.3a Extending etoolbox patching commands
+))
 (c:/texlive/2026/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count532
-\lst@gtempboxa=\box96
-\lst@token=\toks53
-\lst@length=\count533
+\lst@mode=\count533
+\lst@gtempboxa=\box98
+\lst@token=\toks55
+\lst@length=\count534
 \lst@currlwidth=\dimen309
-\lst@column=\count534
-\lst@pos=\count535
+\lst@column=\count535
+\lst@pos=\count536
 \lst@lostspace=\dimen310
 \lst@width=\dimen311
-\lst@newlines=\count536
-\lst@lineno=\count537
+\lst@newlines=\count537
+\lst@lineno=\count538
 \lst@maxwidth=\dimen312
 
 (c:/texlive/2026/texmf-dist/tex/latex/listings/lstpatch.sty
@@ -2790,9 +2804,9 @@ File: lstpatch.sty 2025/11/14 1.11b (Carsten Heinz)
 )
 (c:/texlive/2026/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2025/11/14 1.11b (Carsten Heinz)
-\c@lstnumber=\count538
-\lst@skipnumbers=\count539
-\lst@framebox=\box97
+\c@lstnumber=\count539
+\lst@skipnumbers=\count540
+\lst@framebox=\box99
 )
 (c:/texlive/2026/texmf-dist/tex/latex/listings/listings.cfg
 File: listings.cfg 2025/11/14 1.11b listings configuration
@@ -2857,6 +2871,7 @@ Package translations Info: loading dictionary `translations-basic-dictionary' f
 or `english'. on input line 191.
 Package hyperref Info: Link coloring OFF on input line 191.
 Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: subfigure package is loaded.
 Package caption Info: End \AtBeginDocument code.
@@ -2990,7 +3005,7 @@ Package biblatex Info: ... file 'main-thesis.bbl' found.
 (./main-thesis.bbl)
 Package biblatex Info: Reference section=0 on input line 191.
 Package biblatex Info: Reference segment=0 on input line 191.
-\c@lstlisting=\count540
+\c@lstlisting=\count541
 Package tocbasic Info: setting babel extension for `lol' on input line 191.
 \scr@dte@lstlisting@maxnumwidth=\skip131
 Requested font "cmr10" at 0.00043pt
@@ -3172,7 +3187,10 @@ ystem für die ICS
 
 
 
-] (././01-introduction.tex
+]
+Package babel Info: 'ngerman' activates 'german' shorthands.
+(babel)             Reported on input line 291.
+ [5] (././01-introduction.tex
 chapter 1.
 Requested font "[fonts/PublicSans-Bold.ttf]/OT:script=latn;language=dflt;mappin
 g=tex-text;" at 14.4pt
@@ -3277,7 +3295,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 ) (././06-rest.tex [12] [13]
 chapter 5.
 
-Overfull \hbox (4.79434pt too wide) in paragraph at lines 45--45
+Overfull \hbox (4.79434pt too wide) in paragraph at lines 50--50
 []|\TU/Inconsolata(0)/m/n/10 /api/v1/schedule/reschedule|  
  []
 
@@ -3286,16 +3304,28 @@ Overfull \hbox (4.79434pt too wide) in paragraph at lines 45--45
 
 
 
-] [15]) (././09-conclusion.tex [16]
+] [15]) (././07-asp.tex [16]
 chapter 6.
-) [17
+[17
+
+
+
+
+]
+
+LaTeX Warning: Reference `sec:rescheduling' on page 18 undefined on input line 
+63.
+
+) (././09-conclusion.tex [18]
+chapter 7.
+) [19
 
 
 
 
 ]
 chapter without number
-(././91-appendix.tex [18
+(././91-appendix.tex [20
 
 
 
@@ -3307,7 +3337,7 @@ File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 )
 (c:/texlive/2026/texmf-dist/tex/generic/stringenc/se-utf32be.def
 File: se-utf32be.def 2019/11/29 v1.12 stringenc: UTF-32BE
-) [19
+) [21
 
 
 
@@ -3316,8 +3346,11 @@ File: se-utf32be.def 2019/11/29 v1.12 stringenc: UTF-32BE
 (./main-thesis.aux)
  ***********
 LaTeX2e <2025-11-01>
-L3 programming layer <2026-01-19>
+L3 programming layer <2020/03/25>
  ***********
+
+
+LaTeX Warning: There were undefined references.
 
 
 LaTeX Warning: There were multiply-defined labels.
@@ -3327,12 +3360,12 @@ Package logreq Info: Writing requests to 'main-thesis.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 58961 strings out of 468168
- 1285546 string characters out of 5436524
- 2654091 words of memory out of 5000000
- 86791 multiletter control sequences out of 15000+600000
+ 59165 strings out of 468168
+ 1289689 string characters out of 5436524
+ 2581315 words of memory out of 5000000
+ 86980 multiletter control sequences out of 15000+600000
  633569 words of font info for 142 fonts, out of 8000000 for 9000
  1350 hyphenation exceptions out of 8191
  130i,26n,137p,11214b,32835s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main-thesis.pdf (23 pages).
+Output written on main-thesis.pdf (26 pages).

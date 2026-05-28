@@ -1,8 +1,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 
 \cleardoubleoddpage%  Make sure to start each chapter on a new odd page
-\chapter{REST-Schnittstellen}
-\begin{table}[h]
+\chapter{REST-Schnittstellen und DTOs}
+Dieses Kapitel beschreibt die REST-Schnittstellen sowie die verwendeten Data Transfer Objects (DTOs) der Anwendung, die für das \textit{Scheduling} nötig sind. Die Schnittstellen bilden die Grundlage für die Kommunikation zwischen Frontend und Backend und ermöglichen den Austausch von Daten für die Dienstplanung sowie die Verwaltung von Benutzern, Stationen und Kompetenzen.
+
+\section{REST-Schnittstellen}
+
+Die nachfolgende Übersicht zeigt die implementierten REST-Endpunkte des Systems. Die Schnittstellen orientieren sich an den Prinzipien von REST und stellen Funktionen für das Erstellen, Laden, Aktualisieren und Löschen der wichtigsten Entitäten bereit.
+\begin{table}[H]
 	\centering
 	\caption{REST-Schnittstellen}\label{tab:rest-api}
 	\begin{tabularx}{\linewidth}{l >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X}
@@ -46,67 +51,49 @@
 \end{table}
 
 \section{Data Transfer Objects}
-Die Kommunikation zwischen Frontend und Backend basiert auf klar definierten Data Transfer Objects (DTOs). 
-Im Folgenden werden die wichtigsten Strukturen erläutert.
+Für den Datenaustausch zwischen Frontend und Backend werden klar definierte Data Transfer Objects (DTOs) verwendet.
+Im Folgenden werden die wichtigsten Datenstrukturen für das \textit{Scheduling} erläutert.
 
-\begin{lstlisting}[language=Python, caption={User \& UserConstraint}]
-	interface User {
-		id: number;
-		name: string;
-		skills: string[];
-	}
-	
-	interface UserConstraint {
-		userId: string;
-		maxDaysPerMonth?: number | null;
-		minDaysPerMonth?: number | null;
-		exactDaysPerMonth?: number | null;
-		fixedDays?: number[] | null;
-		blockedDays?: number[] | null;
-	}
-\end{lstlisting}
+Der \texttt{SchedulePayload} definiert die Eingabedaten für die Dienstplanerstellung 
+und wird bei jedem \textit{Scheduling} und \textit{Rescheduling} an das Backend übermittelt. 
 
-Ein Benutzer besitzt eine Liste von Skills. \texttt{UserConstraint} definiert 
-die individuellen Planungsrestriktionen, etwa Mindest- und Maximaleinsatztage 
-oder gesperrte Tage.
+\begin{table}[H]
+	\centering
+	\caption{Felder von \texttt{SchedulePayload}}\label{tab:schedule-payload}
+	\begin{tabularx}{\linewidth}{l l >{\raggedright\arraybackslash}X}
+		\toprule
+		\textbf{Feld} & \textbf{Typ} & \textbf{Beschreibung} \\
+		\midrule
+		\texttt{currentMonth}              & \texttt{number}            & Zielmonat der Planung (1--12) \\
+		\texttt{currentYear}               & \texttt{number}            & Zieljahr der Planung \\
+		\texttt{daysInMonth}               & \texttt{number}            & Anzahl der Tage im Zielmonat \\
+		\texttt{keepExistingAssignments}   & \texttt{boolean}           & Vorhandene Zuweisungen beibehalten \\
+		\texttt{newPlan}                   & \texttt{boolean}           & Neuen Plan erstellen (default ist überschreiben) \\
+		\texttt{alternativePlan}           & \texttt{boolean}           & Alternativpläne berechnen \\
+		\texttt{constraints}               & \texttt{UserConstraint[]}  & Planungsrestriktionen der Benutzer \\
+		\bottomrule
+	\end{tabularx}
+\end{table}
+\texttt{UserConstraint} 
+bildet die individuellen Planungsrestriktionen eines Benutzers ab und wird als Liste 
+innerhalb des \texttt{SchedulePayload} mitgeschickt.
 
-\begin{lstlisting}[language=Python, caption={Station \& StationAssignment}]
-	interface Station {
-		id: number;
-		name: string;
-		maxAssignments: number;
-		skills_needed: string[];
-	}
-	
-	interface StationAssignment {
-		id: number;
-		date: string; // YYYY-MM-DD
-		station_id: number;
-		user_id: number;
-		user: { id: number; name: string };
-	}
-\end{lstlisting}
-
-Eine Station gibt an, wie viele Personen maximal zugewiesen werden dürfen und 
-welche Skills dafür erforderlich sind. \texttt{StationAssignment} verknüpft 
-einen Benutzer mit einer Station an einem konkreten Datum.
-
-\begin{lstlisting}[language=Python, caption={SchedulePayload}]
-	interface SchedulePayload {
-		currentMonth: number;
-		currentYear: number;
-		daysInMonth: number;
-		keepExistingAssignments: boolean;
-		newPlan: boolean;
-		alternativePlan: boolean;
-		constraints: UserConstraint[];
-	}
-\end{lstlisting}
-
-\texttt{SchedulePayload} wird beim Erstellen oder Neuberechnen eines Dienstplans 
-an das Backend übermittelt. Die Flags steuern das Planungsverhalten, die 
-\texttt{constraints} bündeln die individuellen Vorgaben aller Benutzer.
-
+\begin{table}[H]
+	\centering
+	\caption{Felder von \texttt{UserConstraint}}\label{tab:user-constraint}
+	\begin{tabularx}{\linewidth}{l l >{\raggedright\arraybackslash}X}
+		\toprule
+		\textbf{Feld} & \textbf{Typ} & \textbf{Beschreibung} \\
+		\midrule
+		\texttt{userId}              & \texttt{string}          & Referenz auf den betreffenden Benutzer \\
+		\texttt{maxDaysPerMonth}     & \texttt{number}         & Maximale Einsatztage im Monat \\
+		\texttt{minDaysPerMonth}     & \texttt{number}         & Minimale Einsatztage im Monat \\
+		\texttt{exactDaysPerMonth}   & \texttt{number}         & Exakte Anzahl an Einsatztagen im Monat \\
+		\texttt{fixedDays}           & \texttt{number[]}       & Tage, an denen der Benutzer fix eingeteilt wird \\
+		\texttt{blockedDays}         & \texttt{number[]?}       & Tage, an denen der Benutzer nicht verfügbar ist \\
+		\bottomrule
+	\end{tabularx}
+\end{table}
 
 %% 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

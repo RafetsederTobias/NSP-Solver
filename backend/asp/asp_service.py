@@ -62,6 +62,8 @@ def _build_base_facts(users, stations, days, constraints=None) -> str:
     facts += _build_day_facts(days)
     facts += _build_constraint_facts(constraints)
 
+    print(facts)
+
     return facts
 
 
