@@ -1,0 +1,36 @@
+<div class="overview">
+  <div class="year-group" *ngFor="let group of groupedByYear()">
+    <h2 class="year-label">{{ group.year }}</h2>
+    <div class="cards">
+      <div
+        class="card"
+        *ngFor="let schedule of group.months"
+        [class.loaded]="schedule.is_loaded"
+        (click)="openDialog(schedule)"
+      >
+        <div class="card-header">
+          <span class="material-icons-round">calendar_month</span>
+          <span class="loaded-badge" *ngIf="schedule.is_loaded">Aktiv</span>
+        </div>
+        <div class="month-name">{{ getMonthName(schedule.month) }}</div>
+        <div class="schedule-name">{{ schedule.name }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty" *ngIf="groupedByYear().length === 0">
+    <span class="material-icons-round">event_busy</span>
+    <p>Keine Pläne vorhanden</p>
+  </div>
+  <div class="dialog-backdrop" *ngIf="selectedSchedule()" (click)="closeDialog()">
+    <div class="dialog" (click)="$event.stopPropagation()">
+      <p>
+        <strong>{{ selectedSchedule()?.name }}</strong> wird in den Kalender geladen. Fortsetzen?
+      </p>
+      <div class="dialog-actions">
+        <button class="btn-cancel" (click)="closeDialog()">Abbrechen</button>
+        <button class="btn-confirm" (click)="confirmLoad()">Laden</button>
+      </div>
+    </div>
+  </div>
+</div>

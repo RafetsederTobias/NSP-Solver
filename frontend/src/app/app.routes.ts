@@ -6,12 +6,14 @@ import { Stations } from './components/stations/stations';
 import { CreateStationComponent } from './components/create-station/create-station';
 import { Skills } from './components/skills/skills';
 import { DayDetailComponent } from './components/day-detail-component/day-detail-component';
+import { ScheduleOverviewComponent } from './components/schedule-overview/schedule-overview';
 
 export const routes: Routes = [
   { path: 'calendar', component: CalendarComponent },
   { path: 'users', component: Users },
   { path: 'stations', component: Stations },
   { path: 'skills', component: Skills },
+    { path: 'schedules', component: ScheduleOverviewComponent },
   { path: 'users/create', component: CreateUserComponent },
   { path: 'users/:id/edit', component: CreateUserComponent },
   { path: 'stations/:id/edit', component: CreateStationComponent },

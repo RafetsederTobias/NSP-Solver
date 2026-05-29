@@ -100,6 +100,10 @@ const ROUTE_LABELS: Record<string, string> = {
         <span class="material-icons-round icon">workspace_premium</span>
         Kompetenzen
       </a>
+      <a class="nav-item" routerLink="/schedules" routerLinkActive="active">
+        <span class="material-icons-round icon">event_note</span>
+        Pläne
+      </a>
     </aside>
 
     <div class="main-wrap">

@@ -10,7 +10,7 @@ from models.Schedule import Schedule
 from models.Station import Station
 from models.User import User
 from db import get_db
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.orm import selectinload
 
 
@@ -34,6 +34,15 @@ class SchedulePayload(BaseModel):
     newPlan: bool
     alternativePlan: bool
     constraints: List[UserConstraint]
+
+class ScheduleResponse(BaseModel):
+    id: int
+    name: str
+    year: int
+    month: int
+    is_loaded: bool
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 def get_weekdays(year: int, month: int, days: list[int]) -> list[int]:
@@ -340,3 +349,9 @@ async def reschedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db
 
     print(response)
     return response
+
+
+@router.get("/schedules", response_model=list[ScheduleResponse])
+async def get_all_schedules(db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(Schedule).order_by(Schedule.year.desc(), Schedule.month.asc()))
+    return result.scalars().all()
