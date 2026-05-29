@@ -202,11 +202,14 @@ async def reschedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db
         if not c.blockedDays:
             continue
         result = await db.execute(
-            select(StationAssignment).where(
+            select(StationAssignment)
+            .join(StationAssignment.schedule)
+            .where(
                 extract("year", StationAssignment.date) == payload.currentYear,
                 extract("month", StationAssignment.date) == payload.currentMonth,
                 StationAssignment.user_id == c.user_id,
                 extract("day", StationAssignment.date).in_(c.blockedDays),
+                Schedule.is_loaded == True,
             )
         )
         conflicting_assignments.extend(result.scalars().all())
@@ -221,11 +224,14 @@ async def reschedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db
     )
 
     remaining_result = await db.execute(
-        select(StationAssignment).where(
+        select(StationAssignment)
+        .join(StationAssignment.schedule)
+        .where(
             extract("year", StationAssignment.date) == payload.currentYear,
             extract("month", StationAssignment.date) == payload.currentMonth,
             StationAssignment.user_id != None,
             StationAssignment.date >= date.today(),
+            Schedule.is_loaded == True,
         )
     )
     remaining_assignments = remaining_result.scalars().all()
@@ -257,12 +263,20 @@ async def reschedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db
     # Replacing full month schedule with new solution
     # Delete only future assignments
     await db.execute(
-        delete(StationAssignment).where(
-            extract("year", StationAssignment.date) == payload.currentYear,
-            extract("month", StationAssignment.date) == payload.currentMonth,
-            StationAssignment.date >= today,
+        delete(StationAssignment)
+        .where(
+            StationAssignment.id.in_(
+                select(StationAssignment.id)
+                .join(StationAssignment.schedule)
+                .where(
+                    extract("year", StationAssignment.date) == payload.currentYear,
+                    extract("month", StationAssignment.date) == payload.currentMonth,
+                    StationAssignment.date >= today,
+                    Schedule.is_loaded == True,
+                )
+            )
         )
-)
+    )
 
     result = await db.execute(
         select(Schedule).where(
