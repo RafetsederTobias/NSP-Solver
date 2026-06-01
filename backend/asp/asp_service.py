@@ -207,7 +207,7 @@ def _run_clingo(
         """
 
         print("Phase 1: trying with forced staffing and fairness...")
-        result = solve(EXTRA_FACTS, timeout=60)
+        result = solve(EXTRA_FACTS, timeout=10)
 
         if result:
             print("Phase 1 found a solution, returning...")

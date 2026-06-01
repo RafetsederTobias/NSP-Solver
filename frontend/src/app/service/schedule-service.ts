@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserConstraint } from './user-service';
 import { tap } from 'rxjs';
@@ -29,6 +29,7 @@ export class ScheduleService {
   private _schedules = signal<Schedule[]>([]);
   readonly schedules = this._schedules.asReadonly();
 
+  // creates/updates new schedule
   loadSchedule(payload: SchedulePayload) {
     return this.http.post(this.base, payload);
   }
@@ -41,4 +42,21 @@ export class ScheduleService {
       .get<Schedule[]>(this.base + '/schedules')
       .pipe(tap((schedules) => this._schedules.set(schedules)));
   }
+
+  // loads schedule for calendar
+  load(scheduleId: number) {
+    return this.http.patch<Schedule>(`${this.base}/schedules/${scheduleId}/load`, {}).pipe(
+      tap((updated) =>
+        this._schedules.update((list) =>
+          list.map((s) => {
+            if (s.year === updated.year && s.month === updated.month) {
+              return s.id === updated.id ? updated : { ...s, is_loaded: false };
+            }
+            return s;
+          }),
+        ),
+      ),
+    );
+  }
+  readonly loadedSchedules = computed(() => this._schedules().filter((s) => s.is_loaded));
 }

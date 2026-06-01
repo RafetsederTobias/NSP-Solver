@@ -98,15 +98,31 @@ async def delete(assignment_id: int, db: AsyncSession = Depends(get_db)):
 
 @router.put("/replace/{date}", response_model=list[StationAssignmentRead], status_code=200)
 async def replace_all(date: Date, body: list[StationAssignmentCreate], db: AsyncSession = Depends(get_db)):
-    await db.execute(sa_delete(StationAssignment).where(StationAssignment.date == date))
+    # schedule_id from existing assignments
+    result = await db.execute(
+        select(StationAssignment.schedule_id)
+        .where(StationAssignment.date == date)
+        .limit(1)
+    )
+    schedule_id = result.scalar_one()
 
-    new_assignments = [StationAssignment(**item.model_dump()) for item in body]
+    await db.execute(
+        sa_delete(StationAssignment).where(
+            StationAssignment.date == date,
+            StationAssignment.schedule_id == schedule_id,
+        )
+    )
+
+    new_assignments = [StationAssignment(**item.model_dump(), schedule_id=schedule_id) for item in body]
     db.add_all(new_assignments)
     await db.commit()
 
     result = await db.execute(
         select(StationAssignment)
-        .where(StationAssignment.date == date)
+        .where(
+            StationAssignment.date == date,
+            StationAssignment.schedule_id == schedule_id,
+        )
         .options(selectinload(StationAssignment.user))
     )
 

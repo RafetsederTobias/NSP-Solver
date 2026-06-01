@@ -355,3 +355,30 @@ async def reschedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db
 async def get_all_schedules(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Schedule).order_by(Schedule.year.desc(), Schedule.month.asc()))
     return result.scalars().all()
+
+
+@router.patch("/schedules/{schedule_id}/load", response_model=ScheduleResponse)
+async def load_schedule(schedule_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(Schedule).where(Schedule.id == schedule_id))
+    schedule = result.scalar_one_or_none()
+    if not schedule:
+        raise HTTPException(status_code=404, detail="Schedule not found")
+
+    # Unload schedule
+    conflict_result = await db.execute(
+        select(Schedule).where(
+            Schedule.year == schedule.year,
+            Schedule.month == schedule.month,
+            Schedule.is_loaded == True,
+            Schedule.id != schedule_id,
+        )
+    )
+    for conflicting in conflict_result.scalars().all():
+        conflicting.is_loaded = False
+
+    await db.flush()
+
+    schedule.is_loaded = True
+    await db.commit()
+    await db.refresh(schedule)
+    return schedule

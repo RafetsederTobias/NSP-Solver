@@ -29,8 +29,12 @@ export class ScheduleOverviewComponent implements OnInit {
   }
 
   confirmLoad(): void {
-    // TODO
-    this.closeDialog();
+    const schedule = this.selectedSchedule();
+    if (!schedule) return;
+    this.scheduleService.load(schedule.id).subscribe({
+      next: () => this.closeDialog(),
+      error: (err) => console.error('Failed to load schedule', err),
+    });
   }
   readonly monthNames = [
     'Januar',

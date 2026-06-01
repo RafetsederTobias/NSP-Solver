@@ -434,6 +434,22 @@ import { RescheduleSolverDialog } from '../reschedule-solver-dialog/reschedule-s
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden p-6">
+          @if (activeLoadedSchedule()) {
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-icons-round text-indigo-500 text-base">event_available</span>
+              <span class="text-sm font-medium text-slate-600">
+                Aktiver Plan:
+                <span class="text-indigo-600 font-semibold">{{
+                  activeLoadedSchedule()!.name
+                }}</span>
+              </span>
+            </div>
+          } @else {
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-icons-round text-slate-400 text-base">event_busy</span>
+              <span class="text-sm text-slate-400">Kein Plan geladen</span>
+            </div>
+          }
           <full-calendar #cal [options]="calendarOptions" [events]="events()" />
         </div>
       </div>
@@ -453,6 +469,7 @@ export class CalendarComponent implements OnInit {
   errorMessage = signal<string | null>(null);
   dropdownOpen = false;
   selectedUserIds = signal<Set<number>>(new Set());
+  currentCalendarDate = signal<Date>(new Date());
   selectedIds: number[] = [];
   users = this.userService.users;
   warningList = signal<{ station: string; day: number }[]>([]);
@@ -510,12 +527,27 @@ export class CalendarComponent implements OnInit {
     dateClick: (info: DateClickArg) => {
       this.router.navigate(['/calendar', info.dateStr]);
     },
+    datesSet: (info) => {
+      this.currentCalendarDate.set(info.view.currentStart);
+    },
   };
 
   ngOnInit() {
     this.userService.loadAll().subscribe();
+    this.scheduleService.loadAll().subscribe();
+    console.log(this.scheduleService.loadedSchedules());
     this.stationassignmentService.loadAll().subscribe();
   }
+
+  activeLoadedSchedule = computed(() => {
+    const date = this.currentCalendarDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return (
+      this.scheduleService.loadedSchedules().find((s) => s.month === month && s.year === year) ??
+      null
+    );
+  });
 
   getDaysInMonth(year: number, month: number): number {
     return new Date(year, month, 0).getDate();
