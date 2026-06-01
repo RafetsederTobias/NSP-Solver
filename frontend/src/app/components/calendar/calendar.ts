@@ -8,7 +8,7 @@ import deLocale from '@fullcalendar/core/locales/de';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { switchMap, catchError, tap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
+import { EMPTY, forkJoin } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { StationAssignmentService } from '../../service/station-assignment-service';
 import { SchedulePayload, ScheduleService } from '../../service/schedule-service';
@@ -597,7 +597,9 @@ export class CalendarComponent implements OnInit {
                 this.warningList.set([]);
               }
             }),
-            switchMap(() => this.stationassignmentService.loadAll()),
+            switchMap(() =>
+              forkJoin([this.stationassignmentService.loadAll(), this.scheduleService.loadAll()]),
+            ),
             catchError((err: HttpErrorResponse) => {
               this.isLoading.set(false);
               if (err.status === 409) {
