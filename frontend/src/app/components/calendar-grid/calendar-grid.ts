@@ -241,11 +241,10 @@ export class CalendarGridComponent implements OnChanges {
     return dow === 0 || dow === 6;
   }
 
-  /**
-   * Past days should not be selectable as blocked
-   */
+  // Past days should not be selectable as blocked
   isPastDay(day: number): boolean {
-    if (this.calMode !== 'blocked') return false;
+    if (this.modes.length !== 1 || this.modes[0] !== 'blocked') return false;
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const cellDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), day);

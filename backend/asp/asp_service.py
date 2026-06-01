@@ -202,12 +202,12 @@ def _run_clingo(
             GapSq = Gap * Gap.
 
             #minimize {
-                GapSq @10, S, D : shortfall(S, D, _, GapSq), GapSq > 0
+                GapSq @10, S, D : shortfall(S, D, _, GapSq)
             }.
         """
 
         print("Phase 1: trying with forced staffing and fairness...")
-        result = solve(EXTRA_FACTS, timeout=10)
+        result = solve(EXTRA_FACTS, timeout=60)
 
         if result:
             print("Phase 1 found a solution, returning...")
