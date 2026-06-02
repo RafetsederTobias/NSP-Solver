@@ -1,0 +1,109 @@
+% !TeX root = MAIN.tex
+% !TeX encoding = UTF-8
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT CONFIGURAITON           %%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Language (comment the appropriate line with a % sign)
+\newif\ifeng
+%\engtrue
+\engfalse
+
+%% Title of the thesis
+\def\thesisTitle{Ein ASP-basierter Ansatz zur Lösung des Nurse Scheduling Problems mit Clingo}
+
+%% choose type of work: 0 ... Dissertation
+%%                      1 ... Diplomarbeit
+%%                      2 ... Masterarbeit
+%%                      3 ... Bachelorarbeit
+\def\type{3}
+
+%% enter the name of the student
+\def\name{Rafetseder Tobias}
+
+%% enter the name of the supervisor and first thesis examiner
+%% for the german version you also have to enter the sex (male or female)
+%% of the supervisor/examiners
+\def\supervisor{o. Univ.-Prof. Dipl.-Ing. Dr. techn. Michael Schrefl oder Assoz.-Prof. Mag. Dr. Christoph Schütz}
+\newif\ifsupvismale
+\supvismaletrue %% supervisor is male
+%\supvismalefalse && supervisor is female
+
+% secondexaminer (only for dissertation!)
+\def\secondexaminer{Name des zweiten Prüfers}
+\newif\ifsecexmale
+\secexmaletrue %% second examiner is male
+%\secexmalefalse %% second examiner is female
+
+% if there has been assistance by a further person uncomment the following line
+% and enter the name.
+\def\assist{Dipl.-Ing. Sebastian Windsperger}
+
+%% choose bibliography style: numeric ... Numerisch
+%%                            alphabetic ... Alphabetisch
+%%                            apa ... APA
+%%                            ieee ... IEEE
+\def\bibstyleselection{apa}
+
+% enter month year
+% (the month when you brought it to the Prüfungs- und Anerkennungsservice)
+\def\date{\monthname[\the\month] \the\year}
+
+%% enter name of degree (as stated in your curriculum)
+\ifeng
+	\def\degree{\ifcase\type Doctor of Social Sciences, Economics \& Business \or Magister \or Master of Science \or Bachelor Science \fi}
+\else
+	\def\degree{\ifcase\type Doktor der Sozial- und Wirtschaftswissenschaften \or Magister \or Master of Science \or Bachelor Science \fi}
+\fi
+
+%% enter the study (Studienrichtung, as stated in your curriculum)
+\ifeng
+	\def\study{Business Informatics}
+\else
+	\def\study{Wirtschaftsinformatik}
+\fi
+
+%% enter the name of the institute and load other language dependent packages
+\ifeng
+	\def\institute{Institute for Business \\ Informatics - Data \& \\Knowledge Engineering}
+\else
+	\def\institute{Institut für Wirtschafts-informatik - Data \& \\Knowledge Engineering}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% PACKAGE CONFIGURAITON            %%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% no need to change something below here
+\title{\thesisTitle}
+\author{\name}
+\hypersetup {
+	pdftitle={\thesisTitle},
+	pdfauthor={\name},
+	colorlinks=true,
+	linktoc=all,
+	linkcolor=black,
+	citecolor=black,
+	filecolor=black,
+	urlcolor=black
+}
+\urlstyle{sf}
+\newcolumntype{H}[1]{>{\hsize=#1\hsize\arraybackslash}X} % relative width of table columns with type H
+\renewcommand{\arraystretch}{1.5} 			% padding in tables
+\renewcommand{\familydefault}{\sfdefault} 	% sans-serif font
+\setlength{\parindent}{0pt} % Remove paragraph identation
+\chapterstyle{ell}		% chapter styling http://ctan.math.utah.edu/ctan/tex-archive/info/latex-samples/MemoirChapStyles/MemoirChapStyles.pdf
+\setsecnumdepth{subsection} % enumerate subsection
+
+\ifeng
+	\usepackage[british]{babel}
+	\selectlanguage{british}
+	\usepackage[babel,english=british]{csquotes}
+\else
+	\usepackage[ngerman]{babel}
+	\selectlanguage{ngerman}
+	\usepackage[babel,german=guillemets]{csquotes}
+\fi
+
+\usepackage[backend=biber,style=\bibstyleselection]{biblatex}
+\bibliography{literature}

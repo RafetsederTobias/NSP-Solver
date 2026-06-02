@@ -1,0 +1,26 @@
+% !TeX root = ../MAIN.tex
+% !TeX encoding = UTF-8
+
+\chapter{Weitere Beispiele}
+
+Hier werden einige weitere Beispiele für importierte Pakete gezeigt.
+
+\section{Todos}
+
+Mit \verb|\todo| kann man Todos erzeugen, wie zum Beispiel hier. \todo{Das ist ein Todo.}
+
+Es ist auch möglich auf noch fehlende Grafiken hinzuweisen, indem man \verb|\missingfigure| angibt.
+
+\missingfigure{Beschreibung der fehlenden Abbildung}
+
+Weiters kann man sich mit \verb|\listoftodos| eine Liste aller Todos ausgeben lassen.
+
+\section{URL}
+
+URLs können mit \verb|\href| oder \verb|\url| eingefügt werden. Ein Beispiel für ersteres ist \href{http://dke.jku.at}{DKE}; für zweiteres \url{https://www.jku.at}.
+
+\section{Listing}
+
+Codeausschnitte können mit Listings eingefügt werden (\verb|\lstinputlisting|).
+
+\lstinputlisting[language=java,label={lst:java},caption={Hello World}]{listings/HelloWorld.java}

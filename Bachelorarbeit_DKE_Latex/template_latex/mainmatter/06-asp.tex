@@ -1,0 +1,73 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+
+\chapter{ASP-Logik}
+In diesem Kapitel wird genauer auf die ASP-Logik und die Generierung der Dienstpläne eingegagen.
+\section{Fakten-Generierung}
+Die Fakten-Generierung stellt die Verbindung zwischen der relationalen Datenbank und der ASP-Wissensbasis dar. Damit Clingo einen Dienstplan berechnen kann, müssen die benötigten Informationen zunächst in Form von ASP-Fakten bereitgestellt werden. Dafür werden die aus der Datenbank geladenen ORM-Objekte in der Funktion \texttt{\_build\_base\_facts} in entsprechende Fakten umgewandelt.
+
+Für jeden Benutzer wird dabei ein \texttt{user}-Fakt erzeugt. Zusätzlich wird für jede vorhandene Kompetenz ein \texttt{has\_skill}-Fakt erstellt. Für Stationen werden ebenfalls Fakten generiert, darunter \texttt{station}, \texttt{max\_assignments} zur maximalen Anzahl an Zuweisungen sowie \texttt{requires} für benötigte Kompetenzen.
+
+Die zu planenden Arbeitstage werden als \texttt{day}-Fakten an Clingo übergeben. Wochenenden werden dabei bereits vorher durch die Funktion \texttt{get\_weekdays} herausgefiltert. Zusätzlich werden benutzerspezifische Einschränkungen als Fakten festgelegt. Dazu zählen beispielsweise maximale oder minimale Arbeitstage pro Monat (\texttt{max\_days}, \texttt{min\_days}), fixe Arbeitstage (\texttt{fixed\_day}) oder gesperrte Tage (\texttt{blocked\_day}).
+
+Im Folgenden wird beispielhaft ein Ausschnitt der generierten Basisfakten für ein \textit{Scheduling} gezeigt. 
+
+\begin{lstlisting}[caption={Beispiel generierter Basisfakten},label={lst}]
+	user(1597).
+	has_skill(1597, 23).
+	has_skill(1597, 24).
+	
+	user(1598).
+	has_skill(1598, 22).
+	has_skill(1598, 25).
+	
+	station(865).
+	max_assignments(865, 3).
+	requires(865, 22).
+	requires(865, 23).
+	
+	station(866).
+	max_assignments(866, 3).
+	requires(866, 24).
+	
+	day(1).
+	day(4).
+	day(5).
+	
+	exact_days(1597, 21).
+	exact_days(1598, 21).
+\end{lstlisting}
+In diesem Beispiel werden zwei Benutzer, deren Kompetenzen, Stationen mit den benötigten Kompetenzen sowie Arbeitstage und Constraints als Fakten definiert. Auf Basis dieser Informationen kann Clingo anschließend gültige Dienstpläne berechnen.
+
+\section{Regelwerk}
+%First Draft%
+Das Regelwerk für die initiale Planerstellung ist in der Datei \texttt{rules.lp} 
+definiert. Die Grundlage bildet die Bestimmung der \textit{Eligibility}: Ein 
+Benutzer gilt als qualifiziert für eine Station (\texttt{eligible/2}), wenn er 
+alle erforderlichen Fähigkeiten besitzt, also kein \texttt{requires/2}-Fakt 
+existiert, dem kein entsprechendes \texttt{has\_skill/2}-Fakt gegenübersteht. 
+Daraus wird \texttt{eligible\_day/3} abgeleitet, welches zusätzlich gesperrte 
+Tage ausschließt. Der \textit{Entscheidungsraum} wird durch eine \textit{Choice 
+	Rule} definiert, die Clingo erlaubt, Benutzern Stationen an bestimmten Tagen 
+zuzuweisen, wobei pro Station und Tag maximal \texttt{Max} Benutzer zugewiesen 
+werden dürfen. Die \textit{harten Constraints} erzwingen, dass kein Benutzer an 
+zwei Stationen gleichzeitig eingeteilt wird, dass gesperrte Tage nicht belegt 
+werden, und dass benutzerspezifische Einschränkungen wie \texttt{max\_days/2}, 
+\texttt{min\_days/2} sowie \texttt{exact\_days/2} eingehalten werden. Fixe 
+Arbeitstage werden über \texttt{fixed\_day/2} als harte Bedingung erzwungen, 
+sodass bestimmte Benutzer an vordefinierten Tagen zwingend eingeteilt sind. 
+Die \textit{Optimierung} minimiert unbesetzte Stationen über eine 
+\texttt{\#minimize}-Direktive, die Clingo anweist, die Anzahl der Tage, an 
+denen eine Station ohne Besetzung bleibt, so gering wie möglich zu halten. 
+Die Regelstruktur für das Rescheduling folgt einem ähnlichen Prinzip, wird 
+jedoch in Abschnitt~\ref{sec:rescheduling} gesondert behandelt.
+\section{Zweiphasen-Lösungsanstz}
+
+\section{Rescheduling-Logik}
+
+\section{Timeout NP-hartes Problem}
+
+
+
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

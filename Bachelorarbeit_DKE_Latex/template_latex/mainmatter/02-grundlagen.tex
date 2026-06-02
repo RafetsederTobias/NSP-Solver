@@ -1,0 +1,55 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+
+\chapter{Grundlagen}
+\label{sec:example}
+
+\section{Nurse Scheduling Problem}
+Das \textit{Nurse Scheduling Problem (NSP)} beschreibt die Zuordnung von Arbeitsschichten für Pflegekräfte innerhalb eines bestimmten Planungszeitraums. Ziel ist es, die Abfolge der Schichten für jede Pflegekraft so festzulegen, dass eine kontinuierliche und angemessene Patientenversorgung gewährleistet wird. Die Erstellung solcher Dienstpläne stellt eine komplexe und zeitaufwendige Aufgabe dar. Gleichzeitig beeinflussen Dienstpläne mit unterschiedlichen Schichten das Stressniveau der Pflegekräfte sowie deren soziale Beziehungen und Familienleben erheblich \parencite{Oughalime2008}.
+
+Das Nurse Scheduling Problem umfasst die Zuweisung Schichten unter Berücksichtigung verschiedener Nebenbedingungen. Dabei muss sichergestellt werden, dass jederzeit ausreichend Personal vorhanden ist, ohne unnötige Überbesetzung zu verursachen. Die Dienstplanung erfordert daher umfangreiches Wissen und Erfahrung und wird in vielen Krankenhäusern manuell durch Stationsleitungen oder andere verantwortliche Personen durchgeführt. Ein geeigneter Dienstplan soll nicht nur die täglichen Schichtanforderungen erfüllen, sondern auch Fairness zwischen den Pflegekräften gewährleisten und ihre Gesundheit sowie ihr Privatleben möglichst wenig beeinträchtigen \parencite{Oughalime2008}.
+
+Darüber hinaus müssen bei der Erstellung von Dienstplänen unterschiedliche Qualifikationsstufen der Pflegekräfte sowie, wenn möglich, individuelle Präferenzen berücksichtigt werden. Die gleichzeitige Berücksichtigung dieser vielfältigen Anforderungen und Nebenbedingungen führt dazu, dass das Nurse Scheduling Problem als NP-schweres Optimierungsproblem klassifiziert wird. Ziel der Dienstplanung ist daher eine möglichst faire Verteilung der Arbeitsbelastung unter Einhaltung organisatorischer Vorgaben sowie der Präferenzen der Pflegekräfte \parencite{ayoughiDragonflyAlgorithmApplication2024}.
+
+\textit{Harte Constraints} müssen in jedem Fall erfüllt werden, da der Dienstplan ansonsten als unzulässig gilt. Dazu gehört beispielsweise die Sicherstellung einer Mindestanzahl an Pflegekräften pro Tag. Außerdem darf eine Pflegekraft pro Tag nur einer Station zugewiesen werden. 
+\textit{Weiche Constraints} repräsentieren die Wünsche und Präferenzen der Pflegekräfte. Diese sollen möglichst erfüllt werden, sind jedoch nicht zwingend erforderlich. Dazu kann beispielsweise die bevorzugte Anzahl an Arbeitstagen pro Planungszeitraum gehönren \parencite{Oughalime2008}. Bei der vorliegenden Arbeit wird sich vor Allem auf eine faire Verteilung zwischen Mitarbeiter und Stationen fokussiert.
+
+\section{Answer Set Programming}
+
+Answer Set Programming (ASP) ist ein deklarativer Ansatz  zur Modellierung und Lösung von Such- und Optimierungsproblemen. Es entstand aus der Schnittmenge mehrerer Forschungsgebiete, insbesondere der Wissensrepräsentation, der Logikprogrammierung und der Constraint-Satisfaction, und vereint deren Stärken in einem einheitlichen Framework. ASP erlaubt es, Probleme deklarativ zu formulieren, ohne dass der Programmierer den Suchprozess selbst steuert.
+\subsection{Syntax und Semantik}
+Die grundlegenden Bausteine eines ASP-Programms sind Atome, Literale und Regeln. Atome sind elementare Aussagen mit einem Wahrheitswert, Literale sind entweder Atome oder deren Negation. Regeln haben die allgemeine Form:
+\begin{lstlisting}[language=python]
+a :- b1, . . . , bm, not c1, . . . , not cn
+\end{lstlisting}
+
+Dabei bezeichnet \texttt{a}, also die linke Seite der Regel den Regelkopf, und die rechte Seite den Regelrumpf. Die Regel ist so zu interpretieren: Atom \texttt{a} gilt, sofern alle \texttt{bm} ableitbar sind und keines der \texttt{cn} ableitbar ist. 
+Der Operator not ist nicht als klassische Negation zu verstehen, sondern als Default-Negation, die die Nichtableitbarkeit eines Atoms ausdrückt. 
+Als Beispiel:
+\begin{lstlisting}[language=python]
+kaputt :- blitz, not blitzableiter
+licht_an :-  strom_an, not kaputt
+\end{lstlisting}
+Hier leuchtet eine Lampe, wenn der Strom an ist und es keinen Grund gibt anzunehmen, dass sie kaputt ist. Ist nichts über einen Defekt bekannt, gilt \texttt{not kaputt}, und die Lampe leuchtet.
+Wenn \texttt{Blitz} als Fakt hinzukommt, also der Blitz eingeschlagen hat, wird \texttt{kaputt} ableitbar, und \texttt{not kaputt} gilt nicht mehr, also leuchtet die Lampe nicht mehr. Wäre ein Blitzableiter vorhanden, würde das Atom \texttt{blitzableiter} hinzukommen. Dann wäre \texttt{kaputt} nicht mehr ableitbar, da das Literal \texttt{not blitzableiter} das verhindert. Das Atom \texttt{licht\_an} wäre somit wahr, die Lampe leuchtet.
+Da ASP eng mit der nichtmonotonen Logik verwandt ist, können bereits gezogene Schlussfolgerungen zurückgezogen werden, sobald neue Fakten oder Regeln hinzugefügt werden. Die Default-Negation ist dabei der zentrale Mechanismus, der dieses Verhalten ermöglicht.
+\subsection{Answer Sets als Lösungskonzept}
+Die Semantik von ASP-Programmen basiert auf dem Begriff des Answer Sets, auch früher unter dem Namen \textit{stable models} bekannt, der auf \textcite{stableModelSemanticGelfond} zurückgeht. Ein Answer Set ist eine Menge von Atomen, die in sich konsistent ist und bei der jedes enthaltene Atom durch eine Regelanwendung begründet werden kann. Ein Programm kann dabei mehrere, genau eines oder kein Answer Set besitzen, wobei jedes Answer Set einer gültigen Lösung des modellierten Problems entspricht \parencite{brewkaAnswerSetProgramming2011}. Diese Mehrwertigkeit macht ASP besonders geeignet für Probleme, bei denen mehrere gleichwertige Lösungen existieren können, wie zum Beispiel bei der Dienstplanung.
+\subsection{Verarbeitung und Werkzeuge}
+Die Ausführung eines ASP-Programms erfolgt typischerweise in zwei Schritten. Zunächst übersetzt ein sogenannter Grounder das vorhandene Programm in eine äquivalente aussagenlogische Form, indem alle Variablen durch konkrete Konstanten ersetzt werden. Anschließend berechnet ein Solver die Answer Sets des resultierenden Programms. Bekannte Systeme sind unter anderem CLASP, DLV und SMODELS. Moderne Solver nutzen dabei Techniken aus dem SAT-Solving, die sicherstellen, dass jedes wahre Atom tatsächlich ableitbar ist \parencite{brewkaAnswerSetProgramming2011}.
+\subsection{Anwendungsgebiete}
+Aufgrund seiner Ausdrucksstärke und Flexibilität findet ASP Anwendung in einer Vielzahl von Anwendungsbereichen. Industriell wurde es beispielsweise zur automatisierten Schichtplanung im Containerhafen Gioia Tauro eingesetzt, wo ein ASP-basiertes System die manuelle Planung von mehreren Stunden auf wenige Minuten reduzierte und gleichzeitig die Planqualität verbesserte. Weitere Anwendungsfelder umfassen Entscheidungsunterstützungssysteme, die Analyse biologischer Netzwerke, phylogenetische Systematik sowie klassische kombinatorische Probleme wie den Hamiltonkreis \parencite{brewkaAnswerSetProgramming2011}. 
+
+\section{Clingo}
+
+Clingo ist ein modernes ASP-System zur Berechnung von \textit{stable models} und erweitert klassische ASP-Systeme um das Konzept des Multi-Shot Solving. Während frühere Systeme einem einmaligen („one-shot“) Ablauf folgen, der aus Grounding und anschließendem Solving besteht, ermöglicht Clingo die Verarbeitung sich kontinuierlich verändernder Logikprogramme innerhalb eines laufenden Prozesses. Dadurch können Programme schrittweise erweitert, angepasst oder deaktiviert werden, ohne den Grounder oder Solver neu starten zu müssen \parencite{gebserMultishotASPSolving2018}.
+
+Ein zentrales Merkmal von Clingo ist die Integration von Grounder und Solver innerhalb eines einzigen Systems. Frühere Versionen von Clingo bestanden aus der Kombination des Grounders gringo und des Solvers clasp. Mit der Einführung des Multi-Shot Solving wurde Clingo jedoch um Mechanismen erweitert, die einen flexiblen und zustandsbasierten Lösungsprozess erlauben. Dabei bleibt der interne Zustand des Systems erhalten und kann durch verschiedene Operationen verändert werden. Dies reduziert Redundanzen beim erneuten Grounding und ermöglicht gleichzeitig die Wiederverwendung bereits gelernter Informationen des Solvers \parencite{gebserMultishotASPSolving2018}.
+
+Ein weiterer wichtiger Bestandteil von Clingo ist die bereitgestellte Programmierschnittstelle (API). Diese erlaubt die Kontrolle des Grounding- und Solving-Prozesses aus einer prozeduralen Programmiersprache heraus. Clingo stellt hierfür eine C-API bereit, sowie Bindings für Python und Lua \parencite{gebserMultishotASPSolving2018}.  Besonders relevant für diese Arbeit ist die Integration von Python, da sie eine flexible Steuerung komplexer Reasoning-Prozesse innerhalb von Clingo ermöglicht.
+
+Die Integration von beispielsweise Python erfolgt über das \textit{Directive} \texttt{\#script(python)}. Innerhalb eines solchen Skriptblocks kann eine main-Funktion definiert werden, die Zugriff auf ein Kontrollobjekt erhält. Über dieses Objekt können Subprogramme gezielt gegrounded und Solving-Aufrufe gestartet werden. Beispielsweise kann mit \texttt{prg.ground(...)} ein bestimmtes Teilprogramm instanziiert und mit \texttt{prg.solve()} die Berechnung von \textit{Answer Sets} ausgelöst werden. Dadurch wird die deklarative Wissensrepräsentation von ASP mit prozeduraler Steuerungslogik kombiniert \parencite{gebserMultishotASPSolving2018}.
+
+
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

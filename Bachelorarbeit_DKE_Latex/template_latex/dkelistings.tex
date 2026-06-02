@@ -1,0 +1,137 @@
+% !TeX root = MAIN.tex
+% !TeX encoding = UTF-8
+
+\usepackage{listings}
+\usepackage{inconsolata}
+\usepackage{textcomp}
+
+\definecolor{cblue}{rgb}{0.13,0.13,1}
+\definecolor{cgreen}{rgb}{0,0.5,0}
+\definecolor{cred}{rgb}{0.9,0,0}
+\definecolor{cgrey}{rgb}{0.46,0.45,0.48}
+\definecolor{corange}{rgb}{0.93, 0.53, 0.18}
+\definecolor{cgreen2}{rgb}{0.0, 0.42, 0.24}
+\definecolor{cbrown}{rgb}{0.59, 0.29, 0.0}
+
+\lstdefinelanguage{drools}{
+    morekeywords={
+        true, false, null,
+        lock-on-active, date-effective, date-expires, no-loop, auto-focus, activation-group, agenda-group,
+        ruleflow-group, entry-point, duration, package, import, dialect, salience, enabled, attributes, rule,
+        extend, when, then, template, query, declare, function, global, eval, not, in, or, and, exists, forall,
+        accumulate, collect, from, action, reverse, result, end, over, init, for, while, insert, delete, update,
+        if, else, new, import, instanceof, do, break, class
+    },
+    alsoletter={-},
+    sensitive=false,
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    morestring=[b]"
+}
+
+\lstdefinelanguage{properties}{
+    morekeywords={
+        true, false, null
+    },
+    alsoletter={-},
+    sensitive=false,
+    morecomment=[l]{\#},
+    morestring=[b]"
+}
+
+\lstdefinelanguage{sparql}{
+  sensitive=true,
+  morecomment=[l][\color{cgrey}]{\#},       % comments
+  morecomment=[n][\color{cgreen2}]{<http}{>}, % uris
+  morestring=[b][\color{cgreen}]{\"},  % strings
+  alsoletter={-},
+  % -------------------------- variables
+  keywordsprefix=?,
+  classoffset=0,
+  keywordstyle=\color{cbrown},
+  morekeywords={},
+  % -------------------------- prefixes
+  classoffset=1,
+  keywordstyle=\color{corange},
+  morekeywords={rdf,rdfs,xsd,inst,sim,qbx,ontolex,wordnet},
+  % -------------------------- keywords
+  classoffset=2,
+  keywordstyle=\color{cblue},
+  morekeywords={
+    SELECT,CONSTRUCT,DESCRIBE,ASK,WHERE,FROM,NAMED,PREFIX,BASE,OPTIONAL,
+    FILTER,GRAPH,LIMIT,OFFSET,SERVICE,UNION,EXISTS,NOT,BINDINGS,MINUS,a,
+    BIND,IRI,CONCAT,STRUUID,INSERT,DISTINCT,AS,GROUP,ORDER,BY,DESC,isLiteral
+  }
+}
+
+\lstdefinelanguage{json}{
+    string=[s]{"}{"},
+    stringstyle=\color{cblue},
+    comment=[l]{:},
+    commentstyle=\color{black},
+    literate=
+        *{0}{{{\color{numb}0}}}{1}
+         {1}{{{\color{numb}1}}}{1}
+         {2}{{{\color{numb}2}}}{1}
+         {3}{{{\color{numb}3}}}{1}
+         {4}{{{\color{numb}4}}}{1}
+         {5}{{{\color{numb}5}}}{1}
+         {6}{{{\color{numb}6}}}{1}
+         {7}{{{\color{numb}7}}}{1}
+         {8}{{{\color{numb}8}}}{1}
+         {9}{{{\color{numb}9}}}{1}
+}
+
+\lstdefinelanguage{js}{
+  keywords={const, let, typeof, instanceof, new, true, false, catch, function, return, null, undefined, catch, switch, var, if, in, while, for, do, else, case, break, class, private, public},
+  ndkeywords={class, export, throw, import, this, string, number, boolean},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]`,
+  morestring=[b]"
+}
+
+\lstdefinelanguage{rdf}{
+  sensitive=true,
+  morestring=[b][\color{cgreen}]{\"},
+  %morecomment=[n][\color{cgrey}]{@}{ },
+  alsoletter={-},
+  % --------------------------
+  classoffset=0,
+  keywordstyle=\color{cblue},
+  morekeywords={drugs,qbx,rdfs,xsd},
+  % --------------------------
+  classoffset=1,
+  keywordstyle=\color{cgrey},
+  morekeywords={@en},
+  % --------------------------
+  classoffset=2,
+  keywordstyle=\color{corange},
+  morekeywords={a}
+}
+
+\lstdefinestyle{all}{
+    basicstyle=\ttfamily\small,
+    commentstyle=\color{cgrey},
+    stringstyle=\color{cgreen},
+    keywordstyle=\color{cblue},
+    showtabs=false,
+    showspaces=false,
+    breaklines=true,
+    showstringspaces=false,
+    breakatwhitespace=true,
+    captionpos=t,
+    extendedchars=true,
+    frame=single,
+    rulecolor=\color{black},
+    numbers=left,
+    numbersep=5pt,
+    numberstyle=\tiny\color{darkgray},
+    stepnumber=1,
+    tabsize=2,
+    backgroundcolor=\color{white}
+}
+ 
+\lstset{style=all,upquote=true}

@@ -1,0 +1,62 @@
+% !TeX encoding = UTF-8
+% !TeX program = pdflatex
+% !BIB program = biber
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Basierend auf der Vorlage von									   %%%
+%%% Michael Vierhauser, Institut fuer Wirtschaftsinformatik, Nov 2019  %%%
+%%% und der Vorlage von Ali Varli, Oct 2019                            %%%
+%%% Coversheet by: Andreas Neubauer, May 2016                          %%%    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper,11pt,oneside,onecolumn,openany]{memoir}
+\input{imports}
+\input{config} % Change this file to set title, author, ...
+\input{dkelistings}
+\input{translations}
+\usepackage{chngcntr}
+\counterwithout{figure}{chapter}
+\counterwithout{table}{chapter}
+\usepackage{float} % in der Präambel
+
+\begin{document}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%%% Coverpage                       %%%% 
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\input{cover/coversheet}
+	\clearpage
+	
+	% set page margins for document except coversheet
+	\pagestyle{plain}
+	\newgeometry{left=35mm,right=20mm,top=20mm,bottom=20mm} 
+	\reversemarginpar
+	\OnehalfSpacing
+	\nonzeroparskip
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%%% Front Matter                    %%%% 
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\frontmatter % Switches to roman numbering.
+	\input{frontmatter/acknowledgements} % Optional
+	\input{frontmatter/kurzfassung}
+	\input{frontmatter/abstract}
+	\input{frontmatter/tableofcontents}
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%%% Main  Matter                    %%%% 
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\mainmatter
+	\input{mainmatter/01-introduction}
+	\input{mainmatter/02-grundlagen}
+	\input{mainmatter/03-related-work}
+	\input{mainmatter/04-requirements-architecture}
+	\input{mainmatter/05-rest}
+	\input{mainmatter/06-asp}
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%%% Back Matter                     %%%% 
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\backmatter
+	\input{backmatter/misc}
+	\appendix
+	\input{backmatter/appendix}
+\end{document}

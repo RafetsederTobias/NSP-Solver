@@ -1,0 +1,41 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Some useful macros for section,   %%%
+%%% figure, and table referencing...  %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ifeng
+	\newcommand{\citechap}[1]{Chapter~\ref{chap:#1}}
+	\newcommand{\citesec}[1]{Section~\ref{sec:#1}}
+	\newcommand{\citefig}[1]{Fig.~\ref{fig:#1}}
+	\newcommand{\citelisting}[1]{\textsc{Listing}~\ref{lst:#1}}
+	\newcommand{\citetable}[1]{{Table}~\ref{tab:#1}}
+\else
+	\newcommand{\citechap}[1]{Kapitel~\ref{chap:#1}}
+	\newcommand{\citesec}[1]{Sektion~\ref{sec:#1}}
+	\newcommand{\citefig}[1]{Abb.~\ref{fig:#1}}
+	\newcommand{\citelisting}[1]{\textsc{Listing}~\ref{lst:#1}}
+	\newcommand{\citetable}[1]{{Tabelle}~\ref{tab:#1}}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Headings                        %%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ifeng
+	\newcommand*\statement{Sworn Declaration}
+	\newcommand*\statementFirstPara{I hereby declare that the thesis submitted is my own unaided work, that I have not used other than the sources indicated, and that all direct and indirect sources are acknowledged as references.}
+	\newcommand*\statementSecondPara{This printed thesis is identical with the electronic version submitted.}
+	\newcommand*\statementSignature{Signature}
+	\newcommand*\statementDatePlace{Place, Date}
+	\newcommand*\ack{Acknowledgments}
+\else
+	\newcommand*\statement{Eidesstattliche Erklärung}
+	\newcommand*\statementFirstPara{Ich erkläre an Eides statt, dass ich die vorliegende \ifcase\type Dissertation \or Diplomarbeit \or Masterarbeit \or Bachelorarbeit \fi selbstständig und ohne fremde Hilfe verfasst, andere als die angegebenen Quellen und Hilfsmittel nicht benutzt bzw. die wörtlich oder sinngemäß entnommenen Stellen als solche kenntlich gemacht habe.}
+	\newcommand*\statementSecondPara{Die vorliegende \ifcase\type Dissertation \or Diplomarbeit \or Masterarbeit \or Bachelorarbeit \fi ist mit dem elektronisch übermittelten Textdokument identisch.}
+	\newcommand*\statementSignature{Unterschrift}
+	\newcommand*\statementDatePlace{Ort, Datum}
+	\newcommand*\ack{Danksagung}
+	\renewcommand*\listfigurename{Abbildungsverzeichnis}
+	\renewcommand*\listtablename{Tabellenverzeichnis}
+	\renewcommand{\bibname}{Literaturverzeichnis}
+	\renewcommand{\contentsname}{Inhaltsverzeichnis}
+\fi
