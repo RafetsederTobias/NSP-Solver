@@ -151,7 +151,7 @@ def _run_clingo(
         if isReschedule:
             ctl = clingo.Control(["--opt-mode=opt", "--heuristic=Domain"])
         else:
-            ctl = clingo.Control(["--opt-mode=opt"])
+            ctl = clingo.Control(["--opt-mode=opt",])
         ctl.load(str(rules_file))
         ctl.add("base", [], facts)
         if extra_rules:
@@ -194,20 +194,39 @@ def _run_clingo(
             1{ assigned(U, S, D) : eligible_day(U, S, D) } Max :-
                 station(S), day(D), max_assignments(S, Max).
 
-            shortfall(S, D, Gap, GapSq) :-
-            station(S), day(D),
-            max_assignments(S, Max),
-            staff_count(S, D, N),
-            Gap = Max - N,
-            GapSq = Gap * Gap.
+            ideal_count(S, Target) :-
+                station(S),
+                max_assignments(S, Max),
+                Target = (Max + 1) / 2.   % integer division: max=3 -> target=2
 
+            % --- Deviation per station-day (ASP-safe, no squaring) ---
+            % Use absolute deviation split into over/under to avoid multiplication.
+
+            over_staffed(S, D, Delta) :-
+                station(S), day(D),
+                staff_count(S, D, N),
+                ideal_count(S, Target),
+                N > Target,
+                Delta = N - Target.
+
+            under_staffed(S, D, Delta) :-
+                station(S), day(D),
+                staff_count(S, D, N),
+                ideal_count(S, Target),
+                N < Target,
+                Delta = Target - N.
+
+            % --- Optimization ---
+            % Penalize any deviation from ideal. Higher weight = stricter fairness.
+            % Both directions penalized equally — this is what drives toward 2/3.
             #minimize {
-                GapSq @10, S, D : shortfall(S, D, _, GapSq)
+                Delta @10, S, D : over_staffed(S, D, Delta) ;
+                Delta @10, S, D : under_staffed(S, D, Delta)
             }.
         """
 
         print("Phase 1: trying with forced staffing and fairness...")
-        result = solve(EXTRA_FACTS, timeout=10)
+        result = solve(EXTRA_FACTS, timeout=60)
 
         if result:
             print("Phase 1 found a solution, returning...")
