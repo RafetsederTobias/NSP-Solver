@@ -1,48 +1,21 @@
 from datetime import date
 from typing import List
 
+from schema.schedule_schema import SchedulePayload, ScheduleResponse
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import delete, extract, select, update, func, select
+from sqlalchemy import delete, extract, select, select
 from asp.asp_service import solve_reschedule, solve_schedule
 from models.StationAssignment import StationAssignment
 from models.Schedule import Schedule
 from models.Station import Station
 from models.User import User
 from db import get_db
-from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.orm import selectinload
+from asp.scheduling_options_service import expand_blocked_days_to_full_weeks, get_or_create_schedule
 
 
 router = APIRouter(prefix="/api/v1/schedule", tags=["schedule"])
-
-
-class UserConstraint(BaseModel):
-    user_id: int = Field(alias="userId")
-    maxDaysPerMonth: int | None = None
-    minDaysPerMonth: int | None = None
-    exactDaysPerMonth: int | None = None
-    fixedDays: List[int] | None = None
-    blockedDays: List[int] | None = None
-
-
-class SchedulePayload(BaseModel):
-    currentMonth: int
-    currentYear: int
-    daysInMonth: int
-    keepExistingAssignments: bool
-    newPlan: bool
-    alternativePlan: bool
-    constraints: List[UserConstraint]
-
-class ScheduleResponse(BaseModel):
-    id: int
-    name: str
-    year: int
-    month: int
-    is_loaded: bool
-
-    model_config = ConfigDict(from_attributes=True)
 
 
 def get_weekdays(year: int, month: int, days: list[int]) -> list[int]:
@@ -51,48 +24,6 @@ def get_weekdays(year: int, month: int, days: list[int]) -> list[int]:
         if date(year, month, d).weekday() < 5
     ]
 
-async def get_or_create_schedule(
-    db: AsyncSession,
-    year: int,
-    month: int,
-    new_plan: bool
-) -> int:
-    count_result = await db.execute(
-        select(func.count()).where(
-            Schedule.year == year,
-            Schedule.month == month,
-        )
-    )
-    count = count_result.scalar()
-    name = f"Plan {year}-{month:02d}" if count == 0 else f"Plan {year}-{month:02d} #{count + 1}"
-
-    if new_plan:
-        await db.execute(
-            update(Schedule)
-            .where(Schedule.year == year, Schedule.month == month, Schedule.is_loaded == True)
-            .values(is_loaded=False)
-        )
-        new_schedule = Schedule(name=name, year=year, month=month, is_loaded=True)
-        db.add(new_schedule)
-        await db.flush()
-        return new_schedule.id
-    else:
-        result = await db.execute(
-            select(Schedule).where(
-                Schedule.year == year,
-                Schedule.month == month,
-                Schedule.is_loaded == True
-            )
-        )
-        existing_schedule = result.scalar_one_or_none()
-
-        if existing_schedule is None:
-            new_schedule = Schedule(name=name, year=year, month=month, is_loaded=True)
-            db.add(new_schedule)
-            await db.flush()
-            return new_schedule.id
-
-        return existing_schedule.id
 
 
 @router.post("", status_code=201)
@@ -108,15 +39,15 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
     stations = stations_result.scalars().all()
 
     if payload.newPlan:
-        # Create a new schedule
+        # create new schedule
         schedule_id = await get_or_create_schedule(db, payload.currentYear, payload.currentMonth, new_plan=True)
         existing_assignments = []
     else:
-        # Reuse the existing loaded schedule
+        # reuse existing loaded schedule
         schedule_id = await get_or_create_schedule(db, payload.currentYear, payload.currentMonth, new_plan=False)
 
         if payload.keepExistingAssignments:
-            # Load existing user assignments to pass to solver
+            # load existing user assignments
             existing_result = await db.execute(
                 select(StationAssignment).where(
                     StationAssignment.schedule_id == schedule_id,
@@ -125,7 +56,7 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
             )
             existing_assignments = existing_result.scalars().all()
         else:
-            # Wipe everything in this schedule
+            # wipe everything in this schedule
             await db.execute(
                 delete(StationAssignment).where(
                     StationAssignment.schedule_id == schedule_id
@@ -133,7 +64,7 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
             )
             existing_assignments = []
 
-        # Always clear placeholders for the current schedule before re-solving
+        # clear placeholders for the current schedule before resolving
         await db.execute(
             delete(StationAssignment).where(
                 StationAssignment.schedule_id == schedule_id,
@@ -153,6 +84,8 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
         constraints=payload.constraints,
         existing_assignments=existing_assignments,
     )
+
+    print(expand_blocked_days_to_full_weeks(payload.constraints,payload.currentYear,payload.currentMonth))
 
     if not assignments:
         raise HTTPException(
@@ -188,6 +121,42 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
         .options(selectinload(StationAssignment.station))
     )
     placeholders = placeholder_result.scalars().all()
+
+    # Alternativpläne:
+    if payload.alternativePlan:
+        alt_schedule_id = await get_or_create_schedule(
+            db, payload.currentYear, payload.currentMonth, new_plan=True, load=False
+        )
+
+        alt_assignments = solve_reschedule(
+            users,
+            stations,
+            all_days=weekdays,
+            constraints=expand_blocked_days_to_full_weeks(
+                payload.constraints, payload.currentYear, payload.currentMonth
+            ),
+            existing_assignments=db_assignments,
+        )
+
+        if not alt_assignments:
+            raise HTTPException(
+                status_code=409,
+                detail="Es konnte kein gültiger Alternativplan gefunden werden."
+            )
+
+        alt_db_assignments = [
+            StationAssignment(
+                date=date(payload.currentYear, payload.currentMonth, a["day"]),
+                station_id=a["station_id"],
+                user_id=a["user_id"],
+                schedule_id=alt_schedule_id,
+            )
+            for a in alt_assignments
+        ]
+
+        db.add_all(alt_db_assignments)
+        await db.commit()
+
 
     response = {"created": len([a for a in db_assignments if a.user_id is not None])}
 
@@ -269,8 +238,8 @@ async def reschedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db
             detail="Es konnte kein gültiger Dienstplan gefunden werden. Überprüfe die Parameter."
         )
 
-    # Replacing full month schedule with new solution
-    # Delete only future assignments
+    # replacing full month schedule with new solution
+    # deletes only future assignments
     await db.execute(
         delete(StationAssignment)
         .where(

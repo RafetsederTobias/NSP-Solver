@@ -36,5 +36,5 @@
 \contentsline {chapter}{\numberline {7}Conclusion and Outlook}{19}{chapter.7}%
 \contentsline {chapter}{\nonumberline Literatur}{20}{chapter*.11}%
 \def \@chapapp {\appendixname }
-\contentsline {appendixchapter}{\numberline {A}An Appendix}{21}{appendix.A}%
+\contentsline {appendixchapter}{\numberline {A}An Appendix}{21}{chapter.A}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

@@ -154,80 +154,6 @@
       \verb https://dl.acm.org/doi/10.1145/2043174.2043195
       \endverb
     \endentry
-    \entry{cardellini2023solvingrehabilitationschedulingproblems}{misc}{}{}
-      \name{author}{7}{}{%
-        {{un=0,uniquepart=base,hash=9388543cf808a4885ad1b21879c2cd3f}{%
-           family={Cardellini},
-           familyi={C\bibinitperiod},
-           given={Matteo},
-           giveni={M\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=907a6cb4f96055abc5faa552631222c1}{%
-           family={Nardi},
-           familyi={N\bibinitperiod},
-           given={Paolo\bibnamedelima De},
-           giveni={P\bibinitperiod\bibinitdelim D\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=5dab82e1316a61875fa864346d121e08}{%
-           family={Dodaro},
-           familyi={D\bibinitperiod},
-           given={Carmine},
-           giveni={C\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=d861239445883e0309fb2d90ea3f6f06}{%
-           family={Galatà},
-           familyi={G\bibinitperiod},
-           given={Giuseppe},
-           giveni={G\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=8b026ad42b80ae0837e642d76b1e9eef}{%
-           family={Giardini},
-           familyi={G\bibinitperiod},
-           given={Anna},
-           giveni={A\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=a65827edc12272b7d5310245c1a17588}{%
-           family={Maratea},
-           familyi={M\bibinitperiod},
-           given={Marco},
-           giveni={M\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=79df2c2122fac6d6b17e7a683d50fe1e}{%
-           family={Porro},
-           familyi={P\bibinitperiod},
-           given={Ivan},
-           giveni={I\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{7761dbf20a90956ef609c3604c6a3457}
-      \strng{fullhash}{82470b23bd7dca8703896c3769145db0}
-      \strng{fullhashraw}{82470b23bd7dca8703896c3769145db0}
-      \strng{bibnamehash}{82470b23bd7dca8703896c3769145db0}
-      \strng{authorbibnamehash}{82470b23bd7dca8703896c3769145db0}
-      \strng{authornamehash}{7761dbf20a90956ef609c3604c6a3457}
-      \strng{authorfullhash}{82470b23bd7dca8703896c3769145db0}
-      \strng{authorfullhashraw}{82470b23bd7dca8703896c3769145db0}
-      \field{sortinit}{C}
-      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{eprintclass}{cs.LO}
-      \field{eprinttype}{arXiv}
-      \field{title}{Solving Rehabilitation Scheduling problems via a Two-Phase ASP approach}
-      \field{year}{2023}
-      \verb{eprint}
-      \verb 2303.08709
-      \endverb
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/2303.08709
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/2303.08709
-      \endverb
-    \endentry
     \entry{gebserMultishotASPSolving2018}{online}{}{}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=a296fbe902a96f2ceebb7398463f3e13}{%
@@ -299,42 +225,6 @@
       \verb http://arxiv.org/abs/1705.09811
       \endverb
       \keyw{Computer Science - Artificial Intelligence}
-    \endentry
-    \entry{stableModelSemanticGelfond}{article}{}{}
-      \name{author}{2}{}{%
-        {{un=0,uniquepart=base,hash=9ddf8a4d782a7a6f34c25fbc4ca822b1}{%
-           family={Gelfond},
-           familyi={G\bibinitperiod},
-           given={Michael},
-           giveni={M\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=3f9f7c9937297077325233d345cf9c91}{%
-           family={Lifschitz},
-           familyi={L\bibinitperiod},
-           given={Vladimir},
-           giveni={V\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{701aac313c79e95b5099346df9bba24a}
-      \strng{fullhash}{701aac313c79e95b5099346df9bba24a}
-      \strng{fullhashraw}{701aac313c79e95b5099346df9bba24a}
-      \strng{bibnamehash}{701aac313c79e95b5099346df9bba24a}
-      \strng{authorbibnamehash}{701aac313c79e95b5099346df9bba24a}
-      \strng{authornamehash}{701aac313c79e95b5099346df9bba24a}
-      \strng{authorfullhash}{701aac313c79e95b5099346df9bba24a}
-      \strng{authorfullhashraw}{701aac313c79e95b5099346df9bba24a}
-      \field{sortinit}{G}
-      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Logic Programming}
-      \field{month}{12}
-      \field{title}{The Stable Model Semantics For Logic Programming}
-      \field{volume}{2}
-      \field{year}{2000}
     \endentry
     \entry{nabeshimaASPbasedNurseScheduling2026}{article}{}{}
       \name{author}{4}{}{%
@@ -412,59 +302,6 @@
       \verb http://arxiv.org/abs/2506.13600
       \endverb
       \keyw{Computer Science - Artificial Intelligence}
-    \endentry
-    \entry{Oughalime2008}{inproceedings}{}{}
-      \name{author}{3}{}{%
-        {{un=0,uniquepart=base,hash=df5c52353f2c7a56e24108aa3677c925}{%
-           family={Oughalime},
-           familyi={O\bibinitperiod},
-           given={Ahmed},
-           giveni={A\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=6a524e204a1858fd4b614fdd0951b8f1}{%
-           family={Ismail},
-           familyi={I\bibinitperiod},
-           given={Wan\bibnamedelima Rosmanira},
-           giveni={W\bibinitperiod\bibinitdelim R\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=fa15f9acbff5b9e42a172bf84396a524}{%
-           family={Liong},
-           familyi={L\bibinitperiod},
-           given={Choong\bibnamedelima Yeun},
-           giveni={C\bibinitperiod\bibinitdelim Y\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{2ebfbe23c520e79e604536da8c696d37}
-      \strng{fullhash}{bd33d6c40b32d8e0d471f957e9de4dd5}
-      \strng{fullhashraw}{bd33d6c40b32d8e0d471f957e9de4dd5}
-      \strng{bibnamehash}{bd33d6c40b32d8e0d471f957e9de4dd5}
-      \strng{authorbibnamehash}{bd33d6c40b32d8e0d471f957e9de4dd5}
-      \strng{authornamehash}{2ebfbe23c520e79e604536da8c696d37}
-      \strng{authorfullhash}{bd33d6c40b32d8e0d471f957e9de4dd5}
-      \strng{authorfullhashraw}{bd33d6c40b32d8e0d471f957e9de4dd5}
-      \field{sortinit}{O}
-      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Proceedings - International Symposium on Information Technology 2008, ITSim}
-      \field{note}{Cited by: 17}
-      \field{source}{Scopus}
-      \field{title}{A tabu search approach to the nurse scheduling problem}
-      \field{type}{Conference paper}
-      \field{volume}{1}
-      \field{year}{2008}
-      \verb{doi}
-      \verb 10.1109/ITSIM.2008.4631604
-      \endverb
-      \verb{urlraw}
-      \verb https://www.scopus.com/inward/record.uri?eid=2-s2.0-57349187987&doi=10.1109%2fITSIM.2008.4631604&partnerID=40&md5=32f2cb164994f919d53d66dea59d8332
-      \endverb
-      \verb{url}
-      \verb https://www.scopus.com/inward/record.uri?eid=2-s2.0-57349187987&doi=10.1109%2fITSIM.2008.4631604&partnerID=40&md5=32f2cb164994f919d53d66dea59d8332
-      \endverb
     \endentry
   \enddatalist
   \datalist[entry]{apa/global//global/global/global}
@@ -603,80 +440,6 @@
       \verb https://dl.acm.org/doi/10.1145/2043174.2043195
       \endverb
     \endentry
-    \entry{cardellini2023solvingrehabilitationschedulingproblems}{misc}{}{}
-      \name{author}{7}{}{%
-        {{un=0,uniquepart=base,hash=9388543cf808a4885ad1b21879c2cd3f}{%
-           family={Cardellini},
-           familyi={C\bibinitperiod},
-           given={Matteo},
-           giveni={M\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=907a6cb4f96055abc5faa552631222c1}{%
-           family={Nardi},
-           familyi={N\bibinitperiod},
-           given={Paolo\bibnamedelima De},
-           giveni={P\bibinitperiod\bibinitdelim D\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=5dab82e1316a61875fa864346d121e08}{%
-           family={Dodaro},
-           familyi={D\bibinitperiod},
-           given={Carmine},
-           giveni={C\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=d861239445883e0309fb2d90ea3f6f06}{%
-           family={Galatà},
-           familyi={G\bibinitperiod},
-           given={Giuseppe},
-           giveni={G\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=8b026ad42b80ae0837e642d76b1e9eef}{%
-           family={Giardini},
-           familyi={G\bibinitperiod},
-           given={Anna},
-           giveni={A\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=a65827edc12272b7d5310245c1a17588}{%
-           family={Maratea},
-           familyi={M\bibinitperiod},
-           given={Marco},
-           giveni={M\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=79df2c2122fac6d6b17e7a683d50fe1e}{%
-           family={Porro},
-           familyi={P\bibinitperiod},
-           given={Ivan},
-           giveni={I\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{7761dbf20a90956ef609c3604c6a3457}
-      \strng{fullhash}{82470b23bd7dca8703896c3769145db0}
-      \strng{fullhashraw}{82470b23bd7dca8703896c3769145db0}
-      \strng{bibnamehash}{82470b23bd7dca8703896c3769145db0}
-      \strng{authorbibnamehash}{82470b23bd7dca8703896c3769145db0}
-      \strng{authornamehash}{7761dbf20a90956ef609c3604c6a3457}
-      \strng{authorfullhash}{82470b23bd7dca8703896c3769145db0}
-      \strng{authorfullhashraw}{82470b23bd7dca8703896c3769145db0}
-      \field{sortinit}{C}
-      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{eprintclass}{cs.LO}
-      \field{eprinttype}{arXiv}
-      \field{title}{Solving Rehabilitation Scheduling problems via a Two-Phase ASP approach}
-      \field{year}{2023}
-      \verb{eprint}
-      \verb 2303.08709
-      \endverb
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/2303.08709
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/2303.08709
-      \endverb
-    \endentry
     \entry{gebserMultishotASPSolving2018}{online}{}{}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=a296fbe902a96f2ceebb7398463f3e13}{%
@@ -748,42 +511,6 @@
       \verb http://arxiv.org/abs/1705.09811
       \endverb
       \keyw{Computer Science - Artificial Intelligence}
-    \endentry
-    \entry{stableModelSemanticGelfond}{article}{}{}
-      \name{author}{2}{}{%
-        {{un=0,uniquepart=base,hash=9ddf8a4d782a7a6f34c25fbc4ca822b1}{%
-           family={Gelfond},
-           familyi={G\bibinitperiod},
-           given={Michael},
-           giveni={M\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=3f9f7c9937297077325233d345cf9c91}{%
-           family={Lifschitz},
-           familyi={L\bibinitperiod},
-           given={Vladimir},
-           giveni={V\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{701aac313c79e95b5099346df9bba24a}
-      \strng{fullhash}{701aac313c79e95b5099346df9bba24a}
-      \strng{fullhashraw}{701aac313c79e95b5099346df9bba24a}
-      \strng{bibnamehash}{701aac313c79e95b5099346df9bba24a}
-      \strng{authorbibnamehash}{701aac313c79e95b5099346df9bba24a}
-      \strng{authornamehash}{701aac313c79e95b5099346df9bba24a}
-      \strng{authorfullhash}{701aac313c79e95b5099346df9bba24a}
-      \strng{authorfullhashraw}{701aac313c79e95b5099346df9bba24a}
-      \field{sortinit}{G}
-      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Logic Programming}
-      \field{month}{12}
-      \field{title}{The Stable Model Semantics For Logic Programming}
-      \field{volume}{2}
-      \field{year}{2000}
     \endentry
     \entry{nabeshimaASPbasedNurseScheduling2026}{article}{}{}
       \name{author}{4}{}{%
@@ -862,60 +589,10 @@
       \endverb
       \keyw{Computer Science - Artificial Intelligence}
     \endentry
-    \entry{Oughalime2008}{inproceedings}{}{}
-      \name{author}{3}{}{%
-        {{un=0,uniquepart=base,hash=df5c52353f2c7a56e24108aa3677c925}{%
-           family={Oughalime},
-           familyi={O\bibinitperiod},
-           given={Ahmed},
-           giveni={A\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=6a524e204a1858fd4b614fdd0951b8f1}{%
-           family={Ismail},
-           familyi={I\bibinitperiod},
-           given={Wan\bibnamedelima Rosmanira},
-           giveni={W\bibinitperiod\bibinitdelim R\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=fa15f9acbff5b9e42a172bf84396a524}{%
-           family={Liong},
-           familyi={L\bibinitperiod},
-           given={Choong\bibnamedelima Yeun},
-           giveni={C\bibinitperiod\bibinitdelim Y\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{2ebfbe23c520e79e604536da8c696d37}
-      \strng{fullhash}{bd33d6c40b32d8e0d471f957e9de4dd5}
-      \strng{fullhashraw}{bd33d6c40b32d8e0d471f957e9de4dd5}
-      \strng{bibnamehash}{bd33d6c40b32d8e0d471f957e9de4dd5}
-      \strng{authorbibnamehash}{bd33d6c40b32d8e0d471f957e9de4dd5}
-      \strng{authornamehash}{2ebfbe23c520e79e604536da8c696d37}
-      \strng{authorfullhash}{bd33d6c40b32d8e0d471f957e9de4dd5}
-      \strng{authorfullhashraw}{bd33d6c40b32d8e0d471f957e9de4dd5}
-      \field{sortinit}{O}
-      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Proceedings - International Symposium on Information Technology 2008, ITSim}
-      \field{note}{Cited by: 17}
-      \field{source}{Scopus}
-      \field{title}{A tabu search approach to the nurse scheduling problem}
-      \field{type}{Conference paper}
-      \field{volume}{1}
-      \field{year}{2008}
-      \verb{doi}
-      \verb 10.1109/ITSIM.2008.4631604
-      \endverb
-      \verb{urlraw}
-      \verb https://www.scopus.com/inward/record.uri?eid=2-s2.0-57349187987&doi=10.1109%2fITSIM.2008.4631604&partnerID=40&md5=32f2cb164994f919d53d66dea59d8332
-      \endverb
-      \verb{url}
-      \verb https://www.scopus.com/inward/record.uri?eid=2-s2.0-57349187987&doi=10.1109%2fITSIM.2008.4631604&partnerID=40&md5=32f2cb164994f919d53d66dea59d8332
-      \endverb
-    \endentry
   \enddatalist
+  \missing{Oughalime2008}
+  \missing{cardellini2023solvingrehabilitationschedulingproblems}
+  \missing{stableModelSemanticGelfond}
 \endrefsection
 \endinput
 
