@@ -42,7 +42,7 @@ In diesem Beispiel werden zwei Benutzer, deren Kompetenzen, Stationen mit den be
 \section{Regelwerk}
 %First Draft%
 Das Regelwerk für die initiale Planerstellung ist in der Datei \texttt{rules.lp} 
-definiert. Die Grundlage bildet die Bestimmung der \textit{Eligibility}: Ein 
+definiert. Das Listing \ref{rules} beinhaltet die Basis-Fakten. Die Grundlage bildet die Bestimmung der \textit{Eligibility}: Ein 
 Benutzer gilt als qualifiziert für eine Station (\texttt{eligible/2}), wenn er 
 alle erforderlichen Fähigkeiten besitzt, also kein \texttt{requires/2}-Fakt 
 existiert, dem kein entsprechendes \texttt{has\_skill/2}-Fakt gegenübersteht. 
@@ -61,6 +61,33 @@ Die \textit{Optimierung} minimiert unbesetzte Stationen über eine
 denen eine Station ohne Besetzung bleibt, so gering wie möglich zu halten. 
 Die Regelstruktur für das Rescheduling folgt einem ähnlichen Prinzip, wird 
 jedoch in Abschnitt~\ref{sec:rescheduling} gesondert behandelt.
+\begin{lstlisting}[caption={ASP-Regeln},label={rules}]
+eligible(U, S) :-
+user(U), station(S),
+#count { Sk : requires(S, Sk), not has_skill(U, Sk) } = 0.
+
+eligible_day(U, S, D) :-
+eligible(U, S), day(D),
+not blocked_day(U, D).
+
+{ assigned(U, S, D) : eligible_day(U, S, D) } Max :-
+station(S), day(D), max_assignments(S, Max).
+
+% user nicht bei 2 stationen an einem tag
+:- user(U), day(D),
+#count { S : assigned(U, S, D) } > 1.
+
+:- user(U), fixed_day(U, D), day(D), not assigned(U, _, D).
+
+:- user(U), max_days(U, Max),
+#count { D : assigned(U, _, D) } > Max.
+
+:- user(U), min_days(U, Min),
+#count { D : assigned(U, _, D) } < Min.
+
+:- user(U), exact_days(U, Exact),
+#count { D : assigned(U, _, D) } != Exact.
+\end{lstlisting}
 \section{Zweiphasen-Lösungsanstz}
 
 \section{Rescheduling-Logik}
