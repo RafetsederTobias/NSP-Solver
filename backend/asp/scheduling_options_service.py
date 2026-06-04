@@ -1,10 +1,20 @@
-from schema.schedule_schema import UserConstraint
+from http.client import HTTPException
+
+from asp.asp_service import solve_reschedule
+from models.Station import StationAssignment
+from schema.schedule_schema import SchedulePayload, UserConstraint
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, func, select
 from models.Schedule import Schedule
 from datetime import date, timedelta
 from typing import List
 
+
+def get_weekdays(year: int, month: int, days: list[int]) -> list[int]:
+    return [
+        d for d in days
+        if date(year, month, d).weekday() < 5
+    ]
 
 async def get_or_create_schedule(
     db: AsyncSession,
@@ -108,3 +118,46 @@ def expand_blocked_days_to_full_weeks(
         )
 
     return expanded
+
+async def create_alternative_schedule(
+    db: AsyncSession,
+    users,
+    stations,
+    weekdays,
+    payload: SchedulePayload,
+    db_assignments: list,
+) -> int:
+    alt_schedule_id = await get_or_create_schedule(
+        db, payload.currentYear, payload.currentMonth, new_plan=True, load=False
+    )
+
+    alt_assignments = solve_reschedule(
+        users,
+        stations,
+        all_days=weekdays,
+        constraints=expand_blocked_days_to_full_weeks(
+            payload.constraints, payload.currentYear, payload.currentMonth
+        ),
+        existing_assignments=db_assignments,
+    )
+
+    if not alt_assignments:
+        raise HTTPException(
+            status_code=409,
+            detail="Es konnte kein gültiger Alternativplan gefunden werden."
+        )
+
+    alt_db_assignments = [
+        StationAssignment(
+            date=date(payload.currentYear, payload.currentMonth, a["day"]),
+            station_id=a["station_id"],
+            user_id=a["user_id"],
+            schedule_id=alt_schedule_id,
+        )
+        for a in alt_assignments
+    ]
+
+    db.add_all(alt_db_assignments)
+    await db.commit()
+
+    return alt_schedule_id

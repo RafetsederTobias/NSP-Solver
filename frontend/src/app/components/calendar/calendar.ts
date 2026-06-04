@@ -643,7 +643,7 @@ export class CalendarComponent implements OnInit {
           daysInMonth: daysInCurrentMonth,
           keepExistingAssignments: result.keepExistingAssignments,
           newPlan: false,
-          alternativePlan: false,
+          alternativePlan: result.alternativePlan,
           constraints: result.constraints,
         };
 

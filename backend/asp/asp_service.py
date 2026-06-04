@@ -62,8 +62,6 @@ def _build_base_facts(users, stations, days, constraints=None) -> str:
     facts += _build_day_facts(days)
     facts += _build_constraint_facts(constraints)
 
-    print(facts)
-
     return facts
 
 
@@ -218,7 +216,7 @@ def _run_clingo(
 
             % --- Optimization ---
             % Penalize any deviation from ideal. Higher weight = stricter fairness.
-            % Both directions penalized equally — this is what drives toward 2/3.
+            % Both directions penalized equally, drives toward 2/3.
             #minimize {
                 Delta @10, S, D : over_staffed(S, D, Delta) ;
                 Delta @10, S, D : under_staffed(S, D, Delta)
@@ -226,7 +224,7 @@ def _run_clingo(
         """
 
         print("Phase 1: trying with forced staffing and fairness...")
-        result = solve(EXTRA_FACTS, timeout=60)
+        result = solve(EXTRA_FACTS, timeout=10)
 
         if result:
             print("Phase 1 found a solution, returning...")

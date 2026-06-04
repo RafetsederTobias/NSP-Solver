@@ -12,18 +12,10 @@ from models.Station import Station
 from models.User import User
 from db import get_db
 from sqlalchemy.orm import selectinload
-from asp.scheduling_options_service import expand_blocked_days_to_full_weeks, get_or_create_schedule
+from asp.scheduling_options_service import create_alternative_schedule, get_or_create_schedule, get_weekdays
 
 
 router = APIRouter(prefix="/api/v1/schedule", tags=["schedule"])
-
-
-def get_weekdays(year: int, month: int, days: list[int]) -> list[int]:
-    return [
-        d for d in days
-        if date(year, month, d).weekday() < 5
-    ]
-
 
 
 @router.post("", status_code=201)
@@ -85,8 +77,6 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
         existing_assignments=existing_assignments,
     )
 
-    print(expand_blocked_days_to_full_weeks(payload.constraints,payload.currentYear,payload.currentMonth))
-
     if not assignments:
         raise HTTPException(
             status_code=409,
@@ -124,39 +114,7 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
 
     # Alternativpläne:
     if payload.alternativePlan:
-        alt_schedule_id = await get_or_create_schedule(
-            db, payload.currentYear, payload.currentMonth, new_plan=True, load=False
-        )
-
-        alt_assignments = solve_reschedule(
-            users,
-            stations,
-            all_days=weekdays,
-            constraints=expand_blocked_days_to_full_weeks(
-                payload.constraints, payload.currentYear, payload.currentMonth
-            ),
-            existing_assignments=db_assignments,
-        )
-
-        if not alt_assignments:
-            raise HTTPException(
-                status_code=409,
-                detail="Es konnte kein gültiger Alternativplan gefunden werden."
-            )
-
-        alt_db_assignments = [
-            StationAssignment(
-                date=date(payload.currentYear, payload.currentMonth, a["day"]),
-                station_id=a["station_id"],
-                user_id=a["user_id"],
-                schedule_id=alt_schedule_id,
-            )
-            for a in alt_assignments
-        ]
-
-        db.add_all(alt_db_assignments)
-        await db.commit()
-
+        await create_alternative_schedule(db, users, stations, weekdays, payload, db_assignments)
 
     response = {"created": len([a for a in db_assignments if a.user_id is not None])}
 
@@ -279,6 +237,35 @@ async def reschedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db
     ]
     db.add_all(db_assignments)
     await db.commit()
+
+    if payload.alternativePlan:
+        today = date.today()
+
+        full_result = await db.execute(
+            select(StationAssignment)
+            .join(StationAssignment.schedule)
+            .where(
+                extract("year", StationAssignment.date) == payload.currentYear,
+                extract("month", StationAssignment.date) == payload.currentMonth,
+                Schedule.is_loaded == True,
+            )
+        )
+        full_assignments = full_result.scalars().all()
+
+        alt_schedule_id = await create_alternative_schedule(db, users, stations, future_weekdays, payload, full_assignments)
+
+        past_assignments = [
+            StationAssignment(
+                date=a.date,
+                station_id=a.station_id,
+                user_id=a.user_id,
+                schedule_id=alt_schedule_id,
+            )
+            for a in full_assignments if a.date < today
+        ]
+        db.add_all(past_assignments) #reschedule only reschedules and creates new assignments, past assignments should also be in alternative plan though
+        await db.commit()
+
 
     user_map = {u.id: u.name for u in users}
     station_map = {s.id: s.name for s in stations}
