@@ -76,6 +76,7 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
         constraints=payload.constraints,
         existing_assignments=existing_assignments,
     )
+    print(assignments)
 
     if not assignments:
         raise HTTPException(

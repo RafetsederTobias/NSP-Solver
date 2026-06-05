@@ -122,6 +122,9 @@ def _build_constraint_facts(constraints) -> str:
 
 
 def _fill_unassigned_slots(assignments, stations, days) -> list[dict]:
+    if not assignments:
+        return assignments
+    
     assigned_pairs = {
         (a["station_id"], a["day"])
         for a in assignments
