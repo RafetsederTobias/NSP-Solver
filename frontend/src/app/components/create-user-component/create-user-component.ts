@@ -115,6 +115,33 @@ import { SkillsService, Skill } from '../../service/skills-service';
                   [class.rotate-180]="dropdownOpen()"
                   >expand_more</span
                 >
+                <div
+                  *ngIf="errorMessage()"
+                  class="fixed inset-0 bg-black/25 flex items-center justify-center z-50"
+                  (click)="errorMessage.set(null)"
+                >
+                  <div
+                    class="bg-white rounded-2xl shadow-lg p-8 max-w-sm w-full mx-4"
+                    (click)="$event.stopPropagation()"
+                  >
+                    <div
+                      class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center mb-4"
+                    >
+                      <span class="material-icons-round text-red-600 text-[20px]"
+                        >error_outline</span
+                      >
+                    </div>
+                    <p class="text-sm text-slate-700">{{ errorMessage() }}</p>
+                    <div class="flex justify-end mt-6">
+                      <button
+                        (click)="errorMessage.set(null)"
+                        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition"
+                      >
+                        OK
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div
@@ -197,6 +224,7 @@ export class CreateUserComponent {
 
   isEditMode = false;
   private editId: number | null = null;
+  errorMessage = signal<string | null>(null);
 
   form = { name: '' };
   dropdownOpen = signal(false);
@@ -263,9 +291,15 @@ export class CreateUserComponent {
       skills: this.selectedSkills().map((s) => s.name),
     };
     if (this.isEditMode && this.editId) {
-      this.userService.update(this.editId, data).subscribe(() => this.router.navigate(['/users']));
+      this.userService.update(this.editId, data).subscribe({
+        next: () => this.router.navigate(['/users']),
+        error: (err) => this.errorMessage.set(err.message),
+      });
     } else {
-      this.userService.add(data).subscribe(() => this.router.navigate(['/users']));
+      this.userService.add(data).subscribe({
+        next: () => this.router.navigate(['/users']),
+        error: (err) => this.errorMessage.set(err.message),
+      });
     }
   }
 
