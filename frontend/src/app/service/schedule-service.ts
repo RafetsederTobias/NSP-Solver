@@ -28,6 +28,7 @@ export class ScheduleService {
 
   private _schedules = signal<Schedule[]>([]);
   readonly schedules = this._schedules.asReadonly();
+  readonly loadedSchedules = computed(() => this._schedules().filter((s) => s.is_loaded));
 
   // creates/updates new schedule
   loadSchedule(payload: SchedulePayload) {
@@ -58,5 +59,9 @@ export class ScheduleService {
       ),
     );
   }
-  readonly loadedSchedules = computed(() => this._schedules().filter((s) => s.is_loaded));
+  delete(scheduleId: number) {
+    return this.http
+      .delete(`${this.base}/schedules/${scheduleId}`)
+      .pipe(tap(() => this._schedules.update((list) => list.filter((s) => s.id !== scheduleId))));
+  }
 }

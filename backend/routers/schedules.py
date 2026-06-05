@@ -338,3 +338,14 @@ async def load_schedule(schedule_id: int, db: AsyncSession = Depends(get_db)):
     await db.commit()
     await db.refresh(schedule)
     return schedule
+
+@router.delete("/schedules/{schedule_id}", status_code=204)
+async def delete_schedule(schedule_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(Schedule).where(Schedule.id == schedule_id))
+    schedule = result.scalar_one_or_none()
+
+    if schedule is None:
+        raise HTTPException(status_code=404, detail="Schedule not found")
+
+    await db.delete(schedule)
+    await db.commit()

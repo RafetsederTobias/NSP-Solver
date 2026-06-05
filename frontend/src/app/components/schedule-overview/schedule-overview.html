@@ -14,6 +14,13 @@
         </div>
         <div class="month-name">{{ getMonthName(schedule.month) }}</div>
         <div class="schedule-name">{{ schedule.name }}</div>
+        <button
+          class="btn-delete"
+          (click)="openDeleteDialog(schedule, $event)"
+          aria-label="Plan löschen"
+        >
+          <span class="material-icons-round">delete</span>
+        </button>
       </div>
     </div>
   </div>
@@ -30,6 +37,20 @@
       <div class="dialog-actions">
         <button class="btn-cancel" (click)="closeDialog()">Abbrechen</button>
         <button class="btn-confirm" (click)="confirmLoad()">Laden</button>
+      </div>
+    </div>
+  </div>
+  <div class="dialog-backdrop" *ngIf="scheduleToDelete()" (click)="closeDeleteDialog()">
+    <div class="dialog dialog--danger" (click)="$event.stopPropagation()">
+      <div class="dialog-icon">
+        <span class="material-icons-round">delete_forever</span>
+      </div>
+      <p>
+        <strong>{{ scheduleToDelete()?.name }}</strong> wird unwiderruflich gelöscht. Fortsetzen?
+      </p>
+      <div class="dialog-actions">
+        <button class="btn-cancel" (click)="closeDeleteDialog()">Abbrechen</button>
+        <button class="btn-danger" (click)="confirmDelete()">Löschen</button>
       </div>
     </div>
   </div>

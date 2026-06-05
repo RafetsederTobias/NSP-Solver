@@ -19,6 +19,7 @@ interface Schedule {
 })
 export class ScheduleOverviewComponent implements OnInit {
   selectedSchedule = signal<Schedule | null>(null);
+  scheduleToDelete = signal<Schedule | null>(null);
 
   openDialog(schedule: Schedule): void {
     this.selectedSchedule.set(schedule);
@@ -71,5 +72,23 @@ export class ScheduleOverviewComponent implements OnInit {
   }
   getMonthName(month: number): string {
     return this.monthNames[month - 1];
+  }
+
+  openDeleteDialog(schedule: Schedule, event: MouseEvent): void {
+    event.stopPropagation();
+    this.scheduleToDelete.set(schedule);
+  }
+
+  closeDeleteDialog(): void {
+    this.scheduleToDelete.set(null);
+  }
+
+  confirmDelete(): void {
+    const schedule = this.scheduleToDelete();
+    if (!schedule) return;
+    this.scheduleService.delete(schedule.id).subscribe({
+      next: () => this.closeDeleteDialog(),
+      error: (err) => console.error('Failed to delete schedule', err),
+    });
   }
 }

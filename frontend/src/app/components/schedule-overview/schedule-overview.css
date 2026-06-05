@@ -26,6 +26,8 @@
   border: 1px solid #e8e9f0;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
+  padding-bottom: 2.5rem; 
+  position: relative; 
 
   &:hover {
     transform: translateY(-2px);
@@ -36,6 +38,7 @@
     border-color: #6366f1;
     background: #f5f7ff;
   }
+
 }
 
 .card-header {
@@ -140,4 +143,54 @@
 .btn-confirm {
   background: #6366f1;
   color: #fff;
+}
+
+.btn-delete {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #bbbdcc; 
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.btn-delete:hover {
+  color: #a32d2d;
+  background: #fcebeb;
+}
+
+/* Delete dialog  */
+.dialog--danger .dialog-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fcebeb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.dialog--danger .dialog-icon .material-icons-round {
+  font-size: 20px;
+  color: #a32d2d;
+}
+
+.btn-danger {
+  background: #e24b4a;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 16px;
+  font-size: 13px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 500;
+}
+.btn-danger:hover {
+  background: #a32d2d;
 }
