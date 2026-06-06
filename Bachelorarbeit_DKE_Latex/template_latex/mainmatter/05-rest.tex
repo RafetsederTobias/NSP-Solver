@@ -6,7 +6,7 @@ Dieses Kapitel beschreibt die REST-Schnittstellen sowie die verwendeten Data Tra
 
 \section{REST-Schnittstellen}
 
-Die nachfolgende Übersicht zeigt die implementierten REST-Endpunkte des Systems. Die Schnittstellen orientieren sich an den Prinzipien von REST und stellen Funktionen für das Erstellen, Laden, Aktualisieren und Löschen der wichtigsten Entitäten bereit.
+Die nachfolgende Tabelle \ref{tab:rest-api} zeigt die implementierten REST-Endpunkte des Systems. Die Schnittstellen orientieren sich an den Prinzipien von REST und stellen Funktionen für das Erstellen, Laden, Aktualisieren und Löschen der wichtigsten Entitäten bereit.
 \begin{table}[H]
 	\centering
 	\caption{REST-Schnittstellen}\label{tab:rest-api}
@@ -16,8 +16,11 @@ Die nachfolgende Übersicht zeigt die implementierten REST-Endpunkte des Systems
 		\midrule
 		\multicolumn{3}{l}{\textit{Schedule}} \\
 		\midrule
+		\texttt{GET}    & \texttt{/api/v1/schedules}                         & Alle Dienstpläne laden \\[2pt]
 		\texttt{POST}   & \texttt{/api/v1/schedule}                          & Dienstplan neu erstellen \\
 		\texttt{POST}   & \texttt{/api/v1/schedule/reschedule}               & Dienstplan neu berechnen \\
+		\texttt{PATCH}  & \texttt{/api/v1/schedules/:id/load}                & Dienstplan als aktiv laden (andere im Monat werden deaktiviert) \\
+		\texttt{DELETE} & \texttt{/api/v1/schedules/:id}                     & Dienstplan löschen \\
 		\midrule
 		\multicolumn{3}{l}{\textit{Skills}} \\
 		\midrule
@@ -25,11 +28,11 @@ Die nachfolgende Übersicht zeigt die implementierten REST-Endpunkte des Systems
 		\texttt{POST}   & \texttt{/api/v1/skills}                            & Neuen Skill anlegen \\
 		\texttt{DELETE} & \texttt{/api/v1/skills/:id}                        & Skill löschen \\
 		\midrule
-		\multicolumn{3}{l}{\textit{Station Assignments}} \\
+		\multicolumn{3}{l}{\textit{Station-Assignments}} \\
 		\midrule
 		\texttt{GET}    & \texttt{/api/v1/station-assignments/all}           & Alle Zuweisungen laden \\
 		\texttt{GET}    & \texttt{/api/v1/station-assignments/:date}               & Zuweisungen nach Datum filtern \\
-		\texttt{PUT}    & \texttt{/api/v1/station-assignments/replace/:date} & Zuweisungen eines Datums ersetzen \\
+		\texttt{PUT}    & \texttt{/api/v1/station-assignments\newline/replace/:date} & Zuweisungen eines Datums ersetzen \\
 		\midrule
 		\multicolumn{3}{l}{\textit{Stations}} \\
 		\midrule
@@ -55,7 +58,7 @@ Für den Datenaustausch zwischen Frontend und Backend werden klar definierte Dat
 Im Folgenden werden die wichtigsten Datenstrukturen für das \textit{Scheduling} erläutert.
 
 Der \texttt{SchedulePayload} definiert die Eingabedaten für die Dienstplanerstellung 
-und wird bei jedem \textit{Scheduling} und \textit{Rescheduling} an das Backend übermittelt. 
+und wird bei jedem \textit{Scheduling} und \textit{Rescheduling} an das Backend übermittelt. In Tabelle \ref{tab:schedule-payload} werden die Felder von \texttt{SchedulePayload} erläutert. 
 
 \begin{table}[H]
 	\centering
@@ -76,7 +79,7 @@ und wird bei jedem \textit{Scheduling} und \textit{Rescheduling} an das Backend 
 \end{table}
 \texttt{UserConstraint} 
 bildet die individuellen Planungsrestriktionen eines Benutzers ab und wird als Liste 
-innerhalb des \texttt{SchedulePayload} mitgeschickt.
+innerhalb des \texttt{SchedulePayload} mitgeschickt. Die Tabelle \ref{tab:user-constraint} zeigt alle relevanten Felder auf.
 
 \begin{table}[H]
 	\centering
@@ -90,7 +93,7 @@ innerhalb des \texttt{SchedulePayload} mitgeschickt.
 		\texttt{minDaysPerMonth}     & \texttt{number}         & Minimale Einsatztage im Monat \\
 		\texttt{exactDaysPerMonth}   & \texttt{number}         & Exakte Anzahl an Einsatztagen im Monat \\
 		\texttt{fixedDays}           & \texttt{number[]}       & Tage, an denen der Benutzer fix eingeteilt wird \\
-		\texttt{blockedDays}         & \texttt{number[]?}       & Tage, an denen der Benutzer nicht verfügbar ist \\
+		\texttt{blockedDays}         & \texttt{number[]}       & Tage, an denen der Benutzer nicht verfügbar ist \\
 		\bottomrule
 	\end{tabularx}
 \end{table}

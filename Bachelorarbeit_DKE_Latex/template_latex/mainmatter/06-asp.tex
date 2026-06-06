@@ -10,9 +10,9 @@ Für jeden Benutzer wird dabei ein \texttt{user}-Fakt erzeugt. Zusätzlich wird 
 
 Die zu planenden Arbeitstage werden als \texttt{day}-Fakten an Clingo übergeben. Wochenenden werden dabei bereits vorher durch die Funktion \texttt{get\_weekdays} herausgefiltert. Zusätzlich werden benutzerspezifische Einschränkungen als Fakten festgelegt. Dazu zählen beispielsweise maximale oder minimale Arbeitstage pro Monat (\texttt{max\_days}, \texttt{min\_days}), fixe Arbeitstage (\texttt{fixed\_day}) oder gesperrte Tage (\texttt{blocked\_day}).
 
-Im Folgenden wird beispielhaft ein Ausschnitt der generierten Basisfakten für ein \textit{Scheduling} gezeigt. 
+Im Folgenden wird beispielhaft im Listing \ref{lst:base-facts} ein Ausschnitt der generierten Basisfakten für ein \textit{Scheduling} gezeigt. In diesem Beispiel werden zwei Benutzer, deren Kompetenzen, Stationen mit den benötigten Kompetenzen sowie Arbeitstage und Constraints als Fakten definiert. Auf Basis dieser Informationen kann Clingo anschließend gültige Dienstpläne berechnen.
 
-\begin{lstlisting}[caption={Beispiel generierter Basisfakten},label={lst}]
+\begin{lstlisting}[caption={Beispiel generierter Basisfakten},label={lst:base-facts}]
 	user(1597).
 	has_skill(1597, 23).
 	has_skill(1597, 24).
@@ -37,12 +37,12 @@ Im Folgenden wird beispielhaft ein Ausschnitt der generierten Basisfakten für e
 	exact_days(1597, 21).
 	exact_days(1598, 21).
 \end{lstlisting}
-In diesem Beispiel werden zwei Benutzer, deren Kompetenzen, Stationen mit den benötigten Kompetenzen sowie Arbeitstage und Constraints als Fakten definiert. Auf Basis dieser Informationen kann Clingo anschließend gültige Dienstpläne berechnen.
+
 
 \section{Regelwerk}
 %First Draft%
-Das Regelwerk für die initiale Planerstellung ist in der Datei \texttt{rules.lp} 
-definiert. Das Listing \ref{rules} beinhaltet die Basis-Fakten. Die Grundlage bildet die Bestimmung der \textit{Eligibility}: Ein 
+Das Regelwerk für die initiale Planerstellung ist in einer Datei \texttt{rules.lp} 
+definiert. Das Listing \ref{lst:rules} beinhaltet diese Basis-Regeln. Die Grundlage bildet die Bestimmung der \textit{Eligibility}: Ein 
 Benutzer gilt als qualifiziert für eine Station (\texttt{eligible/2}), wenn er 
 alle erforderlichen Fähigkeiten besitzt, also kein \texttt{requires/2}-Fakt 
 existiert, dem kein entsprechendes \texttt{has\_skill/2}-Fakt gegenübersteht. 
@@ -61,7 +61,7 @@ Die \textit{Optimierung} minimiert unbesetzte Stationen über eine
 denen eine Station ohne Besetzung bleibt, so gering wie möglich zu halten. 
 Die Regelstruktur für das Rescheduling folgt einem ähnlichen Prinzip, wird 
 jedoch in Abschnitt~\ref{sec:rescheduling} gesondert behandelt.
-\begin{lstlisting}[caption={ASP-Regeln},label={rules}]
+\begin{lstlisting}[caption={ASP-Regeln},label={lst:rules}]
 eligible(U, S) :-
 user(U), station(S),
 #count { Sk : requires(S, Sk), not has_skill(U, Sk) } = 0.
@@ -89,10 +89,165 @@ station(S), day(D), max_assignments(S, Max).
 #count { D : assigned(U, _, D) } != Exact.
 \end{lstlisting}
 \section{Zweiphasen-Lösungsanstz}
+Analog zu \textcite{cardellini2023solvingrehabilitationschedulingproblems} wurden auch in dieser Arbeit zwei Phasen implementiert, die auf ähnlichen, jedoch nicht identischen ASP-Encodings basieren.
+Ziel dieser Vorgehensweise ist es, zunächst eine möglichst ausgewogene Belegung der verfügbaren Stationen zu erreichen und bei Bedarf auf eine flexiblere Optimierung zurückzugreifen.
 
-\section{Rescheduling-Logik}
+In der ersten Phase wird das Basis-Encoding um zusätzliche Regeln erweitert, die eine verpflichtende Belegung der verfügbaren Kapazitäten vorgeben. Für jeden Stations-Tag wird dabei eine Anzahl von Zuweisungen zwischen eins und der maximal zulässigen Belegung erzeugt. Somit wird der Suchraum erheblich reduziert, wodurch Clingo schneller feststellen kann, ob für jede Station an jedem Tag mindestens eine Zuteilung möglich ist.
+Die \textit{Choice-Rule} von Listing \ref{lst:base-facts} wird durch eine neue ersetzt:
 
-\section{Timeout NP-hartes Problem}
+\begin{lstlisting}
+	1 { assigned(U, S, D) : eligible_day(U, S, D) } Max :-
+	station(S), day(D), max_assignments(S, Max).
+\end{lstlisting}
+
+ Darüber hinaus wird für jede Station ein Idealwert berechnet, der ungefähr der Hälfte der maximalen Kapazität entspricht. Anschließend wird die Abweichung der tatsächlichen Belegung von diesem Idealwert bestimmt. Sowohl Über- als auch Unterbelegungen werden über eine Optimierungsfunktion minimiert. Dadurch bevorzugt Clingo Lösungen, die eine möglichst gleichmäßige Auslastung der Stationen über alle Tage hinweg erzielen. Im Listing \ref{lst:fairness} werden die dafür verwendeten Fakten aufgezeigt.
+ 
+\begin{lstlisting}[caption={Fairness-Regeln},label={lst:fairness}]
+	ideal_count(S, Target) :-
+	station(S),
+	max_assignments(S, Max),
+	Target = (Max + 1) / 2.   % integer division
+	
+	over_staffed(S, D, Delta) :-
+	station(S), day(D),
+	staff_count(S, D, N),
+	ideal_count(S, Target),
+	N > Target,
+	Delta = N - Target.
+	
+	under_staffed(S, D, Delta) :-
+	station(S), day(D),
+	staff_count(S, D, N),
+	ideal_count(S, Target),
+	N < Target,
+	Delta = Target - N.
+	
+	#minimize {
+		Delta @10, S, D : over_staffed(S, D, Delta) ;
+		Delta @10, S, D : under_staffed(S, D, Delta)
+	}.
+\end{lstlisting}
+
+ 
+
+Kann innerhalb eines vorgegebenen Zeitlimits eine Lösung gefunden werden, wird diese direkt übernommen. Andernfalls wird die erste Phase abgebrochen und die Berechnung in einer zweiten Phase fortgesetzt.
+
+Die zweite Phase verwendet ausschließlich das Basis-Encoding, das in Listing \ref{lst:rules} definiert wurde, ohne die zusätzlichen Fairness- und Belegungsregeln der ersten Phase. Dadurch wird der Suchraum vergrößert und die Optimierung weniger restriktiv gestaltet. Das Verfahren dient somit als Absicherung, um auch in stark eingeschränkten Instanzen innerhalb eines begrenzten Zeitraums eine gültige Lösung zu erhalten. Die ASP-Logik dafür wird in Listing \ref{lst:unstaffed} aufgezeigt.
+
+\begin{lstlisting}[caption={ASP-Encoding: Leere Stationen vermeiden},label={lst:unstaffed}]
+	staff_count(S, D, N) :-
+	station(S), day(D),
+	N = #count { U : assigned(U, S, D) }.
+	
+	% A station is unstaffed if it has zero users on a given day
+	unstaffed(S, D) :-
+	station(S), day(D),
+	not assigned(_, S, D).
+	
+	#minimize {
+		1@1, S, D : unstaffed(S, D)
+	}.
+\end{lstlisting}
+
+\section{Rescheduling-Verfahren}[\label{sec:rescheduling}]
+
+Das Rescheduling wird eingesetzt, wenn nach der Erstellung eines Dienstplans neue Verfügbarkeitsbeschränkungen auftreten. Dabei sollen bestehende Zuteilungen möglichst beibehalten werden, während gleichzeitig alle neuen Einschränkungen berücksichtigt werden.
+
+Als Erstes werden alle Benutzer ermittelt, für die neue Sperrtage definiert wurden. Anschließend werden Zuteilungen identifiziert, die mit diesen Sperrtagen in Konflikt stehen. Existieren keine Konflikte, ist kein Rescheduling erforderlich und der bestehende Dienstplan bleibt unverändert.
+
+Werden Konflikte gefunden, werden die betroffenen Zuteilungen aus dem aktuellen Dienstplan entfernt. Alle übrigen zukünftigen Zuteilungen werden als bestehende Planung übernommen und dienen als Grundlage für die Neuplanung. Vergangene Termine werden dabei nicht verändert.
+
+Die verbleibenden Zuteilungen werden dem ASP-Modell als Fakten der Form \texttt{was\_assigned(U,S,D)} übergeben. Dadurch steht dem Solver die ursprüngliche Planung als Referenz zur Verfügung. Diese Informationen werden später verwendet, um Änderungen zwischen dem bestehenden und dem neu berechneten Dienstplan zu identifizieren sowie bestehende Zuteilungen während der Optimierung bevorzugt beizubehalten.
+
+Im ASP-Modell werden zunächst alle zulässigen Kombinationen von Personen, Stationen und Tagen bestimmt. Eine Person ist, wie auch beim ursprünglichen \textit{Scheduling}, für eine Station geeignet, wenn sie über alle erforderlichen Qualifikationen verfügt. Zusätzlich dürfen keine Sperrtage verletzt werden. Auf Basis dieser zulässigen Kombinationen werden neue Zuteilungen erzeugt.
+
+Während der Suche müssen mehrere harte Bedingungen erfüllt werden. Dazu gehören:
+
+\begin{itemize}
+\item{Sperrtage dürfen nicht belegt werden}
+\item{Die maximale Anzahl an Einsatztagen pro Person darf nicht überschritten werden}
+\item{Eine Person darf pro Tag höchstens einer Station zugeteilt werden}
+\item{Die maximale Belegung einer Station pro Tag muss eingehalten werden}
+\end{itemize}
+
+
+Zusätzlich werden Änderungen gegenüber dem ursprünglichen Dienstplan explizit erfasst. Hierfür werden zwei Arten von Veränderungen unterschieden:
+
+\begin{itemize}
+\item{	Entfernte Zuteilungen: ursprünglich vorhandene Zuteilungen, die im neuen Plan entfallen}
+\item{	Hinzugefügte Zuteilungen: neue Zuteilungen, die im ursprünglichen Plan nicht vorhanden waren}
+\end{itemize}
+
+
+Um die Auswirkungen des Reschedulings möglichst gering zu halten, verwendet das ASP-Encoding eine mehrstufige Optimierung. Die höchste Priorität besitzt die Vermeidung unbesetzter Stationen. Erst danach wird versucht, Änderungen am bestehenden Dienstplan zu minimieren. Harte Constraints bleiben gleich wie beim \textit{Scheduling}, aber das Verfahren wird um einige Regeln erweitert. In Listing \ref{lst:rescheduling} werden die Fakten dargestellt.
+
+\begin{lstlisting}[caption={Rescheduling},label={lst:rescheduling}]
+	unstaffed(S, D) :-
+	station(S), day(D),
+	not assigned(_, S, D).
+	
+	dropped(U, S, D) :-
+	was_assigned(U, S, D),
+	not assigned(U, S, D).
+	
+	added(U, S, D) :-
+	assigned(U, S, D),
+	not was_assigned(U, S, D).
+
+	#minimize {
+		100@3, S, D : unstaffed(S, D);
+		10@2, U, S, D : dropped(U, S, D);
+		2@2, U, S, D : added(U, S, D)
+	}.
+\end{lstlisting}
+
+Wie auch im Encoding von \textcite{nabeshimaASPbasedNurseScheduling2026}, wird in dieser Arbeit die Domain-Heuristik von Clingo eingesetzt. Ziel dabei ist, bestehende Zuteilungen zu bevorzugen. Die Domain-Heuristik erlaubt es, das Suchverhalten des Solvers direkt aus dem Logikprogramm heraus zu steuern \parencite{potasscoGuide}. Heuristische Direktiven der Form \texttt{\#heuristic A : B. [w, m]} wirken dabei nur, wenn ihr Rumpf \texttt{B} wahr ist, was dynamische Modifikationen ermöglicht \parencite{potasscoGuide}.
+Der Modifier \texttt{true} kombiniert intern die Modifier \texttt{level} und \texttt{sign}. \texttt{level} legt fest, in welcher Reihenfolge der Solver über Atome entscheidet, wobei Atome mit höherem Level zuerst betrachtet werden. \texttt{sign} bestimmt, welchen Wahrheitswert der Solver einem Atom bei seiner Entscheidung bevorzugt zuweist \parencite{potasscoGuide}. Ein positiver Wert begünstigt \textit{true}, ein negativer \textit{false}. \texttt{true} setzt also beides gleichzeitig: Es erhöht das Entscheidungsniveau auf den angegebenen Gewichtswert und weist dem Atom ein positives Vorzeichen zu \parencite{potasscoGuide}.
+Die folgende Direktive priorisiert daher Atome \texttt{assigned(U,S,D)}, für die eine Vorzuteilung \texttt{was\_assigned(U,S,D)} existiert, mit Level~10 und positivem Vorzeichen.
+\begin{lstlisting}
+	#heuristic assigned(U, S, D) : was_assigned(U, S, D). [10, true]
+\end{lstlisting}
+Dadurch werden Lösungen begünstigt, die dem ursprünglichen Dienstplan möglichst ähnlich bleiben, ohne die Korrektheit des Optimierungsziels zu beeinträchtigen. Die Heuristik beeinflusst nur die Suchreihenfolge, nicht die Menge der gültigen Antwortmengen.
+
+Nach Abschluss der Optimierung werden alle zukünftigen Zuteilungen des aktuellen Dienstplans durch die neue Lösung ersetzt. Anschließend werden die vorgenommenen Änderungen ausgewertet und als hinzugefügte beziehungsweise entfernte Zuteilungen an den Benutzer zurückgegeben. Dadurch bleibt nachvollziehbar, welche Anpassungen durch das Rescheduling notwendig waren.
+
+Der zentrale Unterschied zur ursprünglichen Planung besteht darin, dass das Rescheduling nicht einen komplett neuen Dienstplan erzeugt, sondern versucht, den bestehenden Plan mit möglichst wenigen Änderungen an die neuen Bedingungen anzupassen. Dadurch bleibt die Stabilität des Dienstplans erhalten und die Auswirkungen auf bereits geplante Einsätze werden minimiert.
+
+\section{Scheduling-Optionen}
+
+Das System bietet drei Optionen, die das Verhalten der Planungserstellung steuern:
+\texttt{newPlan}, \texttt{keepExistingAssignments} und \texttt{alternativePlan}.
+
+\subsection{Neuer Plan}
+
+Die Option \texttt{newPlan} bestimmt, ob ein neuer Dienstplan erstellt oder der
+bestehende geladene Plan weiterverwendet wird. Ist \texttt{newPlan} gesetzt, wird
+ein neuer \texttt{Schedule}-Eintrag in der Datenbank angelegt und der bisher
+geladene Plan des betreffenden Monats als nicht geladen markiert. Ansonsten
+wird der aktuell geladene Plan des Monats verwendet beziehungsweise, falls keiner existiert,
+ein neuer erstellt.
+
+\subsection{Vorhandene Zuteilungen übernehmen}
+
+Die Option \texttt{keepExistingAssignments} ist nur relevant, wenn \texttt{newPlan}
+nicht gesetzt ist. Ist sie aktiv, werden die bereits in der Datenbank gespeicherten
+Zuteilungen des geladenen Plans als Eingabe an den ASP-Solver übergeben, sodass
+bestehende Zuteilungen erhalten bleiben. Ist sie nicht gesetzt, werden alle
+bisherigen Zuteilungen des Plans gelöscht und der Solver arbeitet auf einem leeren
+Zustand.
+
+\subsection{Alternativplan}
+
+Die Option \texttt{alternativePlan} bewirkt, dass zusätzlich zum
+regulären Plan, ein alternativer Dienstplan berechnet wird. Dieser wird als
+separater, nicht geladener \texttt{Schedule}-Eintrag in der Datenbank gespeichert
+und steht dem Nutzer zur Auswahl bereit, ohne den aktiven Plan zu ersetzen.
+
+Ein Alternativplan kann als vorgezogenes Rescheduling verstanden werden. Statt erst auf bereits auftretende Konflikte zu reagieren, wird ein alternativer Plan vorausschauend unter denselben Bedingungen erzeugt. Intern greift das System dabei auf dieselbe Rescheduling-Logik zurück (\texttt{solve\_reschedule}), wobei die bestehenden Zuteilungen als \texttt{was\_assigned}-Fakten übergeben werden.
+
+Vor der Übergabe an den Solver werden die Sperrtage der Nutzer aufbereitet. Enthält die \texttt{blockedDays}-Liste eines Nutzers einen Eintrag, der mehr als einen gesperrten Tag lang ist, werden alle Werktage (Montag bis Freitag) der betroffenen Kalenderwochen als gesperrt markiert. 
+
+Die Lösungssuche berücksichtigt wieder eine Domain-Heuristik, die Pläne bevorzugt, welche dem ursprünglichen Zustand möglichst nahekommen (vgl. Abschnitt~\ref{sec:rescheduling}).
 
 
 
