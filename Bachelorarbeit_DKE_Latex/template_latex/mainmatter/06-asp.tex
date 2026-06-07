@@ -2,6 +2,7 @@
 %% 
 
 \chapter{ASP-Logik}
+\label{sec:asp}
 In diesem Kapitel wird genauer auf die ASP-Logik und die Generierung der Dienstpläne eingegagen.
 \section{Fakten-Generierung}
 Die Fakten-Generierung stellt die Verbindung zwischen der relationalen Datenbank und der ASP-Wissensbasis dar. Damit Clingo einen Dienstplan berechnen kann, müssen die benötigten Informationen zunächst in Form von ASP-Fakten bereitgestellt werden. Dafür werden die aus der Datenbank geladenen ORM-Objekte in der Funktion \texttt{\_build\_base\_facts} in entsprechende Fakten umgewandelt.
