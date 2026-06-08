@@ -12,7 +12,7 @@ from models.Station import Station
 from models.User import User
 from db import get_db
 from sqlalchemy.orm import selectinload
-from asp.scheduling_options_service import create_alternative_schedule, get_or_create_schedule, get_weekdays
+from asp.scheduling_options_service import create_alternative_schedule, get_or_create_schedule, get_weekdays, prepare_existing_assignments
 
 
 router = APIRouter(prefix="/api/v1/schedule", tags=["schedule"])
@@ -30,39 +30,18 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
     users = users_result.scalars().all()
     stations = stations_result.scalars().all()
 
-    if payload.newPlan:
-        # create new schedule
-        schedule_id = await get_or_create_schedule(db, payload.currentYear, payload.currentMonth, new_plan=True)
-        existing_assignments = []
-    else:
-        # reuse existing loaded schedule
-        schedule_id = await get_or_create_schedule(db, payload.currentYear, payload.currentMonth, new_plan=False)
-
-        if payload.keepExistingAssignments:
-            # load existing user assignments
-            existing_result = await db.execute(
-                select(StationAssignment).where(
-                    StationAssignment.schedule_id == schedule_id,
-                    StationAssignment.user_id != None,
-                )
-            )
-            existing_assignments = existing_result.scalars().all()
-        else:
-            # wipe everything in this schedule
-            await db.execute(
-                delete(StationAssignment).where(
-                    StationAssignment.schedule_id == schedule_id
-                )
-            )
-            existing_assignments = []
-
-        # clear placeholders for the current schedule before resolving
-        await db.execute(
-            delete(StationAssignment).where(
-                StationAssignment.schedule_id == schedule_id,
-                StationAssignment.user_id == None,
-            )
+    old_schedule_result = await db.execute(
+        select(Schedule).where(
+            Schedule.year == payload.currentYear,
+            Schedule.month == payload.currentMonth,
+            Schedule.is_loaded == True,
         )
+    )
+    old_schedule = old_schedule_result.scalar_one_or_none()
+    old_schedule_id = old_schedule.id if old_schedule else None
+
+    schedule_id = await get_or_create_schedule(db, payload.currentYear, payload.currentMonth, new_plan=payload.newPlan)
+    existing_assignments = await prepare_existing_assignments(db, payload, schedule_id, old_schedule_id)
 
     weekdays = get_weekdays(
         payload.currentYear,
@@ -70,13 +49,14 @@ async def schedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db))
         list(range(1, payload.daysInMonth + 1))
     )
 
+
     assignments = solve_schedule(
         users, stations,
         days=weekdays,
         constraints=payload.constraints,
         existing_assignments=existing_assignments,
     )
-    
+
     if not assignments:
         raise HTTPException(
             status_code=409,
@@ -303,7 +283,6 @@ async def reschedule(payload: SchedulePayload, db: AsyncSession = Depends(get_db
             for a in unassigned
         ]
 
-    print(response)
     return response
 
 

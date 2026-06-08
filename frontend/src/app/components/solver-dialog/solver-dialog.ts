@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { DIALOG_DATA, Dialog, DialogRef } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
 import { ConstraintsService } from '../../service/constraint-service';
@@ -239,39 +239,57 @@ export interface SolverDialogResult {
 
         <div class="options-bar">
           <label class="toggle-row">
+            <input
+              type="radio"
+              name="planMode"
+              value="overwrite"
+              [checked]="planMode() === 'overwrite'"
+              (change)="planMode.set('overwrite')"
+              style="accent-color:#6366f1;width:16px;height:16px;flex-shrink:0;cursor:pointer;"
+            />
+            <span class="toggle-label">Überschreiben (Standard)</span>
+          </label>
+          <label class="toggle-row" style="margin-top:0.5rem;">
+            <input
+              type="radio"
+              name="planMode"
+              value="new"
+              [checked]="planMode() === 'new'"
+              (change)="planMode.set('new')"
+              style="accent-color:#6366f1;width:16px;height:16px;flex-shrink:0;cursor:pointer;"
+            />
+            <span class="toggle-label">Neuen Plan erstellen</span>
+          </label>
+          <label class="toggle-row" style="margin-top:0.5rem;">
+            <input
+              type="radio"
+              name="planMode"
+              value="alternative"
+              [checked]="planMode() === 'alternative'"
+              (change)="planMode.set('alternative'); keepExistingAssignments.set(false)"
+              style="accent-color:#6366f1;width:16px;height:16px;flex-shrink:0;cursor:pointer;"
+            />
+            <span class="toggle-label">Alternativplan erstellen</span>
+          </label>
+          <label
+            class="toggle-row"
+            style="margin-top:0.75rem;padding-top:0.75rem;border-top:0.5px solid #f1f5f9;"
+            [style.opacity]="planMode() === 'alternative' ? '0.4' : '1'"
+            [style.pointer-events]="planMode() === 'alternative' ? 'none' : 'auto'"
+          >
             <div class="toggle-switch">
               <input
                 type="checkbox"
                 [checked]="keepExistingAssignments()"
+                [disabled]="planMode() === 'alternative'"
                 (change)="keepExistingAssignments.set($any($event.target).checked)"
               />
               <div class="toggle-track"></div>
             </div>
             <span class="toggle-label">Vorhandene Zuteilungen übernehmen</span>
           </label>
-          <label class="toggle-row" style="margin-top: 0.5rem;">
-            <div class="toggle-switch">
-              <input
-                type="checkbox"
-                [checked]="newPlan()"
-                (change)="newPlan.set($any($event.target).checked)"
-              />
-              <div class="toggle-track"></div>
-            </div>
-            <span class="toggle-label">Neuen Plan erstellen (Überschreibung per default)</span>
-          </label>
-          <label class="toggle-row" style="margin-top: 0.5rem;">
-            <div class="toggle-switch">
-              <input
-                type="checkbox"
-                [checked]="alternativePlan()"
-                (change)="alternativePlan.set($any($event.target).checked)"
-              />
-              <div class="toggle-track"></div>
-            </div>
-            <span class="toggle-label">Alternativpläne</span>
-          </label>
         </div>
+
         <div class="footer">
           <button class="btn-ghost" (click)="close()">Abbrechen</button>
           <button class="btn-primary" (click)="solve()">
@@ -289,9 +307,8 @@ export class SolverDialogComponent {
   private constraintsService = inject(ConstraintsService);
   private workdayService = inject(WorkdayService);
 
-  keepExistingAssignments = signal(true);
-  newPlan = signal(false);
-  alternativePlan = signal(false);
+  keepExistingAssignments = signal(false);
+  planMode = signal<'overwrite' | 'new' | 'alternative'>('overwrite');
 
   get monthLabel() {
     return this.data.currentDate.toLocaleDateString('de-AT', { month: 'long', year: 'numeric' });
@@ -347,8 +364,8 @@ export class SolverDialogComponent {
     this.dialogRef.close({
       constraints,
       keepExistingAssignments: this.keepExistingAssignments(),
-      newPlan: this.newPlan(),
-      alternativePlan: this.alternativePlan()
+      newPlan: this.planMode() === 'new',
+      alternativePlan: this.planMode() === 'alternative',
     });
   }
 

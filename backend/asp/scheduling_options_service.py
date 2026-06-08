@@ -4,7 +4,7 @@ from asp.asp_service import solve_reschedule
 from models.Station import StationAssignment
 from schema.schedule_schema import SchedulePayload, UserConstraint
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, func, select
+from sqlalchemy import delete, select, update, func, select
 from models.Schedule import Schedule
 from datetime import date, timedelta
 from typing import List
@@ -107,10 +107,15 @@ def expand_blocked_days_to_full_weeks(
             d = date(year, month, day_num)
             affected_mondays.add(_get_week_monday(d))
 
-        full_week_days: set[int] = set()
+        full_week_days: set[int] = set(blocked)
         for monday in affected_mondays:
+            blocked_in_week = [
+                day_num for day_num in blocked
+                if _get_week_monday(date(year, month, day_num)) == monday
+            ]
+            earliest_blocked = min(blocked_in_week)
             for day_num in _get_weekdays_of_week(monday):
-                if 1 <= day_num <= last_day:
+                if day_num >= earliest_blocked and 1 <= day_num <= last_day:
                     full_week_days.add(day_num)
 
         expanded.append(
@@ -161,3 +166,30 @@ async def create_alternative_schedule(
     await db.commit()
 
     return alt_schedule_id
+
+
+async def prepare_existing_assignments(
+    db: AsyncSession,
+    payload: SchedulePayload,
+    schedule_id: int,
+    old_schedule_id: int | None = None,
+) -> list:
+    if payload.keepExistingAssignments and old_schedule_id:
+        existing_result = await db.execute(
+            select(StationAssignment).where(
+                StationAssignment.schedule_id == old_schedule_id,
+                StationAssignment.user_id != None,
+            )
+        )
+        existing_assignments = existing_result.scalars().all()
+        if payload.newPlan:
+            db.add_all([
+                StationAssignment(date=a.date, station_id=a.station_id, user_id=a.user_id, schedule_id=schedule_id)
+                for a in existing_assignments
+            ])
+            await db.flush()
+    else:
+        await db.execute(delete(StationAssignment).where(StationAssignment.schedule_id == schedule_id))
+        existing_assignments = []
+
+    return existing_assignments
