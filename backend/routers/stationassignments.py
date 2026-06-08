@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from datetime import date as Date
+from asp.scheduling_options_service import get_or_create_schedule
 from db import get_db
 from models.StationAssignment import StationAssignment
 from models.Schedule import Schedule
@@ -98,15 +99,12 @@ async def delete(assignment_id: int, db: AsyncSession = Depends(get_db)):
 
 @router.put("/replace/{date}", response_model=list[StationAssignmentRead], status_code=200)
 async def replace_all(date: Date, body: list[StationAssignmentCreate], db: AsyncSession = Depends(get_db)):
-    schedule_result = await db.execute(
-        select(Schedule).where(
-            Schedule.is_loaded == True,
-            Schedule.year == date.year,
-            Schedule.month == date.month,
-        )
+    schedule_id = await get_or_create_schedule(
+        db=db,
+        year=date.year,
+        month=date.month,
+        new_plan=False,  # use existing loaded schedule, or create one if missing
     )
-    schedule = schedule_result.scalar_one()
-    schedule_id = schedule.id
 
     await db.execute(
         sa_delete(StationAssignment).where(
