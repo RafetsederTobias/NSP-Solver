@@ -104,8 +104,233 @@ Nach erfolgreichem Planungslauf werden die Zuteilungen direkt im Kalender angeze
  	}\label{fig:reschedule_result}
  \end{figure}
  
+ \chapter{Anhang B - Testdokumentation}
+ Der folgende Anhang beschreibt die durchgeführten manuellen Systemtests. 
+ \subsection{Testszenarien}
+ Auf folgende Testszenarien wird in folgendem Kapitel eingegangen:
+ \begin{itemize}
+ 	\item{T1: Dienstplan bei keinen Einschränkungen}
+ 	\item{T2: Dienstplan bei blockierten / fest zugewiesenen Tagen}
+ 	\item{T3: Dienstplan bei zu wenig Mitarbeitern}
+ 	\item{T4: Vorhandene Zuteilungen von bestehendem Dienstplan übernehmen}
+ 	\item{T5: Neuen Plan erstellen, anstatt alten Plan zu überschreiben}
+ 	\item{T6: Kurzfrister Ausfall bei vorhandenem Dienstplan}
+ \end{itemize}
  
+ Für die Evaluation des Dienstplanungsalgorithmus wurde ein Testdatensatz erstellt, der aus 22 Stationen und 41 Mitarbeitern besteht. Jede Station erfordert bestimmte fachliche Kompetenzen, während jedem Mitarbeiter jene Kompetenzen zugeordnet sind, über die er verfügt.
+ 
+ Die betrachteten Kompetenzen umfassen:
+  \begin{itemize}
+ 	\item{Sehtest}
+	\item{ Spaltlampenuntersuchung}
+ 	\item{OCT (Optische Kohärenztomographie)}
+	\item{ Tonometrie}
+	\item{ Perimetrie}
+  \end{itemize}
+ Jede Station definiert die Kompetenzen, die für eine Besetzung erforderlich sind. Beispielsweise benötigt die Station \textit{Leitung / V.} die Kompetenzen Sehtest, Spaltlampenuntersuchung und OCT, während für die Station \textit{KAT 1} ausschließlich die Kompetenz Sehtest erforderlich ist. Die Zuweisungen wurden frei gewählt.
+ 
+ Die Mitarbeiter verfügen über unterschiedliche Kompetenzprofile. Einige Mitarbeiter besitzen nur zwei Kompetenzen, während andere alle fünf Kompetenzen abdecken. Die maximale Anzahl der Zuweisungen bei einer Station wurde bei allen Stationen auf drei festgelegt. Dadurch entsteht eine realitätsnahe Verteilung von Qualifikationen und Flexibilität innerhalb des Personals.
+
+ 
+ Insgesamt ergeben sich dadurch zahlreiche mögliche Zuordnungen zwischen Mitarbeitern und Stationen, wodurch die Fähigkeit des Systems zur automatischen Personaleinsatzplanung unter verschiedenen Randbedingungen untersucht werden kann. 
+ 
+ Die genauen Stationsdaten werden in Tabelle \ref{tab:test-stations} dargestellt:
+ 
+ \begin{table}[H]
+ 	\centering
+ 	\caption{Verwendete Stationen und erforderliche Kompetenzen}
+ 	\label{tab:test-stations}
+ 	\begin{tabularx}{\linewidth}{l >{\raggedright\arraybackslash}X}
+ 		\toprule
+ 		\textbf{Station} & \textbf{Erforderliche Kompetenzen} \\
+ 		\midrule
+ 		Leitung / V. & Sehtest, Spaltlampenuntersuchung, OCT \\
+ 		Koord. TK & Spaltlampenuntersuchung, OCT, Tonometrie \\
+ 		Koord. Amb. & Sehtest, Perimetrie \\
+ 		OP 1 & Sehtest, Tonometrie \\
+ 		OP 2 & Sehtest, Spaltlampenuntersuchung \\
+ 		OP Vorb. & OCT, Tonometrie \\
+ 		KAT 1 & Sehtest \\
+ 		KAT 2 & Sehtest, Perimetrie \\
+ 		KAT Vorb. & Spaltlampenuntersuchung, OCT \\
+ 		Laser & OCT, Tonometrie \\
+ 		IVOM & Sehtest, OCT \\
+ 		Stützpunkt & Spaltlampenuntersuchung, Perimetrie \\
+ 		EGR 3 & Sehtest, Spaltlampenuntersuchung \\
+ 		Vers. Ass. & OCT \\
+ 		Akut & Sehtest, OCT, Tonometrie \\
+ 		Lid & Spaltlampenuntersuchung \\
+ 		Rondeau & Sehtest \\
+ 		Allgemein & OCT, Perimetrie \\
+ 		Makula & Sehtest, OCT \\
+ 		Refr. VU & Spaltlampenuntersuchung, OCT, Perimetrie \\
+ 		Kat VU & Sehtest, Tonometrie \\
+ 		Springer & Tonometrie, Perimetrie \\
+ 		\bottomrule
+ 	\end{tabularx}
+ \end{table}
+ 
+ Die verwendeten Mitarbeiter-Testdaten werden in Tabelle \ref{tab:kompetenzmatrix} aufgelistet:
+\begin{longtable}{lccccc}
+	\caption{Kompetenzmatrix der Testmitarbeiter}
+	\label{tab:kompetenzmatrix}\\
+	
+	\toprule
+	\textbf{Mitarbeiter} & \textbf{Sehtest} & \textbf{Spaltlampe} & \textbf{OCT} & \textbf{Tonometrie} & \textbf{Perimetrie} \\
+	\midrule
+	\endfirsthead
+	
+	\toprule
+	\textbf{Mitarbeiter} & \textbf{Sehtest} & \textbf{Spaltlampe} & \textbf{OCT} & \textbf{Tonometrie} & \textbf{Perimetrie} \\
+	\midrule
+	\endhead
+	
+	Anna Müller        & -- & X & X & X & X \\
+	Lukas Schmidt      & X & -- & X & -- & X \\
+	Marie Schneider    & -- & X & X & -- & -- \\
+	Leon Fischer       & X & -- & X & X & -- \\
+	Laura Weber        & X & X & X & -- & X \\
+	Paul Wagner        & X & -- & X & X & -- \\
+	Sophie Becker      & X & X & X & -- & X \\
+	Felix Hoffmann     & X & X & X & X & X \\
+	Emma Schäfer       & -- & X & X & -- & -- \\
+	Jonas Koch         & X & X & X & -- & X \\
+	Mia Bauer          & X & X & X & X & -- \\
+	Noah Richter       & X & X & X & -- & -- \\
+	Lena Klein         & X & X & X & X & -- \\
+	Tim Wolf           & X & -- & X & -- & X \\
+	Leonie Schröder    & X & X & X & X & X \\
+	Ben Neumann        & X & X & X & X & X \\
+	Clara Schwarz      & X & X & X & -- & -- \\
+	David Zimmermann   & X & X & X & -- & -- \\
+	Hannah Braun       & X & X & X & -- & X \\
+	Julian Krüger      & X & X & X & X & -- \\
+	Nina Hofmann       & X & X & X & X & X \\
+	Max Hartmann       & X & -- & X & -- & X \\
+	Sarah Lange        & X & X & X & -- & -- \\
+	Tom Schmitt        & X & X & X & -- & -- \\
+	Julia Werner       & X & -- & X & X & -- \\
+	Philipp Schmitz    & X & X & X & -- & X \\
+	Katharina Krause   & X & X & X & X & -- \\
+	Daniel Meier       & X & -- & X & -- & X \\
+	Vanessa Lehmann    & X & X & X & -- & -- \\
+	Sebastian Schulz   & X & X & X & X & X \\
+	Alina Maier        & X & X & X & -- & -- \\
+	Robin Herrmann     & X & X & X & -- & X \\
+	Melanie König      & X & X & X & X & -- \\
+	Tobias Frank       & X & X & X & -- & -- \\
+	Franziska Vogel    & X & X & X & -- & -- \\
+	Andreas Graf       & X & -- & X & X & X \\
+	Stefanie Sommer    & X & X & X & X & X \\
+	Marco Haas         & X & X & X & -- & X \\
+	Carina Seidel      & X & X & X & X & -- \\
+	Patrick Brandt     & X & X & X & X & -- \\
+	Lisa Otto          & X & X & X & -- & X \\
+	
+	\bottomrule
+\end{longtable}
+
+
+\subsection{Test T1: Dienstplan bei keinen Einschränkungen}
+
+Für Test T1 wurden alle Mitarbeiter beim Konfigurieren auf Vollzeit eingestellt. Das Resultat wird in der Abbildung \ref{fig:t1} dargestellt. Als Zeit wurden 60 Sekunden definiert. Viele 2/3 Zuteilungen deuten auf eine, wenn möglich, faire Verteilung hin.
+ 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{figures/tests/t1}
+	\caption{
+		T1: Resultat
+	}\label{fig:t1}
+\end{figure}
+
+\subsection{Test T2: Dienstplan bei blockierten / fest zugewiesenen Tagen}
+
+Für Testfall T2 wurde bei einem Planungsdurch für die Mitarbeiterin \textit{Anna Müller} statt Vollzeit (22 Tage im Juni 2026) nur 17 Tage im Juni 2026 definiert und die erste Woche als blockiert festgelegt. Das Ergebnis wird in Abbilung \ref{fig:t2_1} dargestellt. Die Mitarbeiterin \textit{Anna Müller} wurde in der ersten Woche nicht einer Station zugewiesen.
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{figures/tests/t2_1}
+	\caption{
+		T2: Gefilterte Kalenderansicht
+	}\label{fig:t2_1}
+\end{figure}
+
+Für das Testen von fest zugewiesenen Tagen wurde der Mitarbeiterin \textit{Anna Müller} statt Vollzeit (22 Tage im Juni 2026) nur 8 Tage zugewiesen. Es wurde jeweils der Mittwoch und der Freitag des Montats festgelegt. Das Ergebnis wird in Abbildung \ref{fig:t2_2} abgebildet. Die Mitarbeiterin \textit{Anna Müller} wurde in dem Monat immer nur am Mittwoch und Freitag zugeteilt.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{figures/tests/t2_2}
+	\caption{
+		T2: Gefilterte Kalenderansicht
+	}\label{fig:t2_2}
+\end{figure}
 
 
 
+\subsection{Test T3: Dienstplan bei zu wenig Mitarbeitern}
+Für Test T3 wird die Mitarbeiteranzahl von 41 auf 21 reduziert. Da 22 Stationen pro Tag befüllt werden können, wird es nicht möglich sein, bei jeder Station eine Zuteilung zu gewährleisten. Trotzdem wird eine Lösung gefunden, bei der die Anzahl an leeren Stationen minimiert wird. In Abbildung \ref{fig:t3} wird die Usermeldung dargestellt. An jedem Tag im Monat war bei dem gefundenen Plan eine Station unbesetzt.
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{figures/tests/t3}
+	\caption{
+		T3: Resultat
+	}\label{fig:t3}
+\end{figure}
+
+\subsection{Test T4: Vorhandene Zuteilungen von bestehendem Dienstplan übernehmen}
+Für Test T4 wurden Mitarbeiter manuell gewissen Stationen am 01. Juni 2026 zugewiesen, ersichtlich in Abbildung \ref{fig:t4_1}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{figures/tests/t4_1}
+	\caption{
+		T2: Vorhandene Zuweisungen
+	}\label{fig:t4_1}
+\end{figure}
+
+Wird nun das \textit{Scheduling} mit der Option \textit{Vorhandene Zuweisungen übernehmen} ausgeführt, wird der Monatsplan erstellt. Die vorhandenen Zuteilungen werden dabei übernommen. Das Ergebnis für den Testtag 01. Juni 2026 ist in Abbildung \ref{fig:t4_2} abgebildet. Die schon vorher definierten Zuteilungen wurden übernommen.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{figures/tests/t4_2}
+	\caption{
+		T4: Resultat
+	}\label{fig:t4_2}
+\end{figure}
+
+\subsection{Test T5: Neuen Plan erstellen, anstatt alten Plan zu überschreiben}
+
+Wird die Option \textit{Neuen Plan erstellen} im Dialog ausgewählt, bleibt der aktuell geladene Plan erhalten und es wird ein neuer Plan mit den ausgewählten Einschränkungen erstellt. Auf der Unterseite \textit{Pläne}, abgebildet in Abbildung \ref{fig:t5}, ist der neue Plan ersichtlich.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{figures/tests/t5}
+	\caption{
+		T4: Resultat
+	}\label{fig:t5}
+\end{figure}
+
+\subsection{Test T6: Kurzfrister Ausfall bei vorhandenem Dienstplan}
+
+Für Testzwecke wurde ein Dienstplan erstellt. Dabei wurde die Mitarbeiterin \textit{Stefanie Sommer} als Einzige bei der Station \textit{Koord. TK} am 08.Juni.2026 zugeteilt, wie in Abbildung \ref{fig:t6_1} dargestellt.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{figures/tests/t6_1}
+	\caption{
+		T6: Dienstplan
+	}\label{fig:t6_1}
+\end{figure}
+
+Es wird ein \textit{Rescheduling} durchgeführt. Wie in Abbildung \ref{fig:t6_2} ersichtlich, wurde eine automatische Umplanung durchgeführt. Eine andere Mitarbeiterin von einer Station mit mindestens zwei Mitarbeitern wurde der nun leeren Station zugewiesen, sodass keine Station unbesetzt bleibt.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{figures/tests/t6_2}
+	\caption{
+		T6: Resultat
+	}\label{fig:t6_2}
+\end{figure}
 

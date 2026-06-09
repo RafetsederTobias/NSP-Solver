@@ -200,7 +200,7 @@ def _run_clingo(
                 max_assignments(S, Max),
                 Target = (Max + 1) / 2.   % integer division: max=3 -> target=2
 
-            % --- Deviation per station-day (ASP-safe, no squaring) ---
+            % --- Deviation per station-day ---
             % Use absolute deviation split into over/under to avoid multiplication.
 
             over_staffed(S, D, Delta) :-
@@ -227,11 +227,11 @@ def _run_clingo(
         """
 
         print("Phase 1: trying with forced staffing and fairness...")
-        result = solve(EXTRA_FACTS, timeout=10)
+        result = solve(EXTRA_FACTS, timeout=60)
 
         if result:
             print("Phase 1 found a solution, returning...")
             return result
 
     print("Phase 2: falling back to soft optimization...")
-    return solve(timeout=10)
+    return solve(timeout=60)

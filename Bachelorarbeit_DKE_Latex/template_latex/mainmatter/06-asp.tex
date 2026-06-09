@@ -5,7 +5,7 @@
 \label{sec:asp}
 In diesem Kapitel wird genauer auf die ASP-Logik und die Generierung der Dienstpläne eingegagen.
 \section{Fakten-Generierung}
-Die Fakten-Generierung stellt die Verbindung zwischen der relationalen Datenbank und der ASP-Wissensbasis dar. Damit Clingo einen Dienstplan berechnen kann, müssen die benötigten Informationen zunächst in Form von ASP-Fakten bereitgestellt werden. Dafür werden die aus der Datenbank geladenen ORM-Objekte in der Funktion \texttt{\_build\_base\_facts} in entsprechende Fakten umgewandelt.
+Die Fakten-Generierung stellt die Verbindung zwischen der relationalen Datenbank und der ASP-Wissensbasis dar. Damit Clingo einen Dienstplan berechnen kann, müssen die benötigten Informationen zunächst in Form von ASP-Fakten bereitgestellt werden. Dafür werden die aus der Datenbank geladenen Objekte in entsprechende Fakten umgewandelt.
 
 Für jeden Benutzer wird dabei ein \texttt{user}-Fakt erzeugt. Zusätzlich wird für jede vorhandene Kompetenz ein \texttt{has\_skill}-Fakt erstellt. Für Stationen werden ebenfalls Fakten generiert, darunter \texttt{station}, \texttt{max\_assignments} zur maximalen Anzahl an Zuweisungen sowie \texttt{requires} für benötigte Kompetenzen.
 
@@ -150,7 +150,7 @@ Die zweite Phase verwendet ausschließlich das Basis-Encoding, das in Listing \r
 	}.
 \end{lstlisting}
 
-\section{Rescheduling-Verfahren}[\label{sec:rescheduling}]
+\section{Rescheduling-Verfahren}\label{sec:rescheduling}
 
 Das Rescheduling wird eingesetzt, wenn nach der Erstellung eines Dienstplans neue Verfügbarkeitsbeschränkungen auftreten. Dabei sollen bestehende Zuteilungen möglichst beibehalten werden, während gleichzeitig alle neuen Einschränkungen berücksichtigt werden.
 
@@ -208,7 +208,7 @@ Die folgende Direktive priorisiert daher Atome \texttt{assigned(U,S,D)}, für di
 \begin{lstlisting}
 	#heuristic assigned(U, S, D) : was_assigned(U, S, D). [10, true]
 \end{lstlisting}
-Dadurch werden Lösungen begünstigt, die dem ursprünglichen Dienstplan möglichst ähnlich bleiben, ohne die Korrektheit des Optimierungsziels zu beeinträchtigen. Die Heuristik beeinflusst nur die Suchreihenfolge, nicht die Menge der gültigen Antwortmengen.
+Dadurch werden Lösungen begünstigt, die dem ursprünglichen Dienstplan möglichst ähnlich bleiben, ohne die Korrektheit des Optimierungsziels zu beeinträchtigen. Die Heuristik beeinflusst nur die Suchreihenfolge, nicht die Menge der gültigen Antwortmengen \parencite{potasscoGuide}.
 
 Nach Abschluss der Optimierung werden alle zukünftigen Zuteilungen des aktuellen Dienstplans durch die neue Lösung ersetzt. Anschließend werden die vorgenommenen Änderungen ausgewertet und als hinzugefügte beziehungsweise entfernte Zuteilungen an den Benutzer zurückgegeben. Dadurch bleibt nachvollziehbar, welche Anpassungen durch das Rescheduling notwendig waren.
 
@@ -230,9 +230,7 @@ ein neuer erstellt.
 
 \subsection{Vorhandene Zuteilungen übernehmen}
 
-Die Option \texttt{keepExistingAssignments} ist nur relevant, wenn \texttt{newPlan}
-nicht gesetzt ist. Ist sie aktiv, werden die bereits in der Datenbank gespeicherten
-Zuteilungen des geladenen Plans als Eingabe an den ASP-Solver übergeben, sodass
+ Wenn die Option \textit{keepExistingAssignments} aktiv ist, werden die bereits in der Datenbank gespeicherten Zuteilungen des geladenen Plans als Eingabe an den ASP-Solver übergeben, sodass
 bestehende Zuteilungen erhalten bleiben. Ist sie nicht gesetzt, werden alle
 bisherigen Zuteilungen des Plans gelöscht und der Solver arbeitet auf einem leeren
 Zustand.
@@ -244,9 +242,9 @@ regulären Plan, ein alternativer Dienstplan berechnet wird. Dieser wird als
 separater, nicht geladener \texttt{Schedule}-Eintrag in der Datenbank gespeichert
 und steht dem Nutzer zur Auswahl bereit, ohne den aktiven Plan zu ersetzen.
 
-Ein Alternativplan kann als vorgezogenes Rescheduling verstanden werden. Statt erst auf bereits auftretende Konflikte zu reagieren, wird ein alternativer Plan vorausschauend unter denselben Bedingungen erzeugt. Intern greift das System dabei auf dieselbe Rescheduling-Logik zurück (\texttt{solve\_reschedule}), wobei die bestehenden Zuteilungen als \texttt{was\_assigned}-Fakten übergeben werden.
+Ein Alternativplan kann als vorgezogenes Rescheduling verstanden werden. Statt erst auf bereits auftretende Konflikte zu reagieren, wird ein alternativer Plan vorausschauend unter denselben Bedingungen erzeugt. Intern greift das System dabei auf dieselbe Rescheduling-Logik zurück, wobei die bestehenden Zuteilungen als \texttt{was\_assigned}-Fakten übergeben werden.
 
-Vor der Übergabe an den Solver werden die Sperrtage der Nutzer aufbereitet. Enthält die \texttt{blockedDays}-Liste eines Nutzers einen Eintrag, der mehr als einen gesperrten Tag lang ist, werden alle Werktage (Montag bis Freitag) der betroffenen Kalenderwochen als gesperrt markiert. 
+Vor der Übergabe an den Solver werden die Sperrtage der Nutzer aufbereitet. Enthält die \texttt{blockedDays}-Liste eines Nutzers einen Eintrag, der mehr als einen gesperrten Tag lang ist, werden alle zukünftigen Werktage (Montag bis Freitag) der betroffenen Kalenderwochen als gesperrt markiert. 
 
 Die Lösungssuche berücksichtigt wieder eine Domain-Heuristik, die Pläne bevorzugt, welche dem ursprünglichen Zustand möglichst nahekommen (vgl. Abschnitt~\ref{sec:rescheduling}).
 
