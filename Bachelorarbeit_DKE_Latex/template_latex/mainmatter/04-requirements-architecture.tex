@@ -24,9 +24,9 @@ Basierend auf bereits bestehenden Implementierungen sowie konkreten Anforderunge
 
 Das System soll die Erstellung eines Monatsplans von der Pflegeleitung für Mitarbeiter in einer Abteilung in einem Krankenhaus ermöglichen. Für jeden Mitarbeiter soll die Anzahl der Arbeitstage pro Monat erfasst werden können. Im Rahmen dieser Arbeit wird ausschließlich eine Tagesschicht betrachtet, unterschiedliche Schichtarten werden daher nicht berücksichtigt.
 
-Zusätzlich müssen verschiedene Hard Constraints eingehalten werden. Ein Mitarbeiter darf an einem Tag nur einer Station zugeteilt werden. Außerdem darf eine Zuteilung nur erfolgen, wenn der Mitarbeiter über die erforderlichen Kompetenzen für die jeweilige Station verfügt. Bestimmte Zuteilungen von Mitarbeitern zu Tagen und Stationen sollen als fixiert markiert werden können, sodass diese bei einer Neuberechnung des Plans unverändert bleiben. Ebenso soll definiert werden können, dass ein Mitarbeiter an bestimmten Tagen nicht eingeteilt werden darf, oder an bestimmten Tagen eingeteilt werden muss.
+Zusätzlich müssen verschiedene harte Constraints eingehalten werden. Ein Mitarbeiter darf an einem Tag nur einer Station zugeteilt werden. Außerdem darf eine Zuteilung nur erfolgen, wenn der Mitarbeiter über die erforderlichen Kompetenzen für die jeweilige Station verfügt. Bestimmte Zuteilungen von Mitarbeitern zu Tagen und Stationen sollen als fixiert markiert werden können, sodass diese bei einer Neuberechnung des Plans unverändert bleiben. Ebenso soll definiert werden können, dass ein Mitarbeiter an bestimmten Tagen nicht eingeteilt werden darf, oder an bestimmten Tagen eingeteilt werden muss.
 
-Neben den verpflichtenden Einschränkungen sollen auch Soft Constraints berücksichtigt werden. Als Soft Constraint wurde eine möglichst faire Verteilung der Mitarbeiter auf die einzelnen Stationen definiert. Wenn eine gültige Lösung existiert, bei der jede Station an jedem Tag mit mindestens einem Mitarbeiter besetzt ist, soll das System eine möglichst gleichmäßige Zuteilung der Mitarbeiter auf die Stationen anstreben.
+Neben den verpflichtenden Einschränkungen sollen auch Soft Constraints berücksichtigt werden. Als weiche Constraint wurde eine möglichst faire Verteilung der Mitarbeiter auf die einzelnen Stationen definiert. Wenn eine gültige Lösung existiert, bei der jede Station an jedem Tag mit mindestens einem Mitarbeiter besetzt ist, soll das System eine möglichst gleichmäßige Zuteilung der Mitarbeiter auf die Stationen anstreben.
 
 Ein weiterer wichtiger Punkt ist die Berechnungszeit des Systems. Vergleichbare Systeme berechnen Monatspläne innerhalb einer Minute, während Jahrespläne mehrere Minuten benötigen. Das entwickelte System soll daher ebenfalls in der Lage sein, einen Monatsplan innerhalb weniger Minute zu berechnen. Auch ein krankheitsbedingtes \textit{Rescheduling} soll innerhalb weniger Minuten möglich sein. Falls keine gültige Lösung gefunden werden kann, soll das System den Benutzer entsprechend warnen.
 
@@ -65,11 +65,10 @@ Die Tabelle \texttt{user\_skills} stellt die Zuordnung zwischen den Tabellen \te
 
 Die Tabelle \texttt{station\_skills} definiert die für eine Station erforderlichen Qualifikationen und stellt die Verbindung zwischen den Tabellen \texttt{stations} und \texttt{skills} her. Eine Station kann dabei über mehrere notwendige Qualifikationen verfügen. Diese Informationen ermöglichen anschließend den Abgleich zwischen den Fähigkeiten der Benutzer und den Anforderungen der jeweiligen Stationen.
 
-Die Tabelle \texttt{station\_assignments} stellt die zentrale Verknüpfung des Datenmodells dar. Sie ordnet für ein bestimmtes Datum (\texttt{date}) eine Station (\texttt{station\_id}) einem Benutzer (\texttt{user\_id}) sowie einem Dienstplan (\texttt{schedule\_id}) zu. Das Attribut \texttt{user\_id} ist optional, sodass auch Zuweisungen ohne konkreten Benutzer gespeichert werden können. Dies ermöglicht die Abbildung von Platzhalterzuweisungen für den Fall, dass einem Dienstplan nicht für jede Station unmittelbar ein Mitarbeiter zugeordnet werden kann.
-
+Die Tabelle \texttt{station\_assignments} stellt die zentrale Verknüpfung des Datenmodells dar. Sie ordnet für ein bestimmtes Datum (\texttt{date}) eine Station (\texttt{station\_id}) einem Benutzer (\texttt{user\_id}) sowie einem Dienstplan (\texttt{schedule\_id}) zu. Das Attribut \texttt{user\_id} ist optional, sodass auch Zuweisungen ohne konkreten Benutzer gespeichert werden können. Dies ermöglicht die Abbildung von Platzhalterzuweisungen für den Fall, dass einem Dienstplan nicht für jede Station unmittelbar ein Mitarbeiter zugeordnet werden kann. Der \textit{Unique Constraint} auf den Spalten \texttt{schedule\_id}, \texttt{date} und \texttt{user\_id} stellt dabei sicher, dass ein Benutzer innerhalb eines Dienstplans pro Tag nur einer einzigen Station zugewiesen werden kann.
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=\linewidth]{figures/datenmodell}
+	\includegraphics[width=\linewidth]{figures/datenmodell_plantuml}
 	\caption{
 		Datenmodell
 	}\label{fig:Datenmodell}

@@ -7,7 +7,7 @@ In diesem Kapitel wird genauer auf die ASP-Logik und die Generierung der Dienstp
 \section{Fakten-Generierung}
 Die Fakten-Generierung stellt die Verbindung zwischen der relationalen Datenbank und der ASP-Wissensbasis dar. Damit Clingo einen Dienstplan berechnen kann, müssen die benötigten Informationen zunächst in Form von ASP-Fakten bereitgestellt werden. Dafür werden die aus der Datenbank geladenen Objekte in entsprechende Fakten umgewandelt.
 
-Für jeden Benutzer wird dabei ein \texttt{user}-Fakt erzeugt. Zusätzlich wird für jede vorhandene Kompetenz ein \texttt{has\_skill}-Fakt erstellt. Für Stationen werden ebenfalls Fakten generiert, darunter \texttt{station}, \texttt{max\_assignments} zur maximalen Anzahl an Zuweisungen sowie \texttt{requires} für benötigte Kompetenzen.
+Für jeden Benutzer wird dabei ein \texttt{user}-Fakt erzeugt, wie in Listing \ref{lst:base-facts} zu sehen ist. Zusätzlich wird für jede vorhandene Kompetenz ein \texttt{has\_skill}-Fakt erstellt. Für Stationen werden ebenfalls Fakten generiert, darunter \texttt{station}, \texttt{max\_assignments} zur maximalen Anzahl an Zuweisungen sowie \texttt{requires} für benötigte Kompetenzen.
 
 Die zu planenden Arbeitstage werden als \texttt{day}-Fakten an Clingo übergeben. Wochenenden werden dabei bereits vorher durch die Funktion \texttt{get\_weekdays} herausgefiltert. Zusätzlich werden benutzerspezifische Einschränkungen als Fakten festgelegt. Dazu zählen beispielsweise maximale oder minimale Arbeitstage pro Monat (\texttt{max\_days}, \texttt{min\_days}), fixe Arbeitstage (\texttt{fixed\_day}) oder gesperrte Tage (\texttt{blocked\_day}).
 
@@ -44,22 +44,19 @@ Im Folgenden wird beispielhaft im Listing \ref{lst:base-facts} ein Ausschnitt de
 %First Draft%
 Das Regelwerk für die initiale Planerstellung ist in einer Datei \texttt{rules.lp} 
 definiert. Das Listing \ref{lst:rules} beinhaltet diese Basis-Regeln. Die Grundlage bildet die Bestimmung der \textit{Eligibility}: Ein 
-Benutzer gilt als qualifiziert für eine Station (\texttt{eligible/2}), wenn er 
-alle erforderlichen Fähigkeiten besitzt, also kein \texttt{requires/2}-Fakt 
-existiert, dem kein entsprechendes \texttt{has\_skill/2}-Fakt gegenübersteht. 
-Daraus wird \texttt{eligible\_day/3} abgeleitet, welches zusätzlich gesperrte 
+Benutzer gilt als qualifiziert für eine Station (\texttt{eligible}), wenn er 
+alle erforderlichen Fähigkeiten besitzt, also kein \texttt{requires}-Fakt 
+existiert, dem kein entsprechendes \texttt{has\_skill}-Fakt gegenübersteht. 
+Daraus wird \texttt{eligible\_day} abgeleitet, welches zusätzlich gesperrte 
 Tage ausschließt. Der \textit{Entscheidungsraum} wird durch eine \textit{Choice 
 	Rule} definiert, die Clingo erlaubt, Benutzern Stationen an bestimmten Tagen 
 zuzuweisen, wobei pro Station und Tag maximal \texttt{Max} Benutzer zugewiesen 
 werden dürfen. Die \textit{harten Constraints} erzwingen, dass kein Benutzer an 
 zwei Stationen gleichzeitig eingeteilt wird, dass gesperrte Tage nicht belegt 
-werden, und dass benutzerspezifische Einschränkungen wie \texttt{max\_days/2}, 
-\texttt{min\_days/2} sowie \texttt{exact\_days/2} eingehalten werden. Fixe 
-Arbeitstage werden über \texttt{fixed\_day/2} als harte Bedingung erzwungen, 
+werden, und dass benutzerspezifische Einschränkungen wie \texttt{max\_days}, 
+\texttt{min\_days} sowie \texttt{exact\_days} eingehalten werden. Fixe 
+Arbeitstage werden über \texttt{fixed\_day} als harte Bedingung erzwungen, 
 sodass bestimmte Benutzer an vordefinierten Tagen zwingend eingeteilt sind. 
-Die \textit{Optimierung} minimiert unbesetzte Stationen über eine 
-\texttt{\#minimize}-Direktive, die Clingo anweist, die Anzahl der Tage, an 
-denen eine Station ohne Besetzung bleibt, so gering wie möglich zu halten. 
 Die Regelstruktur für das Rescheduling folgt einem ähnlichen Prinzip, wird 
 jedoch in Abschnitt~\ref{sec:rescheduling} gesondert behandelt.
 \begin{lstlisting}[caption={ASP-Regeln},label={lst:rules}]
@@ -89,19 +86,19 @@ station(S), day(D), max_assignments(S, Max).
 :- user(U), exact_days(U, Exact),
 #count { D : assigned(U, _, D) } != Exact.
 \end{lstlisting}
-\section{Zweiphasen-Lösungsanstz}
+\section{Zweiphasen-Lösungsansatz}
 Analog zu \textcite{cardellini2023solvingrehabilitationschedulingproblems} wurden auch in dieser Arbeit zwei Phasen implementiert, die auf ähnlichen, jedoch nicht identischen ASP-Encodings basieren.
 Ziel dieser Vorgehensweise ist es, zunächst eine möglichst ausgewogene Belegung der verfügbaren Stationen zu erreichen und bei Bedarf auf eine flexiblere Optimierung zurückzugreifen.
 
 In der ersten Phase wird das Basis-Encoding um zusätzliche Regeln erweitert, die eine verpflichtende Belegung der verfügbaren Kapazitäten vorgeben. Für jeden Stations-Tag wird dabei eine Anzahl von Zuweisungen zwischen eins und der maximal zulässigen Belegung erzeugt. Somit wird der Suchraum erheblich reduziert, wodurch Clingo schneller feststellen kann, ob für jede Station an jedem Tag mindestens eine Zuteilung möglich ist.
-Die \textit{Choice-Rule} von Listing \ref{lst:base-facts} wird durch eine neue ersetzt:
+Die \textit{Choice-Rule} von Listing \ref{lst:rules} wird durch eine neue ersetzt:
 
 \begin{lstlisting}
 	1 { assigned(U, S, D) : eligible_day(U, S, D) } Max :-
 	station(S), day(D), max_assignments(S, Max).
 \end{lstlisting}
 
- Darüber hinaus wird für jede Station ein Idealwert berechnet, der ungefähr der Hälfte der maximalen Kapazität entspricht. Anschließend wird die Abweichung der tatsächlichen Belegung von diesem Idealwert bestimmt. Sowohl Über- als auch Unterbelegungen werden über eine Optimierungsfunktion minimiert. Dadurch bevorzugt Clingo Lösungen, die eine möglichst gleichmäßige Auslastung der Stationen über alle Tage hinweg erzielen. Im Listing \ref{lst:fairness} werden die dafür verwendeten Fakten aufgezeigt.
+ Darüber hinaus wird für jede Station ein Idealwert berechnet (siehe Listing \ref{lst:fairness}), der ungefähr der Hälfte der maximalen Kapazität entspricht. Anschließend wird die Abweichung der tatsächlichen Belegung von diesem Idealwert bestimmt. Sowohl Über- als auch Unterbelegungen werden über eine Optimierungsfunktion minimiert. Die \texttt{\#minimize}-Direktive summiert dabei die \texttt{Delta}-Werte aller über- und unterbelegten Stationen-Tag-Kombinationen. Das Gewicht \texttt{@10} definiert die Optimierungspriorität: Clingo löst Zielfunktionen mit höherer Priorität zuerst, bevor Kriterien niedrigerer Priorität berücksichtigt werden. Auf diese Weise wird die Fairness-Optimierung gegenüber anderen \texttt{\#minimize}-Anweisungen im Regelwerk priorisiert. Dadurch bevorzugt Clingo Lösungen, die eine möglichst gleichmäßige Auslastung der Stationen über alle Tage hinweg erzielen. Im Listing \ref{lst:fairness} werden die dafür verwendeten Fakten aufgezeigt.
  
 \begin{lstlisting}[caption={Fairness-Regeln},label={lst:fairness}]
 	ideal_count(S, Target) :-
@@ -133,7 +130,7 @@ Die \textit{Choice-Rule} von Listing \ref{lst:base-facts} wird durch eine neue e
 
 Kann innerhalb eines vorgegebenen Zeitlimits eine Lösung gefunden werden, wird diese direkt übernommen. Andernfalls wird die erste Phase abgebrochen und die Berechnung in einer zweiten Phase fortgesetzt.
 
-Die zweite Phase verwendet ausschließlich das Basis-Encoding, das in Listing \ref{lst:rules} definiert wurde, ohne die zusätzlichen Fairness- und Belegungsregeln der ersten Phase. Dadurch wird der Suchraum vergrößert und die Optimierung weniger restriktiv gestaltet. Das Verfahren dient somit als Absicherung, um auch in stark eingeschränkten Instanzen innerhalb eines begrenzten Zeitraums eine gültige Lösung zu erhalten. Die ASP-Logik dafür wird in Listing \ref{lst:unstaffed} aufgezeigt.
+Die zweite Phase verwendet ausschließlich das Basis-Encoding, das in Listing \ref{lst:rules} definiert wurde, ohne die zusätzlichen Fairness- und Belegungsregeln der ersten Phase. Dadurch wird der Suchraum vergrößert und den Vorgang weniger restriktiv gestaltet. Die \textit{Optimierung} zielt darauf ab, unbesetzte Stationen zu minimieren. Mittels der \texttt{\#minimize}-Direktive wird Clingo angewiesen, die Anzahl der Tage, an denen eine Station ohne zugewiesenen Benutzer bleibt, so gering wie möglich zu halten. Das Verfahren dient somit als Absicherung, um auch in stark eingeschränkten Instanzen innerhalb eines begrenzten Zeitraums eine gültige Lösung zu erhalten. Die ASP-Logik dafür wird in Listing \ref{lst:unstaffed} aufgezeigt.
 
 \begin{lstlisting}[caption={ASP-Encoding: Leere Stationen vermeiden},label={lst:unstaffed}]
 	staff_count(S, D, N) :-
@@ -154,7 +151,7 @@ Die zweite Phase verwendet ausschließlich das Basis-Encoding, das in Listing \r
 
 Das Rescheduling wird eingesetzt, wenn nach der Erstellung eines Dienstplans neue Verfügbarkeitsbeschränkungen auftreten. Dabei sollen bestehende Zuteilungen möglichst beibehalten werden, während gleichzeitig alle neuen Einschränkungen berücksichtigt werden.
 
-Als Erstes werden alle Benutzer ermittelt, für die neue Sperrtage definiert wurden. Anschließend werden Zuteilungen identifiziert, die mit diesen Sperrtagen in Konflikt stehen. Existieren keine Konflikte, ist kein Rescheduling erforderlich und der bestehende Dienstplan bleibt unverändert.
+Als Erstes werden alle Benutzer ermittelt, für die neue Sperrtage definiert wurden, beispielsweise aufgrund einer kurzfristigen Krankmeldung oder anderer unerwarteter Abwesenheiten. Anschließend werden Zuteilungen identifiziert, die mit diesen Sperrtagen in Konflikt stehen. Existieren keine Konflikte, ist kein Rescheduling erforderlich und der bestehende Dienstplan bleibt unverändert.
 
 Werden Konflikte gefunden, werden die betroffenen Zuteilungen aus dem aktuellen Dienstplan entfernt. Alle übrigen zukünftigen Zuteilungen werden als bestehende Planung übernommen und dienen als Grundlage für die Neuplanung. Vergangene Termine werden dabei nicht verändert.
 
@@ -235,7 +232,7 @@ bestehende Zuteilungen erhalten bleiben. Ist sie nicht gesetzt, werden alle
 bisherigen Zuteilungen des Plans gelöscht und der Solver arbeitet auf einem leeren
 Zustand.
 
-\subsection{Alternativplan}
+\subsection{Alternativplan} \label{sub:alternativplan}
 
 Die Option \texttt{alternativePlan} bewirkt, dass zusätzlich zum
 regulären Plan, ein alternativer Dienstplan berechnet wird. Dieser wird als
