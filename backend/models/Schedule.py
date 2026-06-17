@@ -13,7 +13,7 @@ class Schedule(Base):
     is_loaded = Column(Boolean, nullable=False, default=False)
 
 
-    station_assignments = relationship("StationAssignment", back_populates="schedule")
+    station_assignments = relationship("StationAssignment", back_populates="schedule", cascade="all, delete-orphan")
     
     __table_args__ = (
     Index(
