@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 
 
-\chapter{Anforderungen, Systemarchitektur und Datenmodell}
+\chapter{Anforderungen, Systemarchitektur und Datenmodell} \label{sec:requirements_architecture}
 \section{Anforderungen}
 \label{sec:requirements}
 Basierend auf bereits bestehenden Implementierungen sowie konkreten Anforderungen des Krankenhauses wurden die Systemanforderungen definiert. Das Projekt wird als Fullstack-Webanwendung umgesetzt und ist über den Webbrowser zugänglich. In Tabelle \ref{tab:technologien} wird die genaue Technologie des jeweiligen Subsystems erläutert.
@@ -28,7 +28,7 @@ Zusätzlich müssen verschiedene harte Constraints eingehalten werden. Ein Mitar
 
 Neben den verpflichtenden Einschränkungen sollen auch Soft Constraints berücksichtigt werden. Als weiche Constraint wurde eine möglichst faire Verteilung der Mitarbeiter auf die einzelnen Stationen definiert. Wenn eine gültige Lösung existiert, bei der jede Station an jedem Tag mit mindestens einem Mitarbeiter besetzt ist, soll das System eine möglichst gleichmäßige Zuteilung der Mitarbeiter auf die Stationen anstreben.
 
-Ein weiterer wichtiger Punkt ist die Berechnungszeit des Systems. Vergleichbare Systeme berechnen Monatspläne innerhalb einer Minute, während Jahrespläne mehrere Minuten benötigen. Das entwickelte System soll daher ebenfalls in der Lage sein, einen Monatsplan innerhalb weniger Minute zu berechnen. Auch ein krankheitsbedingtes \textit{Rescheduling} soll innerhalb weniger Minuten möglich sein. Falls keine gültige Lösung gefunden werden kann, soll das System den Benutzer entsprechend warnen.
+Ein weiterer wichtiger Punkt ist die Berechnungszeit des Systems. Vergleichbare Systeme berechnen Monatspläne innerhalb einer Minute, während Jahrespläne mehrere Minuten benötigen. Das entwickelte System soll daher ebenfalls in der Lage sein, einen Monatsplan innerhalb weniger Minuten zu berechnen. Auch ein krankheitsbedingtes \textit{Rescheduling} soll innerhalb weniger Minuten möglich sein. Falls keine gültige Lösung gefunden werden kann, soll das System den Benutzer entsprechend warnen.
 
 
 \section{Systemarchitektur}
@@ -42,7 +42,7 @@ Die Applikation besteht aus einer dreischichtigen Architektur, die in Angular-Fr
 \end{figure}
 
 Das Frontend wurde als Single-Page Application mit dem Angular Framework umgesetzt. Es stellt die Benutzeroberfläche bereit, über die Mitarbeiter, Stationen, Kompetenzen verwaltet, sowie Constraints festgelegt und Monatspläne angezeigt werden können. Die Kommunikation mit dem Backend erfolgt ausschließlich über HTTP-REST-Schnittstellen.
-Das Backend ist in Python mit FastAPI realisiert und übernimmt die gesamte Geschäftslogik der Anwendung. Es stellt REST-Endpunkte bereit und verarbeitet eingehende Anfragen Ein zentraler Bestandteil des Backends ist der ASP-Service. Dieser Service ist für die Berechnung der Monatspläne unter Berücksichtigung der definierten Hard und Soft Constraints verantwortlich.
+Das Backend ist in Python mit FastAPI realisiert und übernimmt die gesamte Geschäftslogik der Anwendung. Es stellt REST-Endpunkte bereit und verarbeitet eingehende Anfragen. Ein zentraler Bestandteil des Backends ist der ASP-Service. Dieser Service ist für die Berechnung der Monatspläne unter Berücksichtigung der definierten Hard und Soft Constraints verantwortlich.
 Als Datenbankschicht wird Supabase eingesetzt, eine Open-Source-Plattform, die auf PostgreSQL aufbaut. Supabase stellt neben der relationalen Datenbank auch eine PostgREST-Schnittstelle bereit, über die das Backend direkt auf die Datenbankressourcen zugreifen kann.
 
 \section{Datenmodell}
@@ -65,7 +65,7 @@ Die Tabelle \texttt{user\_skills} stellt die Zuordnung zwischen den Tabellen \te
 
 Die Tabelle \texttt{station\_skills} definiert die für eine Station erforderlichen Qualifikationen und stellt die Verbindung zwischen den Tabellen \texttt{stations} und \texttt{skills} her. Eine Station kann dabei über mehrere notwendige Qualifikationen verfügen. Diese Informationen ermöglichen anschließend den Abgleich zwischen den Fähigkeiten der Benutzer und den Anforderungen der jeweiligen Stationen.
 
-Die Tabelle \texttt{station\_assignments} stellt die zentrale Verknüpfung des Datenmodells dar. Sie ordnet für ein bestimmtes Datum (\texttt{date}) eine Station (\texttt{station\_id}) einem Benutzer (\texttt{user\_id}) sowie einem Dienstplan (\texttt{schedule\_id}) zu. Das Attribut \texttt{user\_id} ist optional, sodass auch Zuweisungen ohne konkreten Benutzer gespeichert werden können. Dies ermöglicht die Abbildung von Platzhalterzuweisungen für den Fall, dass einem Dienstplan nicht für jede Station unmittelbar ein Mitarbeiter zugeordnet werden kann. Der \textit{Unique Constraint} auf den Spalten \texttt{schedule\_id}, \texttt{date} und \texttt{user\_id} stellt dabei sicher, dass ein Benutzer innerhalb eines Dienstplans pro Tag nur einer einzigen Station zugewiesen werden kann.
+Die Tabelle \texttt{station\_assignments} stellt die zentrale Verknüpfung des Datenmodells dar. Sie ordnet für ein bestimmtes Datum (\texttt{date}) eine Station (\texttt{station\_id}) einem Benutzer (\texttt{user\_id}) sowie einem Dienstplan (\texttt{schedule\_id}) zu. Das Attribut \texttt{user\_id} ist optional, sodass auch Zuweisungen ohne konkreten Benutzer gespeichert werden können. Dies ermöglicht die Abbildung von Platzhalterzuweisungen für den Fall, dass einem Dienstplan nicht für jede Station unmittelbar ein Mitarbeiter zugeordnet werden kann. Der \textit{Unique Constraint} auf den Spalten \texttt{schedule\_id}, \texttt{date} und \texttt{user\_id} stellt dabei sicher, dass ein Benutzer eines Dienstplans pro Tag nur einer einzigen Station zugewiesen werden kann.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{figures/datenmodell_plantuml}

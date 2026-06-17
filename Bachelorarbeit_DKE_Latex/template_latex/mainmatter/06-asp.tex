@@ -3,7 +3,7 @@
 
 \chapter{ASP-Logik}
 \label{sec:asp}
-In diesem Kapitel wird genauer auf die ASP-Logik und die Generierung der Dienstpläne eingegagen.
+In diesem Kapitel wird genauer auf die ASP-Logik und die Generierung der Dienstpläne eingegangen.
 \section{Fakten-Generierung}
 Die Fakten-Generierung stellt die Verbindung zwischen der relationalen Datenbank und der ASP-Wissensbasis dar. Damit Clingo einen Dienstplan berechnen kann, müssen die benötigten Informationen zunächst in Form von ASP-Fakten bereitgestellt werden. Dafür werden die aus der Datenbank geladenen Objekte in entsprechende Fakten umgewandelt.
 
@@ -88,7 +88,7 @@ station(S), day(D), max_assignments(S, Max).
 \end{lstlisting}
 \section{Zweiphasen-Lösungsansatz}
 Analog zu \textcite{cardellini2023solvingrehabilitationschedulingproblems} wurden auch in dieser Arbeit zwei Phasen implementiert, die auf ähnlichen, jedoch nicht identischen ASP-Encodings basieren.
-Ziel dieser Vorgehensweise ist es, zunächst eine möglichst ausgewogene Belegung der verfügbaren Stationen zu erreichen und bei Bedarf auf eine flexiblere Optimierung zurückzugreifen.
+Ziel dieser Vorgehensweise ist es, zunächst eine möglichst ausgewogene Belegung der verfügbaren Stationen zu erreichen und bei Bedarf auf eine flexiblere Optimierung zurückzugreifen. Durch die zwei Phasen kann Clingo schneller lösen, ob eine Zuteilung mit mindestens einer Person pro Station möglich ist.
 
 In der ersten Phase wird das Basis-Encoding um zusätzliche Regeln erweitert, die eine verpflichtende Belegung der verfügbaren Kapazitäten vorgeben. Für jeden Stations-Tag wird dabei eine Anzahl von Zuweisungen zwischen eins und der maximal zulässigen Belegung erzeugt. Somit wird der Suchraum erheblich reduziert, wodurch Clingo schneller feststellen kann, ob für jede Station an jedem Tag mindestens eine Zuteilung möglich ist.
 Die \textit{Choice-Rule} von Listing \ref{lst:rules} wird durch eine neue ersetzt:

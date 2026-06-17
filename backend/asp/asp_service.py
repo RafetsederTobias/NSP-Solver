@@ -201,8 +201,6 @@ def _run_clingo(
                 Target = (Max + 1) / 2.   % integer division: max=3 -> target=2
 
             % --- Deviation per station-day ---
-            % Use absolute deviation split into over/under to avoid multiplication.
-
             over_staffed(S, D, Delta) :-
                 station(S), day(D),
                 staff_count(S, D, N),

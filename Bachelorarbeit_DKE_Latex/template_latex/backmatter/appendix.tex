@@ -26,7 +26,7 @@ Abbildung \ref{fig:user_list} zeigt die Übersichts-Liste von Mitarbeitern.
 \end{figure}
 
 Analog dazu können auch Stationen und Kompetenzen auf den entsprechenden Unterseiten angelegt werden. \newline
-Auf der Unterseite \textit{Kalendar} bekommt man eine Übersicht für den Monat. Wie die Unterseite aussieht, wird in Abbildung \ref{fig:calendar} dargestellt.
+Auf der Unterseite \textit{Kalender} bekommt man eine Übersicht für den Monat. Wie die Unterseite aussieht, wird in Abbildung \ref{fig:calendar} dargestellt.
 
 \begin{figure}[h]
 	\centering
@@ -71,7 +71,7 @@ Nach erfolgreichem Planungslauf werden die Zuteilungen direkt im Kalender angeze
  	\centering
  	\includegraphics[width=\linewidth]{figures/day_detail}
  	\caption{
- 		Monatsübersicht mit Zuteilungen
+ 		Tages-Detailansicht
  	}\label{fig:day_detail}
  \end{figure}
  
@@ -114,7 +114,7 @@ Nach erfolgreichem Planungslauf werden die Zuteilungen direkt im Kalender angeze
  	\item{T3: Dienstplan bei zu wenig Mitarbeitern}
  	\item{T4: Vorhandene Zuteilungen von bestehendem Dienstplan übernehmen}
  	\item{T5: Neuen Plan erstellen, anstatt alten Plan zu überschreiben}
- 	\item{T6: Kurzfrister Ausfall bei vorhandenem Dienstplan}
+ 	\item{T6: Kurzfristiger Ausfall bei vorhandenem Dienstplan}
  \end{itemize}
  
  Für die Evaluation des Dienstplanungsalgorithmus wurde ein Testdatensatz erstellt, der aus 22 Stationen und 41 Mitarbeitern besteht. Jede Station erfordert bestimmte fachliche Kompetenzen, während jedem Mitarbeiter jene Kompetenzen zugeordnet sind, über die er verfügt.
@@ -245,7 +245,7 @@ Für Test T1 wurden alle Mitarbeiter beim Konfigurieren auf Vollzeit eingestellt
 
 \subsection{Test T2: Dienstplan bei blockierten / fest zugewiesenen Tagen}
 
-Für Testfall T2 wurde bei einem Planungsdurchlauf für die Mitarbeiterin \textit{Anna Müller} statt Vollzeit (22 Tage im Juni 2026) nur 17 Tage im Juni 2026 definiert und die erste Woche als blockiert festgelegt. Das Ergebnis wird in Abbilung \ref{fig:t2_1} dargestellt. Die Mitarbeiterin \textit{Anna Müller} wurde in der ersten Woche keiner Station zugewiesen.
+Für Testfall T2 wurde bei einem Planungsdurchlauf für die Mitarbeiterin \textit{Anna Müller} statt Vollzeit (22 Tage im Juni 2026) nur 17 Tage im Juni 2026 definiert und die erste Woche als blockiert festgelegt. Das Ergebnis wird in Abbildung \ref{fig:t2_1} dargestellt. Die Mitarbeiterin \textit{Anna Müller} wurde in der ersten Woche keiner Station zugewiesen.
 
 
 \begin{figure}[H]
@@ -287,7 +287,7 @@ Für Test T4 wurden Mitarbeiter manuell gewissen Stationen am 01. Juni 2026 zuge
 	\centering
 	\includegraphics[width=\linewidth]{figures/tests/t4_1}
 	\caption{
-		T2: Vorhandene Zuweisungen
+		T4: Vorhandene Zuweisungen
 	}\label{fig:t4_1}
 \end{figure}
 
@@ -308,11 +308,11 @@ Wird die Option \textit{Neuen Plan erstellen} im Dialog ausgewählt, bleibt der 
 	\centering
 	\includegraphics[width=\linewidth]{figures/tests/t5}
 	\caption{
-		T4: Resultat
+		T5: Resultat
 	}\label{fig:t5}
 \end{figure}
 
-\subsection{Test T6: Kurzfrister Ausfall bei vorhandenem Dienstplan}
+\subsection{Test T6: Kurzfristiger Ausfall bei vorhandenem Dienstplan}
 
 Für Testzwecke wurde ein Dienstplan erstellt. Dabei wurde die Mitarbeiterin \textit{Stefanie Sommer} als Einzige bei der Station \textit{Koord. TK} am 08.Juni.2026 zugeteilt, wie in Abbildung \ref{fig:t6_1} dargestellt.
 
