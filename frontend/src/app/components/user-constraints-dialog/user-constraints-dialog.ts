@@ -4,7 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserConstraint } from '../../service/user-service';
 import { WorkdayService } from '../../service/workday-service';
-import { CalendarGridComponent, CalendarGridSelection, CalendarPriority } from '../calendar-grid/calendar-grid';
+import {
+  CalendarGridComponent,
+  CalendarGridSelection,
+  CalendarPriority,
+} from '../calendar-grid/calendar-grid';
 
 export interface UserConstraintsDialogData {
   user: { id: string; name: string };
@@ -219,7 +223,9 @@ type DayMode = 'fulltime' | 'exact' | 'minmax';
         width: calc(50% - 2px);
         height: calc(100% - 4px);
         border-radius: 4px;
-        transition: transform 0.18s ease, background 0.18s ease;
+        transition:
+          transform 0.18s ease,
+          background 0.18s ease;
         pointer-events: none;
       }
       .priority-thumb.pflicht {
@@ -359,12 +365,14 @@ type DayMode = 'fulltime' | 'exact' | 'minmax';
                   class="priority-option"
                   [class.active]="priority === 'pflicht'"
                   [class.inactive]="priority === 'wunsch'"
-                >Pflicht</span>
+                  >Pflicht</span
+                >
                 <span
                   class="priority-option"
                   [class.active]="priority === 'wunsch'"
                   [class.inactive]="priority === 'pflicht'"
-                >Wunsch</span>
+                  >Wunsch</span
+                >
               </div>
             </div>
 
@@ -398,7 +406,7 @@ export class UserConstraintsDialogComponent {
   };
 
   mode: DayMode = this.inferMode();
-  priority: CalendarPriority = 'pflicht';
+  priority: CalendarPriority = this.data.constraints.priority ?? 'pflicht';
 
   get initials() {
     return this.data.user.name
