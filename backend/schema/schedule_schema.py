@@ -1,5 +1,5 @@
 from pydantic import BaseModel, ConfigDict, Field
-from typing import List
+from typing import List, Literal
 
 class UserConstraint(BaseModel):
     user_id: int = Field(alias="userId")
@@ -8,6 +8,7 @@ class UserConstraint(BaseModel):
     exactDaysPerMonth: int | None = None
     fixedDays: List[int] | None = None
     blockedDays: List[int] | None = None
+    priority: Literal["pflicht", "wunsch"] | None = None
 
 class SchedulePayload(BaseModel):
     currentMonth: int

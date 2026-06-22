@@ -99,6 +99,7 @@ def _build_constraint_facts(constraints) -> str:
         return ""
 
     facts = ""
+    preferred = []
 
     for c in constraints:
         if c.maxDaysPerMonth is not None:
@@ -112,11 +113,21 @@ def _build_constraint_facts(constraints) -> str:
 
         if c.fixedDays:
             for d in c.fixedDays:
-                facts += f"fixed_day({c.user_id}, {d}).\n"
+                if c.priority == "wunsch":
+                    facts += f"preferred_day({c.user_id}, {d}).\n"
+                    preferred.append((c.user_id, d))
+                else:
+                    facts += f"fixed_day({c.user_id}, {d}).\n"
 
         if c.blockedDays:
             for d in c.blockedDays:
-                facts += f"blocked_day({c.user_id}, {d}).\n"
+                if c.priority == "wunsch":
+                    facts += f"avoid_day({c.user_id}, {d}).\n"
+                else:
+                    facts += f"blocked_day({c.user_id}, {d}).\n"
+
+    print(constraints)
+    print(facts)
 
     return facts
 
@@ -219,13 +230,13 @@ def _run_clingo(
             % Penalize any deviation from ideal. Higher weight = stricter fairness.
             % Both directions penalized equally, drives toward 2/3.
             #minimize {
-                Delta @10, S, D : over_staffed(S, D, Delta) ;
-                Delta @10, S, D : under_staffed(S, D, Delta)
+                Delta @1, S, D : over_staffed(S, D, Delta) ;
+                Delta @1, S, D : under_staffed(S, D, Delta)
             }.
         """
 
         print("Phase 1: trying with forced staffing and fairness...")
-        result = solve(EXTRA_FACTS, timeout=15)
+        result = solve(EXTRA_FACTS, timeout=60)
 
         if result:
             print("Phase 1 found a solution, returning...")

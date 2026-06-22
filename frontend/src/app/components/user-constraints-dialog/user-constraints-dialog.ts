@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserConstraint } from '../../service/user-service';
 import { WorkdayService } from '../../service/workday-service';
-import { CalendarGridComponent, CalendarGridSelection } from '../calendar-grid/calendar-grid';
+import { CalendarGridComponent, CalendarGridSelection, CalendarPriority } from '../calendar-grid/calendar-grid';
 
 export interface UserConstraintsDialogData {
   user: { id: string; name: string };
@@ -65,6 +65,12 @@ type DayMode = 'fulltime' | 'exact' | 'minmax';
         text-transform: uppercase;
         letter-spacing: 0.06em;
         color: #94a3b8;
+        margin-bottom: 10px;
+      }
+      .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         margin-bottom: 10px;
       }
       .radio-group {
@@ -191,6 +197,58 @@ type DayMode = 'fulltime' | 'exact' | 'minmax';
         height: 0.5px;
         background: #f1f5f9;
       }
+
+      /* ── Priority toggle ── */
+      .priority-track {
+        position: relative;
+        width: 120px;
+        height: 22px;
+        background: #f1f5f9;
+        border-radius: 6px;
+        border: 0.5px solid #e2e8f0;
+        display: flex;
+        cursor: pointer;
+        padding: 2px;
+        box-sizing: border-box;
+        flex-shrink: 0;
+      }
+      .priority-thumb {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: calc(50% - 2px);
+        height: calc(100% - 4px);
+        border-radius: 4px;
+        transition: transform 0.18s ease, background 0.18s ease;
+        pointer-events: none;
+      }
+      .priority-thumb.pflicht {
+        background: #6366f1;
+        transform: translateX(0);
+      }
+      .priority-thumb.wunsch {
+        background: #a78bfa;
+        transform: translateX(100%);
+      }
+      .priority-option {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 600;
+        z-index: 1;
+        transition: color 0.18s ease;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        user-select: none;
+      }
+      .priority-option.active {
+        color: #fff;
+      }
+      .priority-option.inactive {
+        color: #94a3b8;
+      }
     `,
   ],
   template: `
@@ -289,7 +347,26 @@ type DayMode = 'fulltime' | 'exact' | 'minmax';
           <div class="divider"></div>
 
           <div>
-            <div class="section-label">Verfügbarkeit</div>
+            <div class="section-header">
+              <span class="section-label" style="margin-bottom:0;">Verfügbarkeit</span>
+              <div class="priority-track" (click)="togglePriority()">
+                <div
+                  class="priority-thumb"
+                  [class.pflicht]="priority === 'pflicht'"
+                  [class.wunsch]="priority === 'wunsch'"
+                ></div>
+                <span
+                  class="priority-option"
+                  [class.active]="priority === 'pflicht'"
+                  [class.inactive]="priority === 'wunsch'"
+                >Pflicht</span>
+                <span
+                  class="priority-option"
+                  [class.active]="priority === 'wunsch'"
+                  [class.inactive]="priority === 'pflicht'"
+                >Wunsch</span>
+              </div>
+            </div>
 
             <app-calendar-grid
               [currentDate]="data.currentDate"
@@ -321,6 +398,7 @@ export class UserConstraintsDialogComponent {
   };
 
   mode: DayMode = this.inferMode();
+  priority: CalendarPriority = 'pflicht';
 
   get initials() {
     return this.data.user.name
@@ -346,6 +424,11 @@ export class UserConstraintsDialogComponent {
     if (c.maxDaysPerMonth != null || c.minDaysPerMonth != null) return 'minmax';
     return 'fulltime';
   }
+
+  togglePriority(): void {
+    this.priority = this.priority === 'pflicht' ? 'wunsch' : 'pflicht';
+  }
+
   onModeChange() {
     this.draft.exactDaysPerMonth = null as any;
     this.draft.maxDaysPerMonth = null as any;
@@ -360,7 +443,6 @@ export class UserConstraintsDialogComponent {
     this.trimFixedDaysTocap();
   }
 
-  /* Max allowed fixed days ( null means no cap) */
   get fixedCap(): number | null {
     if (this.mode === 'fulltime') return this.workdays;
     if (this.mode === 'exact' && this.draft.exactDaysPerMonth != null)
@@ -388,7 +470,7 @@ export class UserConstraintsDialogComponent {
     if (this.mode === 'fulltime') {
       this.draft.exactDaysPerMonth = this.workdays;
     }
-    this.dialogRef.close(this.draft);
+    this.dialogRef.close({ ...this.draft, priority: this.priority });
   }
 
   onBackdropClick(e: MouseEvent) {

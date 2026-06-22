@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core
 import { CommonModule } from '@angular/common';
 
 export type CalendarMode = 'fixed' | 'blocked';
+export type CalendarPriority = 'pflicht' | 'wunsch';
 
 export interface CalendarGridSelection {
   fixedDays: number[];
@@ -215,7 +216,6 @@ export class CalendarGridComponent implements OnChanges {
     this._fixedDays = [...this.fixedDays];
     this._blockedDays = [...this.blockedDays];
 
-    // If only one mode is allowed, lock to it
     if (this.modes.length === 1) {
       this.calMode = this.modes[0];
     }
@@ -226,7 +226,7 @@ export class CalendarGridComponent implements OnChanges {
     const month = this.currentDate.getMonth();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     let firstDow = new Date(year, month, 1).getDay();
-    firstDow = firstDow === 0 ? 6 : firstDow - 1; // Monday-first
+    firstDow = firstDow === 0 ? 6 : firstDow - 1;
     const cells: (number | null)[] = Array(firstDow).fill(null);
     for (let d = 1; d <= daysInMonth; d++) cells.push(d);
     return cells;
@@ -241,10 +241,8 @@ export class CalendarGridComponent implements OnChanges {
     return dow === 0 || dow === 6;
   }
 
-  // Past days should not be selectable as blocked
   isPastDay(day: number): boolean {
     if (this.modes.length !== 1 || this.modes[0] !== 'blocked') return false;
-
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const cellDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), day);

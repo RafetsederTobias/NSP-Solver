@@ -41,5 +41,8 @@ unstaffed(S, D) :-
 
 % Priority @2: minimize unstaffed stations 
 #minimize {
-    1@1, S, D : unstaffed(S, D)
+    1@10, S, D : unstaffed(S, D)
 }.
+
+#minimize { 1@2, U, D : preferred_day(U, D), not assigned(U, _, D) }.
+#minimize { 1@2, U, D : avoid_day(U, D), assigned(U, _, D) }.

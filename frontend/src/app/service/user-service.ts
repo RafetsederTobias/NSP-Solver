@@ -1,6 +1,7 @@
-import { Injectable, signal, inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap, throwError } from 'rxjs';
+import { CalendarPriority } from '../components/calendar-grid/calendar-grid';
 
 export interface User {
   id: number;
@@ -8,13 +9,15 @@ export interface User {
   skills: string[];
 }
 
+
 export interface UserConstraint {
   userId: string;
   maxDaysPerMonth?: number | null;
   minDaysPerMonth?: number | null;
   exactDaysPerMonth?: number | null;
-  fixedDays?: number[] | null; // ISO date strings e.g. "2025-04-03"
+  fixedDays?: number[] | null;
   blockedDays?: number[] | null;
+  priority?: CalendarPriority | null;
 }
 
 type UserPayload = Omit<User, 'id'>;
