@@ -26,13 +26,13 @@ Das System soll die Erstellung eines Monatsplans von der Pflegeleitung für Mita
 
 Zusätzlich müssen verschiedene harte Constraints eingehalten werden. Ein Mitarbeiter darf an einem Tag nur einer Station zugeteilt werden. Außerdem darf eine Zuteilung nur erfolgen, wenn der Mitarbeiter über die erforderlichen Kompetenzen für die jeweilige Station verfügt. Bestimmte Zuteilungen von Mitarbeitern zu Tagen und Stationen sollen als fixiert markiert werden können, sodass diese bei einer Neuberechnung des Plans unverändert bleiben. Ebenso soll definiert werden können, dass ein Mitarbeiter an bestimmten Tagen nicht eingeteilt werden darf, oder an bestimmten Tagen eingeteilt werden muss.
 
-Neben den verpflichtenden Einschränkungen sollen auch Soft Constraints berücksichtigt werden. Als weiche Constraint wurde eine möglichst faire Verteilung der Mitarbeiter auf die einzelnen Stationen definiert. Wenn eine gültige Lösung existiert, bei der jede Station an jedem Tag mit mindestens einem Mitarbeiter besetzt ist, soll das System eine möglichst gleichmäßige Zuteilung der Mitarbeiter auf die Stationen anstreben.
+Neben den verpflichtenden Einschränkungen sollen auch weiche Constraints berücksichtigt werden. Als weicher Constraint wurde eine möglichst faire Verteilung der Mitarbeiter auf die einzelnen Stationen definiert. Wenn eine gültige Lösung existiert, bei der jede Station an jedem Tag mit mindestens einem Mitarbeiter besetzt ist, soll das System eine möglichst gleichmäßige Zuteilung der Mitarbeiter auf die Stationen anstreben.
 
 Ein weiterer wichtiger Punkt ist die Berechnungszeit des Systems. Vergleichbare Systeme berechnen Monatspläne innerhalb einer Minute, während Jahrespläne mehrere Minuten benötigen. Das entwickelte System soll daher ebenfalls in der Lage sein, einen Monatsplan innerhalb weniger Minuten zu berechnen. Auch ein krankheitsbedingtes \textit{Rescheduling} soll innerhalb weniger Minuten möglich sein. Falls keine gültige Lösung gefunden werden kann, soll das System den Benutzer entsprechend warnen.
 
 
 \section{Systemarchitektur}
-Die Applikation besteht aus einer dreischichtigen Architektur, die in Angular-Frontend, FastAPI-Backend sowie einer Supabase-Datenbank mit PostgreSQL aufgeteilt wird. Die Daten zu Stationen, Mitarbeitenden und Kompetenzen dienen ausschließlich Testzwecken und wurden manuell erstellt. Es handelt sich nicht um reale Daten. Die Abbildung \ref{fig:Applikations-Architektur} stellt die Schichten grafisch dar.
+Die Applikation besteht aus einer dreischichtigen Architektur, die in Angular-Frontend, FastAPI-Backend sowie einer Supabase-Datenbank mit PostgreSQL aufgeteilt wird. Die Daten zu Stationen, Mitarbeitenden und Kompetenzen sind synthetisch generierte Testdaten. Sie orientieren sich hinsichtlich ihrer Struktur und der verwendeten Attribute an typischen Daten eines Krankenhauses, wurden jedoch vollständig künstlich erstellt. Insbesondere wurden die Namen von Mitarbeitenden generiert und es wurden keine realen personenbezogenen oder krankenhausspezifischen Daten verwendet. Die Abbildung \ref{fig:Applikations-Architektur} stellt die Schichten grafisch dar.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{figures/architecture}
@@ -41,7 +41,7 @@ Die Applikation besteht aus einer dreischichtigen Architektur, die in Angular-Fr
 	}\label{fig:Applikations-Architektur}
 \end{figure}
 
-Das Frontend wurde als Single-Page Application mit dem Angular Framework umgesetzt. Es stellt die Benutzeroberfläche bereit, über die Mitarbeiter, Stationen, Kompetenzen verwaltet, sowie Constraints festgelegt und Monatspläne angezeigt werden können. Die Kommunikation mit dem Backend erfolgt ausschließlich über HTTP-REST-Schnittstellen.
+Das Frontend wurde als Single-Page Application mit dem Angular Framework umgesetzt. Es stellt die Benutzeroberfläche bereit, über die Mitarbeiter, Stationen und Kompetenzen verwaltet, sowie Constraints festgelegt und Monatspläne angezeigt werden können. Die Kommunikation mit dem Backend erfolgt ausschließlich über HTTP-REST-Schnittstellen.
 Das Backend ist in Python mit FastAPI realisiert und übernimmt die gesamte Geschäftslogik der Anwendung. Es stellt REST-Endpunkte bereit und verarbeitet eingehende Anfragen. Ein zentraler Bestandteil des Backends ist der ASP-Service. Dieser Service ist für die Berechnung der Monatspläne unter Berücksichtigung der definierten Hard und Soft Constraints verantwortlich.
 Als Datenbankschicht wird Supabase eingesetzt, eine Open-Source-Plattform, die auf PostgreSQL aufbaut. Supabase stellt neben der relationalen Datenbank auch eine PostgREST-Schnittstelle bereit, über die das Backend direkt auf die Datenbankressourcen zugreifen kann.
 

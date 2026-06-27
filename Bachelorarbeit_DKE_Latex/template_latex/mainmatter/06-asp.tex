@@ -9,7 +9,8 @@ Die Fakten-Generierung stellt die Verbindung zwischen der relationalen Datenbank
 
 Für jeden Benutzer wird dabei ein \texttt{user}-Fakt erzeugt, wie in Listing \ref{lst:base-facts} zu sehen ist. Zusätzlich wird für jede vorhandene Kompetenz ein \texttt{has\_skill}-Fakt erstellt. Für Stationen werden ebenfalls Fakten generiert, darunter \texttt{station}, \texttt{max\_assignments} zur maximalen Anzahl an Zuweisungen sowie \texttt{requires} für benötigte Kompetenzen.
 
-Die zu planenden Arbeitstage werden als \texttt{day}-Fakten an Clingo übergeben. Wochenenden werden dabei bereits vorher durch die Funktion \texttt{get\_weekdays} herausgefiltert. Zusätzlich werden benutzerspezifische Einschränkungen als Fakten festgelegt. Dazu zählen beispielsweise maximale oder minimale Arbeitstage pro Monat (\texttt{max\_days}, \texttt{min\_days}), fixe Arbeitstage (\texttt{fixed\_day}) oder gesperrte Tage (\texttt{blocked\_day}).
+Die zu planenden Arbeitstage werden als \texttt{day}-Fakten an Clingo übergeben. Wochenenden werden dabei bereits vorher durch die Funktion \texttt{get\_weekdays} herausgefiltert. Zusätzlich werden benutzerspezifische Einschränkungen als Fakten festgelegt. Dazu zählen beispielsweise maximale oder minimale Arbeitstage pro Monat (\texttt{max\_days}, \texttt{min\_days}), fixe Arbeitstage (\texttt{fixed\_day}) oder gesperrte Tage (\texttt{blocked\_day}). Es können auch Tage als wünschenswert oder nicht wünschenswert angegeben werden (\texttt{preferred\_day}, \texttt{avoid\_day}).
+Diese werden dann vom Solver nicht als harte, sondern als weiche Constraints behandelt.
 
 Im Folgenden wird beispielhaft im Listing \ref{lst:base-facts} ein Ausschnitt der generierten Basisfakten für ein \textit{Scheduling} gezeigt. In diesem Beispiel werden zwei Benutzer, deren Kompetenzen, Stationen mit den benötigten Kompetenzen sowie Arbeitstage und Constraints als Fakten definiert. Auf Basis dieser Informationen kann Clingo anschließend gültige Dienstpläne berechnen.
 
@@ -48,8 +49,7 @@ Benutzer gilt als qualifiziert für eine Station (\texttt{eligible}), wenn er
 alle erforderlichen Fähigkeiten besitzt, also kein \texttt{requires}-Fakt 
 existiert, dem kein entsprechendes \texttt{has\_skill}-Fakt gegenübersteht. 
 Daraus wird \texttt{eligible\_day} abgeleitet, welches zusätzlich gesperrte 
-Tage ausschließt. Der \textit{Entscheidungsraum} wird durch eine \textit{Choice 
-	Rule} definiert, die Clingo erlaubt, Benutzern Stationen an bestimmten Tagen 
+Tage ausschließt. Der \textit{Entscheidungsraum} wird durch eine \textit{Choice Rule} definiert, die Clingo erlaubt, Benutzern Stationen an bestimmten Tagen 
 zuzuweisen, wobei pro Station und Tag maximal \texttt{Max} Benutzer zugewiesen 
 werden dürfen. Die \textit{harten Constraints} erzwingen, dass kein Benutzer an 
 zwei Stationen gleichzeitig eingeteilt wird, dass gesperrte Tage nicht belegt 
@@ -57,6 +57,7 @@ werden, und dass benutzerspezifische Einschränkungen wie \texttt{max\_days},
 \texttt{min\_days} sowie \texttt{exact\_days} eingehalten werden. Fixe 
 Arbeitstage werden über \texttt{fixed\_day} als harte Bedingung erzwungen, 
 sodass bestimmte Benutzer an vordefinierten Tagen zwingend eingeteilt sind. 
+Zusätzlich werden Präferenzen über zwei \texttt{\#minimize}-Anweisungen als weiche Constraints modelliert. Dabei wird einerseits bestraft, wenn ein als \texttt{preferred\_day} markierter Tag nicht zugewiesen wird, und andererseits, wenn ein als \texttt{avoid\_day} gekennzeichneter Tag dennoch belegt wird. Clingo minimiert diese Strafkosten und bevorzugt dadurch Lösungen, welche die angegebenen Präferenzen möglichst gut erfüllen, ohne die harten Constraints zu verletzen.
 Die Regelstruktur für das Rescheduling folgt einem ähnlichen Prinzip, wird 
 jedoch in Abschnitt~\ref{sec:rescheduling} gesondert behandelt.
 \begin{lstlisting}[caption={ASP-Regeln},label={lst:rules}]
@@ -85,6 +86,9 @@ station(S), day(D), max_assignments(S, Max).
 
 :- user(U), exact_days(U, Exact),
 #count { D : assigned(U, _, D) } != Exact.
+
+#minimize { 1@2, U, D : preferred_day(U, D), not assigned(U, _, D) }.
+#minimize { 1@2, U, D : avoid_day(U, D), assigned(U, _, D) }.
 \end{lstlisting}
 \section{Zweiphasen-Lösungsansatz}
 Analog zu \textcite{cardellini2023solvingrehabilitationschedulingproblems} wurden auch in dieser Arbeit zwei Phasen implementiert, die auf ähnlichen, jedoch nicht identischen ASP-Encodings basieren.
@@ -98,7 +102,7 @@ Die \textit{Choice-Rule} von Listing \ref{lst:rules} wird durch eine neue ersetz
 	station(S), day(D), max_assignments(S, Max).
 \end{lstlisting}
 
- Darüber hinaus wird für jede Station ein Idealwert berechnet (siehe Listing \ref{lst:fairness}), der ungefähr der Hälfte der maximalen Kapazität entspricht. Anschließend wird die Abweichung der tatsächlichen Belegung von diesem Idealwert bestimmt. Sowohl Über- als auch Unterbelegungen werden über eine Optimierungsfunktion minimiert. Die \texttt{\#minimize}-Direktive summiert dabei die \texttt{Delta}-Werte aller über- und unterbelegten Stationen-Tag-Kombinationen. Das Gewicht \texttt{@10} definiert die Optimierungspriorität: Clingo löst Zielfunktionen mit höherer Priorität zuerst, bevor Kriterien niedrigerer Priorität berücksichtigt werden. Auf diese Weise wird die Fairness-Optimierung gegenüber anderen \texttt{\#minimize}-Anweisungen im Regelwerk priorisiert. Dadurch bevorzugt Clingo Lösungen, die eine möglichst gleichmäßige Auslastung der Stationen über alle Tage hinweg erzielen. Im Listing \ref{lst:fairness} werden die dafür verwendeten Fakten aufgezeigt.
+ Darüber hinaus wird für jede Station ein Idealwert berechnet (siehe Listing \ref{lst:fairness}), der ungefähr der Hälfte der maximalen Kapazität entspricht. Anschließend wird die Abweichung der tatsächlichen Belegung von diesem Idealwert bestimmt. Sowohl Über- als auch Unterbelegungen werden über eine Optimierungsfunktion minimiert. Die \texttt{\#minimize}-Direktive summiert dabei die \texttt{Delta}-Werte aller über- und unterbelegten Stationen-Tag-Kombinationen. Das Gewicht \texttt{@1} definiert die Optimierungspriorität: Clingo löst Zielfunktionen mit höherer Priorität zuerst, bevor Kriterien niedrigerer Priorität berücksichtigt werden. Dadurch wird eine möglichst gleichmäßige Auslastung der Stationen über alle Tage hinweg angestrebt, sofern dadurch keine höher priorisierten Optimierungsziele beeinträchtigt werden. Zu diesen zählen die Berücksichtigung von als wünschenswert (\texttt{preferred\_day}) bzw. nicht wünschenswert (\texttt{avoid\_day}) markierten Arbeitstagen.
  
 \begin{lstlisting}[caption={Fairness-Regeln},label={lst:fairness}]
 	ideal_count(S, Target) :-
@@ -121,8 +125,8 @@ Die \textit{Choice-Rule} von Listing \ref{lst:rules} wird durch eine neue ersetz
 	Delta = Target - N.
 	
 	#minimize {
-		Delta @10, S, D : over_staffed(S, D, Delta) ;
-		Delta @10, S, D : under_staffed(S, D, Delta)
+		Delta @1, S, D : over_staffed(S, D, Delta) ;
+		Delta @1, S, D : under_staffed(S, D, Delta)
 	}.
 \end{lstlisting}
 
