@@ -334,3 +334,123 @@ Es wird ein \textit{Rescheduling} durchgeführt. Wie in Abbildung \ref{fig:t6_2}
 	}\label{fig:t6_2}
 \end{figure}
 
+\chapter{Anhang C - Installationsanleitung}
+Die Installationsanleitung gliedert sich in die Bereiche Frontend-, Backend- und Datenbank-Setup.
+\section{Frontend}
+Vor der Installation des Frontends müssen folgende Komponenten auf dem Zielsystem installiert sein:
+
+\begin{itemize}
+	\item Node.js Version \textbf{24.11.1} (oder eine kompatible Version der Major-Version 24)
+	\item npm Version \textbf{11.6.2} (wird zusammen mit Node.js installiert)
+	\item Angular CLI Version \textbf{21.2.6}
+\end{itemize}
+
+Die installierten Versionen können mit folgendem Befehl überprüft werden:
+
+\begin{verbatim}
+	ng version
+\end{verbatim}
+
+\subsection{Installation}
+Falls Angular CLI noch nicht installiert ist, kann die benötigte Version mit folgendem Befehl global installiert werden:
+
+\begin{verbatim}
+	npm install -g @angular/cli@21.2.6
+\end{verbatim}
+Nach dem Klonen oder Herunterladen des Repositorys wird in das Frontend-Verzeichnis gewechselt:
+
+\begin{verbatim}
+	cd frontend
+\end{verbatim}
+
+Anschließend werden alle benötigten Abhängigkeiten installiert:
+
+\begin{verbatim}
+	npm install
+\end{verbatim}
+
+Die erforderlichen Pakete und deren Versionen sind in den Dateien \texttt{package.json} und \texttt{package-lock.json} definiert und werden automatisch installiert.
+
+\subsection{Starten der Anwendung}
+
+Nach erfolgreicher Installation kann der Entwicklungsserver mit folgendem Befehl gestartet werden:
+
+\begin{verbatim}
+	ng serve
+\end{verbatim}
+
+Standardmäßig ist das Frontend anschließend unter folgender Adresse erreichbar:
+
+\begin{verbatim}
+	http://localhost:4200
+\end{verbatim}
+
+Während der Entwicklung werden Änderungen am Quellcode automatisch erkannt, neu kompiliert und im Browser aktualisiert.
+
+\section{Backend-Setup}
+
+\subsection{Voraussetzungen}
+
+Vor der Installation des Backends müssen folgende Komponenten auf dem Zielsystem installiert sein:
+
+\begin{itemize}
+	\item Python \textbf{3.x}
+	\item \texttt{pip} (wird zusammen mit Python installiert)
+\end{itemize}
+
+Die installierte Python-Version kann mit folgendem Befehl überprüft werden:
+
+\begin{verbatim}
+	python --version
+\end{verbatim}
+
+\subsection{Installation}
+
+Nach dem Klonen oder Herunterladen des Repositorys wird in das Backend-Verzeichnis gewechselt:
+
+\begin{verbatim}
+	cd backend
+\end{verbatim}
+
+Anschließend wird eine virtuelle Python-Umgebung erstellt:
+
+\begin{verbatim}
+	python -m venv venv
+\end{verbatim}
+
+Die virtuelle Umgebung wird anschließend aktiviert.
+
+Unter Windows:
+
+\begin{verbatim}
+	venv\Scripts\activate
+\end{verbatim}
+
+Unter Linux bzw. macOS:
+
+\begin{verbatim}
+	source venv/bin/activate
+\end{verbatim}
+
+Nachdem die virtuelle Umgebung aktiviert wurde, werden alle benötigten Projektabhängigkeiten aus der Datei \texttt{requirements.txt} installiert:
+
+\begin{verbatim}
+	pip install -r requirements.txt
+\end{verbatim}
+
+\subsection{Starten der Anwendung}
+
+Nach erfolgreicher Installation kann der FastAPI-Server mit folgendem Befehl gestartet werden:
+
+\begin{verbatim}
+	uvicorn main:app --reload
+\end{verbatim}
+
+Dabei ist \texttt{main} der Name der Python-Datei, welche die FastAPI-Anwendung enthält. Falls sich die Anwendung in einer anderen Datei befindet, muss der Dateiname entsprechend angepasst werden.
+
+Standardmäßig ist das Backend anschließend unter folgender Adresse erreichbar:
+
+\begin{verbatim}
+	http://localhost:8000
+\end{verbatim}
+
