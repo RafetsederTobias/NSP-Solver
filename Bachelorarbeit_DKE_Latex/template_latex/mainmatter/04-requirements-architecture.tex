@@ -7,17 +7,16 @@
 Basierend auf den in Kapitel~\ref{sec:related_work} vorgestellten Systemen sowie konkreten Anforderungen des Krankenhauses wurden die Systemanforderungen definiert. Während \textcite{nabeshimaASPbasedNurseScheduling2026} Dienstpläne im Vier-Wochen-Rhythmus mit einer Vielzahl an Schichttypen erstellen und \textcite{alvianoNurseReschedulingAnswer2019} Jahrespläne mit drei Schichtarten optimieren, beschränkt sich die vorliegende Arbeit bewusst auf eine einheitliche Tagesschicht sowie eine monatliche Planungsperiode. Der Fokus liegt dabei nicht auf der Optimierung des ASP-Encodings für große Instanzen, sondern auf der vollständigen Integration in eine  Fullstack-Webanwendung mit interaktiver Benutzeroberfläche. Analog zu \textcite{nabeshimaASPbasedNurseScheduling2026} wird das System als webbasierter Dienst bereitgestellt und unterstützt neben der initialen Planung ein Rescheduling bei kurzfristigen Ausfällen. Ein wesentliches Merkmal gegenüber allen verglichenen Systemen ist die vorausschauende Berechnung von Alternativplänen, die eine Absicherung gegen zukünftige Ausfälle ermöglicht. In Tabelle~\ref{tab:technologien} wird die genaue Technologie des jeweiligen Subsystems erläutert.
 \begin{table}[h]
 	\centering
-	\caption{
-		Technologien
-	}\label{tab:technologien}
-	\begin{tabularx}{\linewidth}{l>{\raggedright\arraybackslash}X}
+	\caption{Verwendete Technologien}
+	\label{tab:technologien}
+	\begin{tabularx}{\linewidth}{l>{\raggedright\arraybackslash}Xl}
 		\toprule
-		\textbf{Subsystem}        & \textbf{Konkrete Technologie} \\
+		\textbf{Subsystem} & \textbf{Technologie} & \textbf{Version} \\
 		\midrule
-		\texttt{Frontend}     & Angular \\
-		\texttt{Backend}      & FastAPI \\
-		\texttt{Datenbank} & PostgreSQL / Supabase \\
-		\texttt{ASP-Solver}      & Clingo \\
+		\texttt{Frontend}   & Angular                & 21.2.6 \\
+		\texttt{Backend}    & FastAPI                & 0.135.3 \\
+		\texttt{Datenbank}  & PostgreSQL / Supabase  & 15.1 \\
+		\texttt{ASP-Solver} & Clingo                 & 5.8.0 \\
 		\bottomrule
 	\end{tabularx}
 \end{table}

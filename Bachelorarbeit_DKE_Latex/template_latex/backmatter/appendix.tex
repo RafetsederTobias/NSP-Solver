@@ -335,7 +335,20 @@ Es wird ein \textit{Rescheduling} durchgeführt. Wie in Abbildung \ref{fig:t6_2}
 \end{figure}
 
 \chapter{Anhang C - Installationsanleitung}
-Die Installationsanleitung gliedert sich in die Bereiche Frontend-, Backend- und Datenbank-Setup.
+Die Installationsanleitung ist in die drei Bereiche Frontend, Backend und Datenbank gegliedert.
+\section{Hardware-Voraussetzungen}
+Für die Installation bestehen keine spezifischen Hardwareanforderungen. Die Entwicklung der Anwendung erfolgte auf einem System mit einem AMD Ryzen 9 Prozessor, einer NVIDIA GeForce RTX 4050 Grafikkarte sowie 16 GB Arbeitsspeicher.
+
+Für den Betrieb der Anwendung werden als Mindestanforderung ein Mehrkernprozessor sowie 8 GB Arbeitsspeicher empfohlen, da die Datenbank PostgreSQL, das FastAPI-Backend, der Angular-Entwicklungsserver sowie der ASP-Solver Clingo parallel ausgeführt werden.
+
+\section{Einsatzgrenzen}
+
+Die Anwendung wurde mit Datensätzen von bis zu 20 Stationen und 40 Mitarbeitenden erfolgreich getestet. Darüber hinaus sind auch größere Problemgrößen möglich. In Testläufen konnte das System Instanzen mit bis zu 40 Stationen und 80 Mitarbeitenden verarbeiten.
+
+Mit zunehmender Problemgröße steigt jedoch insbesondere die Berechnungszeit für die Optimierung der Soft Constraints deutlich an.
+
+Die Anwendung eignet sich daher insbesondere für kleine bis mittelgroße Einsatzszenarien. Für größere Planungsprobleme ist eine weitere Optimierung des ASP-Modells oder eine Anpassung der Gewichtung beziehungsweise Formulierung der Soft Constraints empfehlenswert.
+
 \section{Frontend}
 Vor der Installation des Frontends müssen folgende Komponenten auf dem Zielsystem installiert sein:
 
@@ -446,11 +459,14 @@ Nach erfolgreicher Installation kann der FastAPI-Server mit folgendem Befehl ges
 	uvicorn main:app --reload
 \end{verbatim}
 
-Dabei ist \texttt{main} der Name der Python-Datei, welche die FastAPI-Anwendung enthält. Falls sich die Anwendung in einer anderen Datei befindet, muss der Dateiname entsprechend angepasst werden.
-
 Standardmäßig ist das Backend anschließend unter folgender Adresse erreichbar:
 
 \begin{verbatim}
 	http://localhost:8000
 \end{verbatim}
+
+\subsection{Datenbank-Verbindung}
+Um eine Verbindung mit der Datenbank herzustellen, muss im Ordner \textit{backend} des Projektverzeichnisses eine \textit{.env}-Datei mit folgendem Inhalt erstellt werden:
+
+
 
