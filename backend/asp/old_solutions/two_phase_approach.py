@@ -8,10 +8,8 @@ def solve_schedule(users, stations, days, constraints=None, existing_assignments
     
     result = _run_clingo(facts, strict=True)
     if result is not None:
-        print("1")
         return result
 
-    print("2")
     result = _run_clingo(facts, strict=False)
     return result if result is not None else []
 

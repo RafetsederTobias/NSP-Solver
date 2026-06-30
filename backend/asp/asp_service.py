@@ -126,9 +126,6 @@ def _build_constraint_facts(constraints) -> str:
                 else:
                     facts += f"blocked_day({c.user_id}, {d}).\n"
 
-    print(constraints)
-    print(facts)
-
     return facts
 
 
@@ -236,7 +233,7 @@ def _run_clingo(
         """
 
         print("Phase 1: trying with forced staffing and fairness...")
-        result = solve(EXTRA_FACTS, timeout=60)
+        result = solve(EXTRA_FACTS, timeout=15)
 
         if result:
             print("Phase 1 found a solution, returning...")

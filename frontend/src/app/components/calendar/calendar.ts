@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, computed, ViewChild, signal, effect } from '@angular/core';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions } from '@fullcalendar/core';
+import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import { DateClickArg } from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -527,6 +527,10 @@ export class CalendarComponent implements OnInit {
     dateClick: (info: DateClickArg) => {
       this.router.navigate(['/calendar', info.dateStr]);
     },
+    eventClick: (info: EventClickArg) => {
+      const dateStr = info.event.startStr.slice(0, 10); // 'YYYY-MM-DD'
+      this.router.navigate(['/calendar', dateStr]);
+    },
     datesSet: (info) => {
       this.currentCalendarDate.set(info.view.currentStart);
     },
@@ -535,7 +539,6 @@ export class CalendarComponent implements OnInit {
   ngOnInit() {
     this.userService.loadAll().subscribe();
     this.scheduleService.loadAll().subscribe();
-    console.log(this.scheduleService.loadedSchedules());
     this.stationassignmentService.loadAll().subscribe();
   }
 
@@ -584,7 +587,6 @@ export class CalendarComponent implements OnInit {
           constraints: result.constraints,
         };
 
-        console.log(payload);
 
         this.isLoading.set(true);
         this.scheduleService

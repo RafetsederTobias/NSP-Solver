@@ -1,4 +1,3 @@
-% ─── ELIGIBILITY ─────────────────────────────────────────────────────────────
 eligible(U, S) :-
     user(U), station(S),
     #count { Sk : requires(S, Sk), not has_skill(U, Sk) } = 0.
@@ -7,10 +6,8 @@ eligible_day(U, S, D) :-
     eligible(U, S), day(D),
     not blocked_day(U, D).
 
-% ─── DECISION SPACE ──────────────────────────────────────────────────────────
 { assigned(U, S, D) : eligible_day(U, S, D) }.
 
-% ─── HARD CONSTRAINTS ────────────────────────────────────────────────────────
 % Blocked days cannot be assigned
 :- assigned(U, S, D), blocked_day(U, D).
 
@@ -30,7 +27,6 @@ unstaffed(S, D) :-
     station(S), day(D),
     not assigned(_, S, D).
 
-% ─── DISRUPTION TRACKING ─────────────────────────────────────────────────────
 dropped(U, S, D) :-
     was_assigned(U, S, D),
     not assigned(U, S, D).
@@ -40,10 +36,9 @@ added(U, S, D) :-
     not was_assigned(U, S, D).
 
 
-% ─── HEURISTIC: prefer keeping existing assignments ──────────────────────────
+prefer keeping existing assignments 
 #heuristic assigned(U, S, D) : was_assigned(U, S, D). [10, true]
 
-% ─── OPTIMIZATION ────────────────────────────────────────────────────────────
 #minimize {
     100@3, S, D : unstaffed(S, D);
      10@2, U, S, D : dropped(U, S, D);
