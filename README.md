@@ -140,7 +140,7 @@ The backend API is available at `http://localhost:8000`.
 Create a `.env` file in the `backend/` directory and add your Supabase connection credentials:
 
 ```env
-SUPABASE_URL=...
+DATABASE_URL=...
 ```
 
 ---
