@@ -36,7 +36,7 @@ added(U, S, D) :-
     not was_assigned(U, S, D).
 
 
-prefer keeping existing assignments 
+%  prefer keeping existing assignments 
 #heuristic assigned(U, S, D) : was_assigned(U, S, D). [10, true]
 
 #minimize {
