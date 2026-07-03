@@ -46,7 +46,7 @@ Auf der Unterseite \textit{Kalender} bekommt man eine Übersicht für den Monat.
 		Solver-Dialogfenster
 	}\label{fig:solver_dialog}
 \end{figure}
-Per Klick auf das Zahnrad-Symbol neben einem Mitarbeiter öffnet sich der Einschränkungsdialog, in dem die gewünschte Arbeitszeit für den Monat definiert wird, entweder als Vollzeit, als exakte Anzahl an Tagen oder als Spannweite. Im Abschnitt Verfügbarkeit kann anschließend über den Kalender angegeben werden, an welchen Tagen ein Mitarbeiter fix eingeplant werden soll oder nicht verfügbar ist. Nach dem Speichern der Einschränkungen stehen im Solver-Dialog außerdem drei Modi zur Auswahl: Vorhandene Zuteilungen übernehmen, Neuen Plan erstellen sowie Alternativpläne. Mit einem Klick auf \textit{Solver starten} wird die Planung unter Berücksichtigung aller konfigurierten Vorgaben ausgeführt. Das Dialogfenster für Einschränkungen wird in Abbildung \ref{fig:constraint_dialog} grafisch veranschaulicht.
+Per Klick auf das Zahnrad-Symbol neben einem Mitarbeiter öffnet sich der Einschränkungsdialog, in dem die gewünschte Arbeitszeit für den Monat definiert wird, entweder als Vollzeit, als exakte Anzahl an Tagen oder als Spannweite. Im Abschnitt Verfügbarkeit kann anschließend über den Kalender angegeben werden, an welchen Tagen ein Mitarbeiter fix eingeplant werden soll oder nicht verfügbar ist, bzw. welche Tage wünschenswert/nicht wünschenswert wären. Nach dem Speichern der Einschränkungen stehen im Solver-Dialog außerdem drei Modi zur Auswahl: Vorhandene Zuteilungen übernehmen, Neuen Plan erstellen sowie Alternativpläne. Ist die Generierung von Alternativplänen aktiviert, werden Fehlzeiten ab einer Dauer von mindestens zwei Tagen für die gesamte Kalenderwoche angenommen. Dadurch können alternative Dienstpläne erstellt werden, die eine längere Abwesenheit des Mitarbeiters berücksichtigen und somit robuster gegenüber kurzfristigen Änderungen sind. Mit einem Klick auf \textit{Solver starten} wird die Planung unter Berücksichtigung aller konfigurierten Vorgaben ausgeführt. Das Dialogfenster für Einschränkungen wird in Abbildung \ref{fig:constraint_dialog} grafisch veranschaulicht.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{figures/constraint_dialog}
@@ -85,7 +85,7 @@ Nach erfolgreichem Planungslauf werden die Zuteilungen direkt im Kalender angeze
  	}\label{fig:reschedule_dialog}
  \end{figure}
  
-  Per Klick auf das Zahnrad-Symbol neben einem Mitarbeiter lässt sich, wie in Abbildung \ref{fig:reschedule_constraint_dialog} dargestellt, ein Kalender öffnen, in dem die betroffenen Tage als nicht verfügbar markiert werden können. Optional kann über den Alternativpläne-Toggle gesteuert werden, ob zusätzliche Planvarianten generiert werden sollen. Diese würden dann auf der Unterseite \textit{Pläne} ersichtlich sein. Was genau ein Alternativplan ist, wird in Kapitel \ref{sub:alternativplan} erklärt.
+  Per Klick auf das Zahnrad-Symbol neben einem Mitarbeiter lässt sich, wie in Abbildung \ref{fig:reschedule_constraint_dialog} dargestellt, ein Kalender öffnen, in dem die betroffenen Tage als nicht verfügbar markiert werden können. Optional kann über den Alternativpläne-Toggle gesteuert werden, ob zusätzliche Planvarianten generiert werden sollen. Diese würden dann auf der Unterseite \textit{Pläne} ersichtlich sein.
   
    \begin{figure}[H]
 	\centering
@@ -467,6 +467,9 @@ Standardmäßig ist das Backend anschließend unter folgender Adresse erreichbar
 
 \subsection{Datenbank-Verbindung}
 Um eine Verbindung mit der Datenbank herzustellen, muss im Ordner \textit{backend} des Projektverzeichnisses eine \textit{.env}-Datei mit folgendem Inhalt erstellt werden:
-
+\begin{verbatim}
+DATABASE_URL=postgresql+asyncpg://postgres.fzuetefekfmvgwdvnrjw:PNgKIcdF1Bf9xVRo
+@aws-0-eu-west-1.pooler.supabase.com:5432/postgres
+\end{verbatim}
 
 

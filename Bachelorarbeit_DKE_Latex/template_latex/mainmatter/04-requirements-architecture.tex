@@ -32,8 +32,8 @@ Ein weiterer wichtiger Aspekt ist die Berechnungszeit des Systems. Vergleichbare
 
 
 \section{Systemarchitektur}
-Die Applikation besteht aus einer dreischichtigen Architektur, die in Angular-Frontend, FastAPI-Backend sowie einer Supabase-Datenbank mit PostgreSQL aufgeteilt wird. Die Daten zu Stationen, Mitarbeitenden und Kompetenzen sind synthetisch generierte Testdaten. Sie orientieren sich hinsichtlich ihrer Struktur und der verwendeten Attribute an typischen Daten eines Krankenhauses, wurden jedoch vollständig künstlich erstellt. Insbesondere wurden die Namen von Mitarbeitenden generiert und es wurden keine realen personenbezogenen oder krankenhausspezifischen Daten verwendet. Die Abbildung \ref{fig:Applikations-Architektur} stellt die Schichten grafisch dar.
-\begin{figure}[h]
+Die Applikation besteht aus einer dreischichtigen Architektur, die in Angular-Frontend, FastAPI-Backend sowie einer Supabase-Datenbank mit PostgreSQL aufgeteilt wird. Die Daten zu Stationen, Mitarbeitenden und Kompetenzen sind synthetisch generierte Testdaten. Sie orientieren sich hinsichtlich ihrer Struktur und der verwendeten Attribute an typischen Daten eines Krankenhauses. Insbesondere wurden die Namen von Mitarbeitenden generiert und es wurden keine realen personenbezogenen oder krankenhausspezifischen Daten verwendet. Die Abbildung \ref{fig:Applikations-Architektur} stellt die Schichten grafisch dar.
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{figures/architecture}
 	\caption{
@@ -66,7 +66,7 @@ Die Tabelle \texttt{user\_skills} stellt die Zuordnung zwischen den Tabellen \te
 Die Tabelle \texttt{station\_skills} definiert die für eine Station erforderlichen Qualifikationen und stellt die Verbindung zwischen den Tabellen \texttt{stations} und \texttt{skills} her. Eine Station kann dabei über mehrere notwendige Qualifikationen verfügen. Diese Informationen ermöglichen anschließend den Abgleich zwischen den Fähigkeiten der Benutzer und den Anforderungen der jeweiligen Stationen.
 
 Die Tabelle \texttt{station\_assignments} stellt die zentrale Verknüpfung des Datenmodells dar. Sie ordnet für ein bestimmtes Datum (\texttt{date}) eine Station (\texttt{station\_id}) einem Benutzer (\texttt{user\_id}) sowie einem Dienstplan (\texttt{schedule\_id}) zu. Das Attribut \texttt{user\_id} ist optional, sodass auch Zuweisungen ohne konkreten Benutzer gespeichert werden können. Dies ermöglicht die Abbildung von Platzhalterzuweisungen für den Fall, dass einem Dienstplan nicht für jede Station unmittelbar ein Mitarbeiter zugeordnet werden kann. Der \textit{Unique Constraint} auf den Spalten \texttt{schedule\_id}, \texttt{date} und \texttt{user\_id} stellt dabei sicher, dass ein Benutzer eines Dienstplans pro Tag nur einer einzigen Station zugewiesen werden kann.
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{figures/datenmodell_plantuml}
 	\caption{
