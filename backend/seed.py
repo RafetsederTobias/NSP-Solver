@@ -74,6 +74,7 @@ USERS = [
     {"name": "Lisa Otto", "skills": ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Perimetrie"]},
 ]
 
+SKILL_NAMES = ["Sehtest", "Spaltlampenuntersuchung", "OCT", "Tonometrie", "Perimetrie"]
 
 async def seed():
     async with SessionLocal() as db:
@@ -83,9 +84,18 @@ async def seed():
         await db.execute(delete(StationAssignment))
         await db.execute(delete(Station))
         await db.execute(delete(User))
+        await db.execute(delete(Skill))
 
-        result = await db.execute(select(Skill))
-        skills_by_name = {s.name: s for s in result.scalars().all()}
+        existing = await db.execute(select(Skill))
+        skills_by_name = {s.name: s for s in existing.scalars().all()}
+
+        for name in SKILL_NAMES:
+            if name not in skills_by_name:
+                skill = Skill(name=name)
+                db.add(skill)
+                skills_by_name[name] = skill
+
+        await db.flush()  
 
         for data in STATIONS:
             station = Station(
@@ -103,7 +113,7 @@ async def seed():
             db.add(user)
 
         await db.commit()
-        print("Seeded stations and users.")
+        print("Seeded skills, stations, and users.")
 
 if __name__ == "__main__":
     asyncio.run(seed())
